@@ -20,13 +20,13 @@
       <widget class="QGroupBox" name="joystick">
        <property name="minimumSize">
         <size>
-         <width>400</width>
+         <width>240</width>
          <height>200</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>400</width>
+         <width>240</width>
          <height>200</height>
         </size>
        </property>
@@ -45,7 +45,7 @@
              <widget class="QProgressBar" name="xAxis">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>0</height>
                </size>
               </property>
@@ -97,7 +97,7 @@
              <widget class="QProgressBar" name="yAxis">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>0</height>
                </size>
               </property>
@@ -152,7 +152,7 @@
              <widget class="QProgressBar" name="zAxis">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>60</width>
                 <height>0</height>
                </size>
               </property>
@@ -239,9 +239,6 @@
        </layout>
        <zorder></zorder>
        <zorder></zorder>
-       <zorder></zorder>
-       <zorder></zorder>
-       <zorder></zorder>
       </widget>
      </item>
      <item>
@@ -282,24 +279,7 @@
     <widget class="QWidget" name="monitor" native="true"/>
    </item>
   </layout>
-  <zorder>verticalSlider</zorder>
-  <zorder>verticalSlider_2</zorder>
-  <zorder>verticalSlider_3</zorder>
-  <zorder>joystick</zorder>
-  <zorder>xSlider</zorder>
-  <zorder>label</zorder>
-  <zorder>ySlider</zorder>
-  <zorder>label_2</zorder>
-  <zorder>zSlider</zorder>
-  <zorder>label_3</zorder>
-  <zorder>zSlider</zorder>
   <zorder></zorder>
-  <zorder></zorder>
-  <zorder>xSlider</zorder>
-  <zorder>label</zorder>
-  <zorder>button1</zorder>
-  <zorder>button2</zorder>
-  <zorder>horizontalSpacer_4</zorder>
   <zorder>monitor</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
