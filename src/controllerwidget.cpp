@@ -7,19 +7,6 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
     m_ui(new Ui::ControllerWidget)
 {
     m_ui->setupUi(this);
-
-    m_ui->xAxis->setMinimum(-32768);
-    m_ui->xAxis->setMaximum(32768);
-    m_ui->xAxis->setValue(0);
-
-    m_ui->yAxis->setMinimum(-32768);
-    m_ui->yAxis->setMaximum(32768);
-    m_ui->yAxis->setValue(0);
-
-    m_ui->zAxis->setMinimum(-32768);
-    m_ui->zAxis->setMaximum(32768);
-    m_ui->zAxis->setValue(0);
-
     m_ui->monitor->setStyleSheet("background-color:black;");
 
     m_joystick = new QJoystick();
@@ -49,7 +36,7 @@ void ControllerWidget::updateJoystickData()
     m_joystick->getData(axis, buttons);
 
     m_ui->xAxis->setValue(axis[0]);
-    m_ui->yAxis->setValue(axis[1]);
+    m_ui->yAxis->setValue(axis[1]*(-1));
     m_ui->zAxis->setValue(axis[2]);
 
     m_ui->button1->setChecked(buttons[0]);
