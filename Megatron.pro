@@ -22,7 +22,7 @@ HEADERS  += src/controllerwidget.h \
 macx {
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
 OBJECTIVE_SOURCES += src/SDLMain.m
-HEADERS += SDLMain.h
+HEADERS += src/SDLMain.h
 LIBS += -F/Library/Frameworks
 LIBS += -framework Cocoa -framework SDL
 }
