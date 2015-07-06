@@ -15,12 +15,12 @@ QJoystick::~QJoystick()
         SDL_JoystickClose(m_joystick);
     }
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
-    this->deleteLater();
 }
 
 bool QJoystick::init()
 {
     if (SDL_NumJoysticks() < 1) {
+        m_joystick = 0;
         return false;
     } else {
         m_joystick = SDL_JoystickOpen(0);

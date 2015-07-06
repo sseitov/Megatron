@@ -17,14 +17,17 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
         connect(m_joystickTimer, SIGNAL(timeout()), this, SLOT(updateJoystickData()));
         m_joystickTimer->start();
     } else {
+        m_joystickTimer = 0;
         m_ui->joystick->setTitle("Joystick not found");
     }
 }
 
 ControllerWidget::~ControllerWidget()
 {
-    m_joystickTimer->stop();
-    delete m_joystickTimer;
+    if (m_joystickTimer) {
+        m_joystickTimer->stop();
+        delete m_joystickTimer;
+    }
     delete m_joystick;
     delete m_ui;
 }
