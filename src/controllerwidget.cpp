@@ -2,12 +2,17 @@
 #include "ui_controllerwidget.h"
 #include <QDebug>
 
+#include "qcan.h"
+
 ControllerWidget::ControllerWidget(QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::ControllerWidget)
 {
     m_ui->setupUi(this);
     m_ui->monitor->setStyleSheet("background-color:black;");
+
+    QCAN can;
+    can.open();
 
     m_joystick = new QJoystick();
     if (m_joystick->init()) {

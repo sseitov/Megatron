@@ -13,11 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += src/main.cpp\
-        src/controllerwidget.cpp \
-        src/qjoystick.cpp
+    src/controllerwidget.cpp \
+    src/qjoystick.cpp \
+    src/qcan.cpp
 
 HEADERS  += src/controllerwidget.h \
-            src/qjoystick.h
+    src/qjoystick.h \
+    src/qcan.h
 
 macx {
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
@@ -28,7 +30,9 @@ LIBS += -framework Cocoa -framework SDL
 }
 
 linux {
+INCLUDEPATH += /usr/local/include
 LIBS += -lSDL
+LIBS += -L/usr/local/lib -lvs_can_api_x86-64
 }
 
 FORMS    += src/controllerwidget.ui
