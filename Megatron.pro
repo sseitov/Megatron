@@ -14,12 +14,10 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp\
     src/controllerwidget.cpp \
-    src/qjoystick.cpp \
-    src/qcan.cpp
+    src/qjoystick.cpp
 
 HEADERS  += src/controllerwidget.h \
-    src/qjoystick.h \
-    src/qcan.h
+    src/qjoystick.h
 
 macx {
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
