@@ -69,7 +69,8 @@ void ControllerWidget::changeBaudRate(int rate)
 #ifdef Q_OS_LINUX
     success = m_can->setBaudRate((CANBaudRate)rate);
 #endif
-    if (!success) {
+    if (!success && rate != 0) {
+        m_ui->baudrate->setCurrentIndex(0);
         QMessageBox::critical(NULL, "Error", "Error change baudrate");
     }
 }
