@@ -135,64 +135,74 @@
          <property name="title">
           <string>CAN</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Baudrate</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="baudrate">
-            <item>
+         <widget class="QWidget" name="">
+          <property name="geometry">
+           <rect>
+            <x>15</x>
+            <y>30</y>
+            <width>175</width>
+            <height>26</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label">
              <property name="text">
-              <string>Unknown</string>
+              <string>Baudrate</string>
              </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>10K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>20K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>50K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>125K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>250K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>500K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>800K</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1000K</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="baudrate">
+             <item>
+              <property name="text">
+               <string>Unknown</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>20K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>50K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>125K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>250K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>500K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>800K</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1000K</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
