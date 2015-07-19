@@ -14,14 +14,10 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp\
     src/controllerwidget.cpp \
-    src/qjoystick.cpp \
-    src/qcan.cpp \
-    src/2088C.c
+    src/qjoystick.cpp
 
 HEADERS  += src/controllerwidget.h \
-    src/qjoystick.h \
-    src/qcan.h \
-    src/2088C.h
+    src/qjoystick.h
 
 macx {
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
@@ -32,6 +28,11 @@ LIBS += -framework Cocoa -framework SDL
 }
 
 linux {
+SOURCES += src/qcan.cpp \
+    src/2088C.c
+HEADERS  += src/qcan.h \
+    src/2088C.h
+
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -lSDL
 LIBS += -L/usr/local/lib -lcanfestival_unix -lcanfestival -ldl -lrt

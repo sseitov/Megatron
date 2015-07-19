@@ -1,6 +1,7 @@
 #include "controllerwidget.h"
 #include "ui_controllerwidget.h"
 #include <QDebug>
+#include <QMessageBox>
 
 ControllerWidget::ControllerWidget(QWidget *parent) :
     QWidget(parent),
@@ -20,15 +21,19 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
         m_joystickTimer = 0;
         m_ui->joystick->setTitle("Joystick not found");
     }
-
+#ifdef Q_OS_LINUX
     m_can = new QCAN();
     if (m_can->init()) {
         m_ui->can->setTitle(m_can->busName());
         m_ui->baudrate->setCurrentIndex((int)m_can->baudRate());
-        connect(m_ui->baudrate, SIGNAL(activated(int)), this, SLOT(changeBaudRate(int)));
     } else {
         m_ui->can->setTitle("CAN not found");
     }
+#else
+    m_can = NULL;
+    m_ui->can->setTitle("CAN not found");
+#endif
+    connect(m_ui->baudrate, SIGNAL(activated(int)), this, SLOT(changeBaudRate(int)));
 }
 
 ControllerWidget::~ControllerWidget()
@@ -37,7 +42,9 @@ ControllerWidget::~ControllerWidget()
         m_joystickTimer->stop();
         delete m_joystickTimer;
     }
+#ifdef Q_OS_LINUX
     delete m_can;
+#endif
     delete m_joystick;
     delete m_ui;
 }
@@ -58,5 +65,11 @@ void ControllerWidget::updateJoystickData()
 
 void ControllerWidget::changeBaudRate(int rate)
 {
-    m_can->setBaudRate((CANBaudRate)rate);
+    bool success = false;
+#ifdef Q_OS_LINUX
+    success = m_can->setBaudRate((CANBaudRate)rate);
+#endif
+    if (!success) {
+        QMessageBox::critical(NULL, "Error", "Error change baudrate");
+    }
 }

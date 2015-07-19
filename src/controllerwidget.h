@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <QTimer>
 #include "qjoystick.h"
+#ifdef Q_OS_LINUX
 #include "qcan.h"
+#endif
 
 namespace Ui {
 class ControllerWidget;
@@ -23,7 +25,11 @@ private:
 
     QJoystick *m_joystick;
     QTimer *m_joystickTimer;
+#ifdef Q_OS_LINUX
     QCAN    *m_can;
+#else
+    void    *m_can;
+#endif
 
 private slots:
     void updateJoystickData();

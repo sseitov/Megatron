@@ -132,19 +132,44 @@
        </item>
        <item>
         <widget class="QGroupBox" name="can">
+         <property name="minimumSize">
+          <size>
+           <width>240</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>240</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="title">
           <string>CAN</string>
          </property>
          <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>15</x>
+            <x>0</x>
             <y>30</y>
-            <width>175</width>
+            <width>225</width>
             <height>26</height>
            </rect>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
