@@ -24,16 +24,12 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
 #ifdef Q_OS_LINUX
     m_can = new QCAN();
     if (m_can->init()) {
-        m_ui->can->setTitle(m_can->busName());
-        m_ui->baudrate->setCurrentIndex((int)m_can->baudRate());
-    } else {
-        m_ui->can->setTitle("CAN not found");
+        connect(m_can, SIGNAL(initialized(const QString&)), this, SLOT(canInitialized(const QString&)));
     }
 #else
     m_can = NULL;
     m_ui->can->setTitle("CAN not found");
 #endif
-    connect(m_ui->baudrate, SIGNAL(activated(int)), this, SLOT(changeBaudRate(int)));
 }
 
 ControllerWidget::~ControllerWidget()
@@ -63,14 +59,7 @@ void ControllerWidget::updateJoystickData()
     m_ui->button2->setChecked(buttons[1]);
 }
 
-void ControllerWidget::changeBaudRate(int rate)
+void ControllerWidget::canInitialized(const QString& name)
 {
-    bool success = false;
-#ifdef Q_OS_LINUX
-    success = m_can->setBaudRate((CANBaudRate)rate);
-#endif
-    if (!success && rate != 0) {
-        m_ui->baudrate->setCurrentIndex(0);
-        QMessageBox::critical(NULL, "Error", "Error change baudrate");
-    }
+    m_ui->can->setTitle("CAN " + name);
 }

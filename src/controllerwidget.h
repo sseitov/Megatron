@@ -33,7 +33,7 @@ private:
 
 private slots:
     void updateJoystickData();
-    void changeBaudRate(int rate);
+    void canInitialized(const QString&);
 };
 
 #endif // CONTROLLERWIDGET_H

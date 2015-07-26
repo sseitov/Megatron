@@ -28,14 +28,12 @@ LIBS += -framework Cocoa -framework SDL
 }
 
 linux {
-SOURCES += src/qcan.cpp \
-    src/2088C.c
-HEADERS  += src/qcan.h \
-    src/2088C.h
+SOURCES += src/qcan.cpp src/ObjDict.c
+HEADERS  += src/qcan.h src/ObjDict.h
 
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -lSDL
-LIBS += -L/usr/local/lib -lcanfestival_unix -lcanfestival -ldl -lrt
+LIBS += -L/usr/local/lib -lcanfestival -lcanfestival_unix -ldl -lrt
 }
 
 FORMS    += src/controllerwidget.ui

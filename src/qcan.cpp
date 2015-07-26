@@ -1,98 +1,122 @@
 #include "qcan.h"
 #include <QDebug>
-
 extern "C" {
-#include "2088C.h"
+#include "ObjDict.h"
 }
 
-static const char* gLibraryPath = "/usr/local/lib/libcanfestival_can_serial.so";
+/***************************  INITIALISATION  **********************************/
 
-QCAN::QCAN(QObject *parent) :
-    QObject(parent)
+// Callback function that check the read SDO demand
+void CheckReadInfoSDO(CO_Data* d, UNS8 nodeid)
 {
-    mBoard.busname = (char*)"/dev/ttyUSB0";
-    mBoard.baudrate = (char*)"125K";
+    UNS32 abortCode;
+    UNS32 data=0;
+    UNS32 size=64;
+
+    if(getReadResultNetworkDict(d, nodeid, &data, &size, &abortCode) != SDO_FINISHED)
+        printf("Master : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+    else {
+        QCAN* can = (QCAN*)d->classObject;
+        emit can->initialized(QString::number(data, 16));
+    }
+
+    // Finalize last SDO transfer with this node
+    closeSDOtransfer(d, nodeid, SDO_CLIENT);
+}
+
+void Init(CO_Data* d, UNS32 id)
+{
+}
+
+/***************************  CLEANUP  *****************************************/
+void Exit(CO_Data* d, UNS32 nodeid)
+{
+}
+
+/***************************  CALLBACK FUNCTIONS  *****************************************/
+
+void CAN_initialisation(CO_Data* d)
+{
+    printf("Node_initialisation\n");
+}
+
+void CAN_preOperational(CO_Data* d)
+{
+    printf("Node_preOperational\n");
+}
+
+void CAN_operational(CO_Data* d)
+{
+    printf("Node_operational\n");
+}
+
+void CAN_stopped(CO_Data* d)
+{
+    printf("Node_stopped\n");
+}
+
+void CAN_post_sync(CO_Data* d)
+{
+    printf("Master_post_sync\n");
+}
+
+void CAN_post_TPDO(CO_Data* d)
+{
+    printf("Master_post_TPDO\n");
+}
+
+void CAN_post_SlaveBootup(CO_Data* d, UNS8 nodeid)
+{
+    printf("Slave %x boot up\n", nodeid);
+}
+
+////////////////////////////////////////////////////
+/// \brief QCAN::QCAN
+/// \param parent
+///
+QCAN::QCAN(QObject *parent) :
+    QObject(parent), mPort(0), mData(&CANOpenShellSlaveOD_Data), mNodeID(2)
+{    
+    TimerInit();
 }
 
 QCAN::~QCAN()
 {
+    if (mPort) {
+        // Stop timer thread
+        StopTimerLoop(&Exit);
+        canClose(mData);
+    }
+    TimerCleanup();
 }
 
 bool QCAN::init()
 {
-    if (LoadCanDriver(gLibraryPath) == NULL) {
-        qDebug() << "Unable to load library: " << gLibraryPath;
+    if (!LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so"))
         return false;
-    }
-    m_port = canOpen(&mBoard,&_Data);
-    if(!m_port){
-        qDebug() << "Cannot open CAN Board " << mBoard.busname << " with rate " << mBoard.baudrate;
+    s_BOARD Board = {"/dev/ttyUSB0", "125K"};
+
+    /* Define callback functions */
+    mData->initialisation = CAN_initialisation;
+    mData->preOperational = CAN_preOperational;
+    mData->operational = CAN_operational;
+    mData->stopped = CAN_stopped;
+    mData->post_sync = CAN_post_sync;
+    mData->post_TPDO = CAN_post_TPDO;
+    mData->post_SlaveBootup = CAN_post_SlaveBootup;
+    mData->classObject = this;
+
+    mPort = canOpen(&Board, mData);
+    if(!mPort)
         return false;
-    }
-    setNodeId(&_Data, 0x01);
-    setState(&_Data, Initialisation);
-    e_nodeState state = getState(&_Data);
-    if (state = Pre_operational) {
-        setState(&_Data, Operational);
-        qDebug() << "Current state " << getState(&_Data);
-    }
+
+    // Defining the node Id
+    setNodeId(mData, mNodeID);
+    // Start Timer thread
+    StartTimerLoop(&Init);
+
+    setState(mData, Initialisation);
+    readNetworkDictCallback(mData, mNodeID, 0x1018, 0x02, 0, CheckReadInfoSDO, 0);
+
     return true;
-}
-
-QString QCAN::rateToString(CANBaudRate rate)
-{
-    switch (rate) {
-    case Rate10K:
-        return QString("10K");
-    case Rate20K:
-        return QString("20K");
-    case Rate50K:
-        return QString("50K");
-    case Rate125K:
-        return QString("125K");
-    case Rate250K:
-        return QString("250K");
-    case Rate500K:
-        return QString("500K");
-    case Rate800K:
-        return QString("800K");
-    case Rate1000K:
-        return QString("100K");
-    default:
-        return QString("Unknown");
-    }
-}
-
-CANBaudRate QCAN::rateFromString(char* rate)
-{
-    if (strcmp("10K", rate) == 0) {
-        return Rate10K;
-    } else if (strcmp("20K", rate) == 0) {
-        return Rate20K;
-    } else if (strcmp("50K", rate) == 0) {
-        return Rate50K;
-    } else if (strcmp("125K", rate) == 0) {
-        return Rate125K;
-    } else if (strcmp("250K", rate) == 0) {
-        return Rate250K;
-    } else if (strcmp("500K", rate) == 0) {
-        return Rate500K;
-    } else if (strcmp("800K", rate) == 0) {
-        return Rate800K;
-    } else if (strcmp("1000K", rate) == 0) {
-        return Rate1000K;
-    } else {
-        return RateUnknown;
-    }
-}
-
-CANBaudRate QCAN::baudRate()
-{
-    return QCAN::rateFromString(mBoard.baudrate);
-}
-
-bool QCAN::setBaudRate(CANBaudRate rate)
-{
-    UNS8 err = canChangeBaudRate(m_port, (char*)QCAN::rateToString(rate).toStdString().c_str());
-    return (err == 0);
 }
