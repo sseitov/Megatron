@@ -4,25 +4,74 @@ extern "C" {
 #include "ObjDict.h"
 }
 
-/***************************  INITIALISATION  **********************************/
-
 // Callback function that check the read SDO demand
 void CheckReadInfoSDO(CO_Data* d, UNS8 nodeid)
+{
+    UNS32 abortCode;
+    char data[255];
+    UNS32 size=255;
+
+    if(getReadResultNetworkDict(d, nodeid, data, &size, &abortCode) != SDO_FINISHED)
+        printf("Master : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+    else {
+        QCAN* can = (QCAN*)d->classObject;
+        emit can->initialized((const char*)data);
+    }
+    closeSDOtransfer(d, nodeid, SDO_CLIENT);
+}
+
+// Callback function that check the read SDO demand
+
+void CheckHighReadSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     UNS32 data=0;
     UNS32 size=64;
 
     if(getReadResultNetworkDict(d, nodeid, &data, &size, &abortCode) != SDO_FINISHED)
-        printf("Master : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+        printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
     else {
         QCAN* can = (QCAN*)d->classObject;
-        emit can->initialized(QString::number(data, 16));
+        emit can->highValues(data);
     }
-
-    // Finalize last SDO transfer with this node
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
 }
+
+void CheckLowReadSDO(CO_Data* d, UNS8 nodeid)
+{
+    UNS32 abortCode;
+    UNS32 data=0;
+    UNS32 size=64;
+
+    if(getReadResultNetworkDict(d, nodeid, &data, &size, &abortCode) != SDO_FINISHED)
+        printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+    else {
+        QCAN* can = (QCAN*)d->classObject;
+        emit can->lowValues(data);
+    }
+    closeSDOtransfer(d, nodeid, SDO_CLIENT);
+}
+
+// Callback function that check the write SDO demand
+void CheckLowWriteSDO(CO_Data* d, UNS8 nodeid)
+{
+    UNS32 abortCode;
+    if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
+        printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+    closeSDOtransfer(d, nodeid, SDO_CLIENT);
+    readNetworkDictCallback(d, nodeid, 0x6200, 1, 0, CheckLowReadSDO, 0);
+}
+
+void CheckHighWriteSDO(CO_Data* d, UNS8 nodeid)
+{
+    UNS32 abortCode;
+    if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
+        printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+    closeSDOtransfer(d, nodeid, SDO_CLIENT);
+    readNetworkDictCallback(d, nodeid, 0x6200, 2, 0, CheckHighReadSDO, 0);
+}
+
+/***************************  INITIALISATION  **********************************/
 
 void Init(CO_Data* d, UNS32 id)
 {
@@ -116,7 +165,33 @@ bool QCAN::init()
     StartTimerLoop(&Init);
 
     setState(mData, Initialisation);
-    readNetworkDictCallback(mData, mNodeID, 0x1018, 0x02, 0, CheckReadInfoSDO, 0);
+    masterSendNMTstateChange(mData, mNodeID, NMT_Reset_Node);
+    readNetworkDictCallback(mData, mNodeID, 0x1008, 0, 0, CheckReadInfoSDO, 0);
 
     return true;
+}
+
+bool QCAN::started()
+{
+    return (mPort != 0);
+}
+
+void QCAN::writeValue(int value)
+{
+    int index = value > 0 ? 2 : 1;
+    int data = 0;
+    if (value != 0) {
+        int v = abs(value >> 12);
+        if (value < 0) {
+            data ^= (0xff >> v);
+        } else {
+            data = (0xff << v);
+        }
+        data = 0xff - data;
+    }
+    if (index == 1) {
+        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, CheckLowWriteSDO, 0);
+    } else {
+        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, CheckHighWriteSDO, 0);
+    }
 }

@@ -4,7 +4,7 @@
 #define POLL_INTERVAL 40
 
 QJoystick::QJoystick(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_joystick(0)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 }
@@ -26,6 +26,11 @@ bool QJoystick::init()
         m_joystick = SDL_JoystickOpen(0);
         return true;
     }
+}
+
+bool QJoystick::started()
+{
+    return (m_joystick != 0);
 }
 
 QString QJoystick::joystickName()

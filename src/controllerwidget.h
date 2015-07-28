@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QCheckBox>
 #include "qjoystick.h"
 #ifdef Q_OS_LINUX
 #include "qcan.h"
@@ -24,16 +25,18 @@ private:
     Ui::ControllerWidget *m_ui;
 
     QJoystick *m_joystick;
-    QTimer *m_joystickTimer;
-#ifdef Q_OS_LINUX
     QCAN    *m_can;
-#else
-    void    *m_can;
-#endif
+    QTimer *m_updateTimer;
+    QVector<QCheckBox*> m_dataIndicator;
+
+    void resetIndicators();
 
 private slots:
-    void updateJoystickData();
+    void updateData();
     void canInitialized(const QString&);
+    void setCANvalue(int);
+    void getLowCANvalue(int);
+    void getHighCANvalue(int);
 };
 
 #endif // CONTROLLERWIDGET_H

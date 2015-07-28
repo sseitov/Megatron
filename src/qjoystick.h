@@ -5,11 +5,7 @@
 #include <QString>
 #include <QList>
 
-#ifdef Q_OS_MACX
-#include <SDL.h>
-#else
 #include <SDL/SDL.h>
-#endif
 
 class QJoystick : public QObject
 {
@@ -19,6 +15,7 @@ public:
     ~QJoystick();
 
     bool init();
+    bool started();
 
     QString joystickName();
     int joystickNumAxes();

@@ -8,58 +8,117 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
     m_ui(new Ui::ControllerWidget)
 {
     m_ui->setupUi(this);
+    m_dataIndicator.push_back(m_ui->d0);
+    m_dataIndicator.push_back(m_ui->d1);
+    m_dataIndicator.push_back(m_ui->d2);
+    m_dataIndicator.push_back(m_ui->d3);
+    m_dataIndicator.push_back(m_ui->d4);
+    m_dataIndicator.push_back(m_ui->d5);
+    m_dataIndicator.push_back(m_ui->d6);
+    m_dataIndicator.push_back(m_ui->d7);
+    m_dataIndicator.push_back(m_ui->d8);
+    m_dataIndicator.push_back(m_ui->d9);
+    m_dataIndicator.push_back(m_ui->d10);
+    m_dataIndicator.push_back(m_ui->d11);
+    m_dataIndicator.push_back(m_ui->d12);
+    m_dataIndicator.push_back(m_ui->d13);
+    m_dataIndicator.push_back(m_ui->d14);
+    m_dataIndicator.push_back(m_ui->d15);
+
     m_ui->monitor->setStyleSheet("background-color:black;");
 
     m_joystick = new QJoystick();
     if (m_joystick->init()) {
         m_ui->joystick->setTitle(m_joystick->joystickName());
-        m_joystickTimer = new QTimer;
-        m_joystickTimer->setInterval(50);
-        connect(m_joystickTimer, SIGNAL(timeout()), this, SLOT(updateJoystickData()));
-        m_joystickTimer->start();
     } else {
-        m_joystickTimer = 0;
         m_ui->joystick->setTitle("Joystick not found");
     }
-#ifdef Q_OS_LINUX
+
     m_can = new QCAN();
     if (m_can->init()) {
         connect(m_can, SIGNAL(initialized(const QString&)), this, SLOT(canInitialized(const QString&)));
+        connect(m_can, SIGNAL(lowValues(int)), this, SLOT(getLowCANvalue(int)));
+        connect(m_can, SIGNAL(highValues(int)), this, SLOT(getHighCANvalue(int)));
+        connect(m_ui->yAxis, SIGNAL(valueChanged(int)), this, SLOT(setCANvalue(int)));
+    } else {
+        m_ui->can->setTitle("CAN not found");
     }
-#else
-    m_can = NULL;
-    m_ui->can->setTitle("CAN not found");
-#endif
+
+    m_updateTimer = new QTimer;
+    m_updateTimer->setInterval(50);
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
+    m_updateTimer->start();
 }
 
 ControllerWidget::~ControllerWidget()
 {
-    if (m_joystickTimer) {
-        m_joystickTimer->stop();
-        delete m_joystickTimer;
-    }
-#ifdef Q_OS_LINUX
+    m_updateTimer->stop();
+    delete m_updateTimer;
     delete m_can;
-#endif
     delete m_joystick;
     delete m_ui;
 }
 
-void ControllerWidget::updateJoystickData()
+void ControllerWidget::updateData()
 {
-    QList<int> axis;
-    QList<bool> buttons;
-    m_joystick->getData(axis, buttons);
+    if (m_joystick-> started()) {
+        QList<int> axis;
+        QList<bool> buttons;
+        m_joystick->getData(axis, buttons);
 
-    m_ui->xAxis->setValue(axis[0]);
-    m_ui->yAxis->setValue(axis[1]*(-1));
-    m_ui->zAxis->setValue(axis[2]);
+        int x = axis[0];
+        int y = axis[1]*(-1);
+        int z = axis[2];
 
-    m_ui->button1->setChecked(buttons[0]);
-    m_ui->button2->setChecked(buttons[1]);
+        m_ui->xAxis->setValue(x);
+        m_ui->yAxis->setValue(y);
+        m_ui->zAxis->setValue(z);
+
+        m_ui->button1->setChecked(buttons[0]);
+        m_ui->button2->setChecked(buttons[1]);
+    }
 }
 
 void ControllerWidget::canInitialized(const QString& name)
 {
-    m_ui->can->setTitle("CAN " + name);
+    m_ui->can->setTitle(name);
+}
+
+void ControllerWidget::setCANvalue(int value)
+{
+    m_can->writeValue(value);
+}
+
+void ControllerWidget::getLowCANvalue(int value)
+{
+    qDebug() << "LOW " << value;
+    int offset = 0x10;
+    for (int i=0; i<8; i++) {
+        if (value >= (offset << i)) {
+            if (!m_dataIndicator[i]->isChecked()) {
+                m_dataIndicator[i]->setChecked(true);
+            }
+        } else {
+            if (m_dataIndicator[i]->isChecked()) {
+                m_dataIndicator[i]->setChecked(false);
+            }
+        }
+    }
+}
+
+void ControllerWidget::getHighCANvalue(int value)
+{
+    qDebug() << "HIGH " << value;
+    int offset = 0x1;
+    for (int i=0; i<8; i++) {
+        if (value >= (offset << i)) {
+            if (!m_dataIndicator[i+8]->isChecked()) {
+                m_dataIndicator[i+8]->setChecked(true);
+            }
+        } else {
+            if (m_dataIndicator[i+8]->isChecked()) {
+                m_dataIndicator[i+8]->setChecked(false);
+            }
+        }
+    }
 }

@@ -14,9 +14,13 @@ public:
     ~QCAN();
 
     bool init();
+    bool started();
+    void writeValue(int value);
 
 signals:
     void initialized(const QString&);
+    void lowValues(int);
+    void highValues(int);
 
 public slots:
 
