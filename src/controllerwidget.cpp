@@ -37,8 +37,8 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
     m_can = new QCAN();
     if (m_can->init()) {
         connect(m_can, SIGNAL(initialized(const QString&)), this, SLOT(canInitialized(const QString&)));
-        connect(m_can, SIGNAL(lowValues(int)), this, SLOT(getLowCANvalue(int)));
-        connect(m_can, SIGNAL(highValues(int)), this, SLOT(getHighCANvalue(int)));
+        connect(m_can, SIGNAL(lowValues(unsigned int)), this, SLOT(getLowCANvalue(unsigned int)));
+        connect(m_can, SIGNAL(highValues(unsigned int)), this, SLOT(getHighCANvalue(unsigned int)));
         connect(m_ui->yAxis, SIGNAL(valueChanged(int)), this, SLOT(setCANvalue(int)));
     } else {
         m_ui->can->setTitle("CAN not found");
@@ -89,12 +89,12 @@ void ControllerWidget::setCANvalue(int value)
     m_can->writeValue(value);
 }
 
-void ControllerWidget::getLowCANvalue(int value)
+void ControllerWidget::getLowCANvalue(unsigned int value)
 {
     qDebug() << "LOW " << value;
-    int offset = 0x10;
+    int offset = 0x1;
     for (int i=0; i<8; i++) {
-        if (value >= (offset << i)) {
+        if (value & (offset << i)) {
             if (!m_dataIndicator[i]->isChecked()) {
                 m_dataIndicator[i]->setChecked(true);
             }
@@ -106,12 +106,12 @@ void ControllerWidget::getLowCANvalue(int value)
     }
 }
 
-void ControllerWidget::getHighCANvalue(int value)
+void ControllerWidget::getHighCANvalue(unsigned int value)
 {
-    qDebug() << "HIGH " << value;
+//    qDebug() << "HIGH " << value;
     int offset = 0x1;
     for (int i=0; i<8; i++) {
-        if (value >= (offset << i)) {
+        if (value & (offset << i)) {
             if (!m_dataIndicator[i+8]->isChecked()) {
                 m_dataIndicator[i+8]->setChecked(true);
             }

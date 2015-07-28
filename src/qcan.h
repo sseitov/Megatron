@@ -19,8 +19,8 @@ public:
 
 signals:
     void initialized(const QString&);
-    void lowValues(int);
-    void highValues(int);
+    void lowValues(unsigned int);
+    void highValues(unsigned int);
 
 public slots:
 

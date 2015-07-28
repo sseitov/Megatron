@@ -35,8 +35,8 @@ private slots:
     void updateData();
     void canInitialized(const QString&);
     void setCANvalue(int);
-    void getLowCANvalue(int);
-    void getHighCANvalue(int);
+    void getLowCANvalue(unsigned int);
+    void getHighCANvalue(unsigned int);
 };
 
 #endif // CONTROLLERWIDGET_H
