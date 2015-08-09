@@ -5,9 +5,8 @@
 #include <QTimer>
 #include <QCheckBox>
 #include "qjoystick.h"
-#ifdef Q_OS_LINUX
 #include "qcan.h"
-#endif
+#include "sinewidget.h"
 
 namespace Ui {
 class ControllerWidget;
@@ -25,18 +24,20 @@ private:
     Ui::ControllerWidget *m_ui;
 
     QJoystick *m_joystick;
-    QCAN    *m_can;
+    QCAN    m_can[2];
     QTimer *m_updateTimer;
-    QVector<QCheckBox*> m_dataIndicator;
 
-    void resetIndicators();
+    QVector<QCheckBox*> m_dataIndicator2057;
+    QVector<QCheckBox*> m_dataIndicator2088PO;
+    QVector<SineWidget*> m_dataMonitor2088PO;
 
 private slots:
     void updateData();
-    void canInitialized(const QString&);
-    void setCANvalue(int);
-    void getLowCANvalue(unsigned int);
-    void getHighCANvalue(unsigned int);
+    void canInitialized(QCAN*);
+
+    void getLowCAN2057value(unsigned int);
+    void getHighCAN2057value(unsigned int);
+    void getPWMDuty(int, int);
 };
 
 #endif // CONTROLLERWIDGET_H

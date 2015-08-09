@@ -7,134 +7,137 @@
     <x>0</x>
     <y>0</y>
     <width>895</width>
-    <height>702</height>
+    <height>828</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Megatron</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QGroupBox" name="joystick">
-         <property name="minimumSize">
-          <size>
-           <width>240</width>
-           <height>320</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>240</width>
-           <height>320</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Joystick</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="1">
-             <widget class="QSlider" name="xAxis">
-              <property name="minimum">
-               <number>-32768</number>
-              </property>
-              <property name="maximum">
-               <number>32768</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QSlider" name="yAxis">
-              <property name="minimum">
-               <number>-32768</number>
-              </property>
-              <property name="maximum">
-               <number>32768</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QDial" name="zAxis">
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>180</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>-32768</number>
-              </property>
-              <property name="maximum">
-               <number>32768</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
+      <widget class="QGroupBox" name="joystick">
+       <property name="minimumSize">
+        <size>
+         <width>240</width>
+         <height>320</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>240</width>
+         <height>320</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Joystick not found</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="1">
+           <widget class="QSlider" name="xAxis">
+            <property name="minimum">
+             <number>-32768</number>
+            </property>
+            <property name="maximum">
+             <number>32768</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QCheckBox" name="button1">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="mouseTracking">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Button 1</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="button2">
-              <property name="mouseTracking">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Button 2</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="1" column="0">
+           <widget class="QSlider" name="yAxis">
+            <property name="minimum">
+             <number>-32768</number>
+            </property>
+            <property name="maximum">
+             <number>32768</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDial" name="zAxis">
+            <property name="minimumSize">
+             <size>
+              <width>180</width>
+              <height>180</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>-32768</number>
+            </property>
+            <property name="maximum">
+             <number>32768</number>
+            </property>
+           </widget>
           </item>
          </layout>
-         <zorder></zorder>
-         <zorder></zorder>
-        </widget>
-       </item>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QCheckBox" name="button1">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="mouseTracking">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Button 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="button2">
+            <property name="mouseTracking">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Button 2</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+       <zorder></zorder>
+       <zorder></zorder>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QGroupBox" name="can">
          <property name="minimumSize">
           <size>
-           <width>240</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
@@ -145,7 +148,7 @@
           </size>
          </property>
          <property name="title">
-          <string>CAN</string>
+          <string>CAN not found</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
@@ -267,20 +270,271 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QGroupBox" name="can_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>240</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>CAN not found</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QCheckBox" name="po0">
+              <property name="text">
+               <string>PO 0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po1">
+              <property name="text">
+               <string>PO 1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po2">
+              <property name="text">
+               <string>PO 2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po3">
+              <property name="text">
+               <string>PO 3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po4">
+              <property name="text">
+               <string>PO 4</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po5">
+              <property name="text">
+               <string>PO 5</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po6">
+              <property name="text">
+               <string>PO 6</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="po7">
+              <property name="text">
+               <string>PO 7</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di0">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di1">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di3">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 4</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di5">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 5</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di6">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 6</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="di7">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>DI 7</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </item>
-     <item>
-      <widget class="QGroupBox" name="monitor">
-       <property name="title">
-        <string>Monitor</string>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="monitor">
+     <property name="title">
+      <string>Monitor</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="SineWidget" name="P0" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P1" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P2" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P3" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P4" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P5" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P6" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SineWidget" name="P7" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SineWidget</class>
+   <extends>QWidget</extends>
+   <header>src/sinewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

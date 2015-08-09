@@ -11,17 +11,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Megatron
 TEMPLATE = app
 
-
 SOURCES += src/main.cpp\
     src/controllerwidget.cpp \
     src/qjoystick.cpp \
     src/qcan.cpp \
-    src/ObjDict.c
+    src/ObjDict.c \
+    src/sinewidget.cpp
 
 HEADERS  += src/controllerwidget.h \
     src/qjoystick.h \
     src/qcan.h \
-    src/ObjDict.h
+    src/ObjDict.h \
+    src/sinewidget.h
 
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -lSDL

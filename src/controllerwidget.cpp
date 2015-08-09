@@ -3,29 +3,62 @@
 #include <QDebug>
 #include <QMessageBox>
 
+/***************************  INITIALISATION  **********************************/
+
+void Init(CO_Data*, UNS32)
+{
+}
+
+/***************************  CLEANUP  *****************************************/
+void Exit(CO_Data*, UNS32)
+{
+}
+
 ControllerWidget::ControllerWidget(QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::ControllerWidget)
 {
     m_ui->setupUi(this);
-    m_dataIndicator.push_back(m_ui->d0);
-    m_dataIndicator.push_back(m_ui->d1);
-    m_dataIndicator.push_back(m_ui->d2);
-    m_dataIndicator.push_back(m_ui->d3);
-    m_dataIndicator.push_back(m_ui->d4);
-    m_dataIndicator.push_back(m_ui->d5);
-    m_dataIndicator.push_back(m_ui->d6);
-    m_dataIndicator.push_back(m_ui->d7);
-    m_dataIndicator.push_back(m_ui->d8);
-    m_dataIndicator.push_back(m_ui->d9);
-    m_dataIndicator.push_back(m_ui->d10);
-    m_dataIndicator.push_back(m_ui->d11);
-    m_dataIndicator.push_back(m_ui->d12);
-    m_dataIndicator.push_back(m_ui->d13);
-    m_dataIndicator.push_back(m_ui->d14);
-    m_dataIndicator.push_back(m_ui->d15);
 
-    m_ui->monitor->setStyleSheet("background-color:black;");
+    m_dataIndicator2057.push_back(m_ui->d0);
+    m_dataIndicator2057.push_back(m_ui->d1);
+    m_dataIndicator2057.push_back(m_ui->d2);
+    m_dataIndicator2057.push_back(m_ui->d3);
+    m_dataIndicator2057.push_back(m_ui->d4);
+    m_dataIndicator2057.push_back(m_ui->d5);
+    m_dataIndicator2057.push_back(m_ui->d6);
+    m_dataIndicator2057.push_back(m_ui->d7);
+    m_dataIndicator2057.push_back(m_ui->d8);
+    m_dataIndicator2057.push_back(m_ui->d9);
+    m_dataIndicator2057.push_back(m_ui->d10);
+    m_dataIndicator2057.push_back(m_ui->d11);
+    m_dataIndicator2057.push_back(m_ui->d12);
+    m_dataIndicator2057.push_back(m_ui->d13);
+    m_dataIndicator2057.push_back(m_ui->d14);
+    m_dataIndicator2057.push_back(m_ui->d15);
+
+    m_dataIndicator2088PO.push_back(m_ui->po0);
+    m_dataIndicator2088PO.push_back(m_ui->po1);
+    m_dataIndicator2088PO.push_back(m_ui->po2);
+    m_dataIndicator2088PO.push_back(m_ui->po3);
+    m_dataIndicator2088PO.push_back(m_ui->po4);
+    m_dataIndicator2088PO.push_back(m_ui->po5);
+    m_dataIndicator2088PO.push_back(m_ui->po6);
+    m_dataIndicator2088PO.push_back(m_ui->po7);
+
+    m_dataMonitor2088PO.push_back(m_ui->P0);
+    m_dataMonitor2088PO.push_back(m_ui->P1);
+    m_dataMonitor2088PO.push_back(m_ui->P2);
+    m_dataMonitor2088PO.push_back(m_ui->P3);
+    m_dataMonitor2088PO.push_back(m_ui->P4);
+    m_dataMonitor2088PO.push_back(m_ui->P5);
+    m_dataMonitor2088PO.push_back(m_ui->P6);
+    m_dataMonitor2088PO.push_back(m_ui->P7);
+
+    for (int i=0; i<8; i++) {
+        m_dataIndicator2088PO[i]->setObjectName(QString::number(i));
+        m_dataMonitor2088PO[i]->setObjectName(QString::number(i));
+    }
 
     m_joystick = new QJoystick();
     if (m_joystick->init()) {
@@ -34,14 +67,15 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
         m_ui->joystick->setTitle("Joystick not found");
     }
 
-    m_can = new QCAN();
-    if (m_can->init()) {
-        connect(m_can, SIGNAL(initialized(const QString&)), this, SLOT(canInitialized(const QString&)));
-        connect(m_can, SIGNAL(lowValues(unsigned int)), this, SLOT(getLowCANvalue(unsigned int)));
-        connect(m_can, SIGNAL(highValues(unsigned int)), this, SLOT(getHighCANvalue(unsigned int)));
-        connect(m_ui->yAxis, SIGNAL(valueChanged(int)), this, SLOT(setCANvalue(int)));
-    } else {
-        m_ui->can->setTitle("CAN not found");
+    // Start CAN Timer thread
+    TimerInit();
+    StartTimerLoop(&Init);
+
+    const char* port[2] = {"/dev/ttyUSB0", "/dev/ttyUSB1"};
+    for (int i=0; i<2; i++) {
+        if (m_can[i].init(port[i])) {
+            connect(&m_can[i], SIGNAL(initialized(QCAN*)), this, SLOT(canInitialized(QCAN*)));
+        }
     }
 
     m_updateTimer = new QTimer;
@@ -54,7 +88,11 @@ ControllerWidget::~ControllerWidget()
 {
     m_updateTimer->stop();
     delete m_updateTimer;
-    delete m_can;
+
+    // Stop timer thread
+    StopTimerLoop(&Exit);
+    TimerCleanup();
+
     delete m_joystick;
     delete m_ui;
 }
@@ -79,46 +117,58 @@ void ControllerWidget::updateData()
     }
 }
 
-void ControllerWidget::canInitialized(const QString& name)
+void ControllerWidget::canInitialized(QCAN* can)
 {
-    m_ui->can->setTitle(name);
+    int id = can->getID();
+    if (id == CAN_2057) {
+        m_ui->can->setTitle(can->getTitle());
+        connect(can, SIGNAL(low2057Values(unsigned int)), this, SLOT(getLowCAN2057value(unsigned int)));
+        connect(can, SIGNAL(high2057Values(unsigned int)), this, SLOT(getHighCAN2057value(unsigned int)));
+        connect(m_ui->yAxis, SIGNAL(valueChanged(int)), can, SLOT(writeValue2057(int)));
+    } else if (id == CAN_2088) {
+        m_ui->can_2->setTitle(can->getTitle());
+        connect(m_ui->xAxis, SIGNAL(valueChanged(int)), can, SLOT(writePwmDuty(int)));
+        connect(can, SIGNAL(pwmDuty(int, int)), this, SLOT(getPWMDuty(int, int)));
+        for (int i=0; i<8; i++) {
+            connect(m_dataIndicator2088PO[i], SIGNAL(toggled(bool)), can, SLOT(togglePwmOutput(bool)));
+        }
+    }
 }
 
-void ControllerWidget::setCANvalue(int value)
+void ControllerWidget::getLowCAN2057value(unsigned int value)
 {
-    m_can->writeValue(value);
-}
-
-void ControllerWidget::getLowCANvalue(unsigned int value)
-{
-    qDebug() << "LOW " << value;
     int offset = 0x1;
     for (int i=0; i<8; i++) {
         if (value & (offset << i)) {
-            if (!m_dataIndicator[i]->isChecked()) {
-                m_dataIndicator[i]->setChecked(true);
+            if (!m_dataIndicator2057[i]->isChecked()) {
+                m_dataIndicator2057[i]->setChecked(true);
             }
         } else {
-            if (m_dataIndicator[i]->isChecked()) {
-                m_dataIndicator[i]->setChecked(false);
+            if (m_dataIndicator2057[i]->isChecked()) {
+                m_dataIndicator2057[i]->setChecked(false);
             }
         }
     }
 }
 
-void ControllerWidget::getHighCANvalue(unsigned int value)
+void ControllerWidget::getHighCAN2057value(unsigned int value)
 {
-//    qDebug() << "HIGH " << value;
     int offset = 0x1;
     for (int i=0; i<8; i++) {
         if (value & (offset << i)) {
-            if (!m_dataIndicator[i+8]->isChecked()) {
-                m_dataIndicator[i+8]->setChecked(true);
+            if (!m_dataIndicator2057[i+8]->isChecked()) {
+                m_dataIndicator2057[i+8]->setChecked(true);
             }
         } else {
-            if (m_dataIndicator[i+8]->isChecked()) {
-                m_dataIndicator[i+8]->setChecked(false);
+            if (m_dataIndicator2057[i+8]->isChecked()) {
+                m_dataIndicator2057[i+8]->setChecked(false);
             }
         }
     }
+}
+
+void ControllerWidget::getPWMDuty(int index, int value)
+{
+    SineWidget *w = m_dataMonitor2088PO[index];
+    w->setPulseDuty(value);
 }
