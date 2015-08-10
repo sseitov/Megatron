@@ -7,8 +7,8 @@ extern "C" {
 #include <canfestival.h>
 }
 
-#define CAN_2057    8279
-#define CAN_2088    8328
+#define CAN_2057    0x2057
+#define CAN_2088    0x2088
 
 class QCAN : public QObject
 {

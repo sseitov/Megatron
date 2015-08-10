@@ -22,7 +22,6 @@ void SineWidget::setPulseDuty(int value)
     if (value < 0) {
         doRepaint = false;
     } else {
-        qDebug() << "SET DUTY " << value;
         doRepaint = true;
         double duty = (double)value/1000.0;
         if (duty <0.001) {
