@@ -27,5 +27,4 @@ HEADERS  += src/controllerwidget.h \
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -lSDL
 LIBS += -L/usr/local/lib -lcanfestival -lcanfestival_unix -ldl -lrt
-
 FORMS    += src/controllerwidget.ui
