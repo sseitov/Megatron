@@ -131,7 +131,28 @@ void CheckReadInfoSDO(CO_Data* d, UNS8 nodeid)
 	GetSlaveNodeInfo(nodeid);
 }
 
+void CheckReadTitleSDO(CO_Data* d, UNS8 nodeid)
+{
+	UNS32 abortCode;
+    	char data[255];
+	UNS32 size=sizeof(data);;
+
+	if(getReadResultNetworkDict(CANOpenShellOD_Data, nodeid, data, &size, &abortCode) != SDO_FINISHED)
+		printf("Master : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+	else
+	{
+		printf("Device title     : %s\n", data);
+	}
+	/* Finalize last SDO transfer with this node */
+	closeSDOtransfer(CANOpenShellOD_Data, nodeid, SDO_CLIENT);
+}
+
 /* Retrieve node informations located at index 0x1000 (Device Type) and 0x1018 (Identity) */
+void GetSlaveNodeTitle(UNS8 nodeid)
+{
+	readNetworkDictCallback(CANOpenShellOD_Data, nodeid, 0x1008, 0x00, 0, CheckReadTitleSDO, 0);
+}
+
 void GetSlaveNodeInfo(UNS8 nodeid)
 {
 		switch(++get_info_step)
@@ -389,6 +410,9 @@ int ProcessCommand(char* command)
 					break;
 		case cst_str4('i', 'n', 'f', 'o') : /* Retrieve node informations */
 					GetSlaveNodeInfo(ExtractNodeId(command + 5));
+					break;
+		case cst_str4('t', 'i', 't', 'l') : /* Retrieve node informations */
+					GetSlaveNodeTitle(ExtractNodeId(command + 5));
 					break;
 		case cst_str4('r', 's', 'd', 'o') : /* Read device entry */
 					ReadDeviceEntry(command);

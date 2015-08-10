@@ -163,7 +163,7 @@ CAN_HANDLE canOpen_driver(s_BOARD *board)
   if(fd0 <= 0)
   {
     fprintf(stderr, "canOpen_driver (VScom): error opening %s\n", board->busname);
-    return (CAN_HANDLE)fd0;
+    return 0;
   }
   printf("(fd = %d)\n", fd0);
   baudrate = TranslateBaudeRate(board->baudrate);
