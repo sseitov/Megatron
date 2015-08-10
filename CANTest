@@ -1,0 +1,2 @@
+#!/bin/sh
+CANOpenShell load#libcanfestival_can_vscom.so,/dev/ttyUSB0,125K,2,0
