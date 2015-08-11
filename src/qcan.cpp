@@ -46,7 +46,7 @@ void QCAN::post_SlaveBootup(CO_Data* d, UNS8 nodeid)
 
 // Callback function that check the read 2057 SDO demand
 
-void CheckHighReadSDO(CO_Data* d, UNS8 nodeid)
+void QCAN::CheckHighReadSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     UNS32 data=0;
@@ -61,7 +61,7 @@ void CheckHighReadSDO(CO_Data* d, UNS8 nodeid)
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
 }
 
-void CheckLowReadSDO(CO_Data* d, UNS8 nodeid)
+void QCAN::CheckLowReadSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     UNS32 data=0;
@@ -78,22 +78,22 @@ void CheckLowReadSDO(CO_Data* d, UNS8 nodeid)
 
 // Callback function that check the write 2057 SDO demand
 
-void CheckLowWriteSDO(CO_Data* d, UNS8 nodeid)
+void QCAN::CheckLowWriteSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
         printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
-    readNetworkDictCallback(d, nodeid, 0x6200, 1, 0, CheckLowReadSDO, 0);
+    readNetworkDictCallback(d, nodeid, 0x6200, 1, 0, &QCAN::CheckLowReadSDO, 0);
 }
 
-void CheckHighWriteSDO(CO_Data* d, UNS8 nodeid)
+void QCAN::CheckHighWriteSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
         printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
-    readNetworkDictCallback(d, nodeid, 0x6200, 2, 0, CheckHighReadSDO, 0);
+    readNetworkDictCallback(d, nodeid, 0x6200, 2, 0, &QCAN::CheckHighReadSDO, 0);
 }
 
 ////////////////////////////////////////////////////
@@ -186,11 +186,11 @@ void QCAN::writeValue2057(int value)
     if (index == 1) {
         int values[9] = {0xFF, 0xFE, 0xFC, 0xF8, 0xF0, 0xE0, 0xC0, 0x80, };
         data = values[8-valueIndex];
-        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, CheckLowWriteSDO, 0);
+        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, &QCAN::CheckLowWriteSDO, 0);
     } else {
         int values[9] = {0, 0x01, 0x03, 0x07, 0x0f, 0x1F, 0x3F, 0x7F, 0xfF};
         data = values[valueIndex];
-        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, CheckHighWriteSDO, 0);
+        writeNetworkDictCallBack(mData, mNodeID, 0x6200, index, 1, 0, &data, &QCAN::CheckHighWriteSDO, 0);
     }
 }
 

@@ -54,6 +54,11 @@ private:
     static void CheckReadPWM(CO_Data* d, UNS8 nodeid);
     static void CheckWriteSDO(CO_Data* d, UNS8 nodeid);
 
+    static void CheckHighReadSDO(CO_Data* d, UNS8 nodeid);
+    static void CheckLowReadSDO(CO_Data* d, UNS8 nodeid);
+    static void CheckLowWriteSDO(CO_Data* d, UNS8 nodeid);
+    static void CheckHighWriteSDO(CO_Data* d, UNS8 nodeid);
+
     static void initialisation(CO_Data* d);
     static void preOperational(CO_Data* d);
     static void operational(CO_Data* d);
