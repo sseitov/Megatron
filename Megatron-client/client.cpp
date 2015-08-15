@@ -14,6 +14,9 @@ Client::Client(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->joystick->connectControls(ui->frequency, ui->frequencyIndicator, ui->lowLimit, ui->lowLimitIndicator, ui->highLimit, ui->highLimitIndicator, ui->joystickMonitor);
+    connect(ui->joystickMonitor, SIGNAL(setLevel(int,int,int,int)), this, SLOT(setLevel(int,int,int,int)));
+
     ui->connectButton->setText("Connect");
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
@@ -117,6 +120,33 @@ void Client::setLevel(int port, bool value)
     }
 }
 
+void Client::setLevel(int port0, int level0, int port1, int level1)
+{
+    if (mServer.isOpen()) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_SetValue);
+
+        QVariantList list;
+
+        QVariantMap p0;
+        p0.insert("Port", port0);
+        p0.insert("Level", level0);
+        list.append(p0);
+
+        QVariantMap p1;
+        p1.insert("Port", port1);
+        p1.insert("Level", level1);
+        list.append(p1);
+
+        map.insert("PortArray", list);
+
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
+    }
+}
+
 void Client::start(bool start)
 {
     if (start) {
@@ -152,8 +182,7 @@ void Client::onSokReadyRead()
                     ui->can_2057->setChecked(true);
                 }
                 if (type.toInt() == CAN_2088) {
-                    qDebug() << "CAN_2088";
-//                    ui->can_2088->setChecked(true);
+                    ui->joystick->setChecked(true);
                 }
             }
         }

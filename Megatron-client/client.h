@@ -21,6 +21,7 @@ public:
 private slots:
     void connectInput(bool);
     void setLevel(int, bool);
+    void setLevel(int, int, int, int);
     void start(bool);
     void onSokReadyRead();
     void onSokConnected();

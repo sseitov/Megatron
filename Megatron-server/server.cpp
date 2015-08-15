@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QVariantMap>
 #include "../common.h"
 
@@ -34,6 +35,10 @@ Server::Server(QWidget *parent) :
     mOutputIndicator.append(ui->d14);
     mOutputIndicator.append(ui->d15);
 
+    mOutputPulseIndicator.append(ui->po0);
+    mOutputPulseIndicator.append(ui->po1);
+    mOutputPulseIndicator.append(ui->po2);
+    mOutputPulseIndicator.append(ui->po3);
 }
 
 Server::~Server()
@@ -50,6 +55,7 @@ void Server::start(bool start)
             QMessageBox::critical(0, "Unable to start the server", mServer->errorString(), QMessageBox::Ok);
         } else {
             ui->can2057->setChecked(true);
+            ui->can2088->setChecked(true);
             setWindowTitle(mServer->serverAddress().toString());
             ui->startButton->setText("Stop");
             ui->startButton->setStyleSheet("background-color:red; color: white;");
@@ -118,12 +124,16 @@ void Server::slotReadClient()
         if (commandType == QJsonValue::Undefined)
             return;
         if (commandType.toInt() == CAN_SetValue) {
-            QJsonValue port = command.take("Port");
-            QJsonValue value = command.take("Value");
             if (canType.toInt() == CAN_2057) {
+                QJsonValue port = command.take("Port");
+                QJsonValue value = command.take("Value");
                 set2057Value(port.toInt(), value.toBool());
-            } else {
-                set2088Value(port.toInt(), value.toInt());
+            } else if (canType.toInt() == CAN_2088) {
+                QJsonArray values = command.take("PortArray").toArray();
+                for (int i=0; i<values.count(); i++) {
+                    QJsonObject value = values[i].toObject();
+                    set2088Value(value.take("Port").toInt(), value.take("Level").toInt());
+                }
             }
         }
     }
@@ -143,5 +153,5 @@ void Server::reset2057()
 
 void Server::set2088Value(int port, int value)
 {
-
+    mOutputPulseIndicator[port]->setValue(value);
 }

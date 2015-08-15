@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QCheckBox>
+#include <QProgressBar>
 
 namespace Ui {
 class Server;
@@ -30,6 +31,7 @@ private:
     QTcpSocket *mClient;
 
     QVector<QCheckBox*> mOutputIndicator;
+    QVector<QProgressBar*> mOutputPulseIndicator;
 
     void set2057Value(int port, bool isOn);
     void reset2057();

@@ -26,7 +26,6 @@ private:
     bool mInverse;
     int mPort;
     void sendLevel(bool);
-
 };
 
 #endif // INPUTBUTTON_H
