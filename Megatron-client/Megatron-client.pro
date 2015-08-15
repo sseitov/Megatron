@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += network widgets
 
 TARGET = Megatron-client
 TEMPLATE = app
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
 
 HEADERS  += client.h \
     buttonsetup.h \
-    inputbutton.h
+    inputbutton.h \
+    ../common.h
 
 FORMS    += client.ui \
     buttonsetup.ui

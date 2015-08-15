@@ -44,6 +44,8 @@ void InputButton::levelOn()
 {
     if (!mButton->isCheckable()) {
         sendLevel(true);
+    } else {
+        mButton->setStyleSheet("QPushButton { background : black; }");
     }
 }
 

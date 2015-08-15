@@ -2,6 +2,9 @@
 #define SERVER_H
 
 #include <QWidget>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QCheckBox>
 
 namespace Ui {
 class Server;
@@ -17,9 +20,20 @@ public:
 
 private slots:
     void start(bool);
+    void connection();
+    void slotReadClient();
+    void slotDisconnectClient();
 
 private:
     Ui::Server *ui;
+    QTcpServer *mServer;
+    QTcpSocket *mClient;
+
+    QVector<QCheckBox*> mOutputIndicator;
+
+    void set2057Value(int port, bool isOn);
+    void reset2057();
+    void set2088Value(int port, int value);
 };
 
 #endif // SERVER_H

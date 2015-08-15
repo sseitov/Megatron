@@ -1,12 +1,22 @@
 #include "client.h"
 #include "ui_client.h"
 #include "buttonsetup.h"
+#include "../common.h"
+#include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QVariantMap>
+#include <QJsonArray>
 
 Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
 {
     ui->setupUi(this);
+
+    ui->connectButton->setText("Connect");
+    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 
     ui->control0->connectButton(ui->button0);
     mInputButton.append(ui->control0);
@@ -63,6 +73,11 @@ Client::Client(QWidget *parent) :
     mOutputIndicator.append(ui->d13);
     mOutputIndicator.append(ui->d14);
     mOutputIndicator.append(ui->d15);
+
+    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
+    connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
+    connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
+    connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
 }
 
 Client::~Client()
@@ -90,4 +105,81 @@ void Client::connectInput(bool enabled)
 void Client::setLevel(int port, bool value)
 {
     mOutputIndicator[port]->setChecked(value);
+    if (mServer.isOpen()) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2057);
+        map.insert("CommandType", CAN_SetValue);
+        map.insert("Port", port);
+        map.insert("Value", value);
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
+    }
+}
+
+void Client::start(bool start)
+{
+    if (start) {
+        if (mServer.isOpen()) {
+            mServer.close();
+        }
+        mServer.connectToHost(ui->ipAddress->text(), SERVER_SOCKET);
+    } else {
+        if (mServer.isOpen()) {
+            mServer.close();
+        }
+    }
+}
+
+void Client::onSokReadyRead()
+{
+    QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
+    if (server) {
+        QByteArray data = server->readAll();
+        QJsonDocument request = QJsonDocument::fromBinaryData(data);
+        QJsonObject command = request.object();
+        QJsonValue commandType = command.take("CommandType");
+        if (commandType == QJsonValue::Undefined)
+            return;
+        if (commandType.toInt() == CAN_Initialized) {
+            QJsonValue canTypes = command.take("CANType");
+            if (canTypes == QJsonValue::Undefined)
+                return;
+            QJsonArray types = canTypes.toArray();
+            for (int i=0; i<types.count(); i++) {
+                QJsonValue type = types[i];
+                if (type.toInt() == CAN_2057) {
+                    ui->can_2057->setChecked(true);
+                }
+                if (type.toInt() == CAN_2088) {
+                    qDebug() << "CAN_2088";
+//                    ui->can_2088->setChecked(true);
+                }
+            }
+        }
+    }
+}
+
+void Client::onSokConnected()
+{
+    ui->connectButton->setText("Disconnect");
+    ui->connectButton->setStyleSheet("background-color:red; color: white;");
+}
+
+void Client::onSokDisconnected()
+{
+    ui->can_2057->setChecked(false);
+    ui->connectButton->setChecked(false);
+    ui->connectButton->setText("Connect");
+    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+}
+
+void Client::onSokDisplayError(QAbstractSocket::SocketError)
+{
+    QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
+    if (server) {
+        QMessageBox::critical(0, "Connection Error!", server->errorString(), QMessageBox::Ok);
+        server->close();
+        onSokDisconnected();
+    }
 }

@@ -15,6 +15,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
         server.cpp
 
-HEADERS  += server.h
+HEADERS  += server.h \
+    ../common.h
 
 FORMS    += server.ui

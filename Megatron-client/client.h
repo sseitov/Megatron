@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QCheckBox>
 #include "inputbutton.h"
+#include <QTcpSocket>
 
 namespace Ui {
 class Client;
@@ -20,11 +21,17 @@ public:
 private slots:
     void connectInput(bool);
     void setLevel(int, bool);
-
+    void start(bool);
+    void onSokReadyRead();
+    void onSokConnected();
+    void onSokDisconnected();
+    void onSokDisplayError(QAbstractSocket::SocketError);
 private:
     Ui::Client *ui;
     QVector<InputButton*> mInputButton;
     QVector<QCheckBox*> mOutputIndicator;
+
+    QTcpSocket mServer;
 };
 
 #endif // CLIENT_H
