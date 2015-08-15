@@ -28,6 +28,7 @@ void InputButton::configure(const QString& name, bool checkable, bool inverse, i
     setStyleSheet("QGroupBox { color : black; }");
     setTitle(name);
     mButton->setCheckable(checkable);
+    mButton->setStyleSheet("QPushButton { background : white; }");
     mInverse = inverse;
     mPort = port;
 }
@@ -35,16 +36,30 @@ void InputButton::configure(const QString& name, bool checkable, bool inverse, i
 void InputButton::buttonClicked(bool checked)
 {
     if (mButton->isCheckable()) {
-        emit setLevel(mPort, checked);
+        sendLevel(checked);
     }
 }
 
 void InputButton::levelOn()
 {
-    emit setLevel(mPort, true);
+    if (!mButton->isCheckable()) {
+        sendLevel(true);
+    }
 }
 
 void InputButton::levelOff()
 {
-    emit setLevel(mPort, false);
+    if (!mButton->isCheckable()) {
+        sendLevel(false);
+    }
+}
+
+void InputButton::sendLevel(bool checked)
+{
+    if (checked) {
+        mButton->setStyleSheet("QPushButton { background : black; }");
+    } else {
+        mButton->setStyleSheet("QPushButton { background : white; }");
+    }
+    emit setLevel(mPort, checked);
 }

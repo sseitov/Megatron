@@ -15,6 +15,9 @@ public:
     explicit Server(QWidget *parent = 0);
     ~Server();
 
+private slots:
+    void start(bool);
+
 private:
     Ui::Server *ui;
 };

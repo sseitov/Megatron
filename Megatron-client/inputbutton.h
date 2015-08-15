@@ -25,6 +25,7 @@ private:
     QPushButton* mButton;
     bool mInverse;
     int mPort;
+    void sendLevel(bool);
 
 };
 
