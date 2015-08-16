@@ -948,14 +948,14 @@
            <widget class="QLCDNumber" name="lowLimitIndicator">
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>60</width>
               <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>60</width>
-              <height>16777215</height>
+              <height>30</height>
              </size>
             </property>
             <property name="smallDecimalPoint">
@@ -1012,14 +1012,14 @@
            <widget class="QLCDNumber" name="highLimitIndicator">
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>60</width>
               <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>60</width>
-              <height>16777215</height>
+              <height>30</height>
              </size>
             </property>
             <property name="digitCount">
