@@ -1,2 +1,6 @@
 Megatron.pro.user
 CanFestival/
+Megatron-client/Info.plist
+Megatron-client/.qmake.stash
+Megatron-client/Megatron-client.build/
+Megatron-client/Megatron-client.xcodeproj/
