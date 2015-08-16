@@ -12,27 +12,34 @@ void InputButton::connectButton(QPushButton* button)
     connect(mButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
     connect(mButton, SIGNAL(pressed()), this, SLOT(levelOn()));
     connect(mButton, SIGNAL(released()), this, SLOT(levelOff()));
-    resetConfig();
 }
 
 void InputButton::resetConfig()
 {
     setStyleSheet("QGroupBox { color : grey; }");
-    setTitle("Connect");
+    setTitle(tr("Подключить"));
     mButton->setText("");
-    mInverse = false;
-    mPort = 0;
+    mConfig.name = "";
+    mConfig.checkable = false;
+    mConfig.inverse = false;
+    mConfig.port = -1;
 }
 
-void InputButton::configure(const QString& name, bool checkable, bool inverse, int port)
+void InputButton::setConfig(const ButtonConfig& config)
 {
-    setStyleSheet("QGroupBox { color : black; }");
-    setTitle("Disconnect");
-    mButton->setText(name);
-    mButton->setCheckable(checkable);
+    mConfig = config;
+    if (mConfig.port < 0) {
+        setStyleSheet("QGroupBox { color : grey; }");
+        setTitle(tr("Подключить"));
+        setChecked(false);
+    } else {
+        setStyleSheet("QGroupBox { color : black; }");
+        setTitle(tr("Отключить"));
+        setChecked(true);
+    }
+    mButton->setText(mConfig.name);
+    mButton->setCheckable(mConfig.checkable);
     mButton->setStyleSheet("QPushButton { background : white; }");
-    mInverse = inverse;
-    mPort = port;
 }
 
 void InputButton::buttonClicked(bool checked)
@@ -65,5 +72,5 @@ void InputButton::sendLevel(bool checked)
     } else {
         mButton->setStyleSheet("background-color : white; color : black;");
     }
-    emit setLevel(mPort, checked);
+    emit setLevel(mConfig.port, checked);
 }

@@ -25,7 +25,7 @@ private:
     void setTarget(qreal x, qreal y);
 
 signals:
-    void setLevel(int, int, int, int);
+    void setLevel(const QVector<int>&);
 };
 
 #endif // JOYSTICKMONITOR_H

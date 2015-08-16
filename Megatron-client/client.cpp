@@ -7,19 +7,13 @@
 #include <QJsonObject>
 #include <QVariantMap>
 #include <QJsonArray>
+#include <QSettings>
 
 Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
 {
     ui->setupUi(this);
-
-    ui->joystick->connectControls(ui->frequency, ui->frequencyIndicator, ui->lowLimit, ui->lowLimitIndicator, ui->highLimit, ui->highLimitIndicator, ui->joystickMonitor);
-    connect(ui->joystickMonitor, SIGNAL(setLevel(int,int,int,int)), this, SLOT(setLevel(int,int,int,int)));
-
-    ui->connectButton->setText("Connect");
-    ui->connectButton->setStyleSheet("background-color:green; color: white;");
-    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 
     ui->control0->connectButton(ui->button0);
     mInputButton.append(ui->control0);
@@ -54,6 +48,19 @@ Client::Client(QWidget *parent) :
     ui->control15->connectButton(ui->button15);
     mInputButton.append(ui->control15);
 
+    loadSettings();
+    
+    ui->joystick->connectControls(ui->frequency, ui->frequencyIndicator,
+                                  ui->lowLimit, ui->lowLimitIndicator,
+                                  ui->highLimit, ui->highLimitIndicator,
+                                  ui->joystickMonitor);
+    connect(ui->joystickMonitor, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
+
+    connect(ui->clearHistory, SIGNAL(clicked()), ui->ipAddress, SLOT(clear()));
+    
+    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
+
     for (int i=0; i<16; i++) {
         mInputButton[i]->setObjectName(QString::number(i));
         connect(mInputButton[i], SIGNAL(toggled(bool)), this, SLOT(connectInput(bool)));
@@ -85,7 +92,63 @@ Client::Client(QWidget *parent) :
 
 Client::~Client()
 {
+    saveSettings();
     delete ui;
+}
+
+void Client::loadSettings()
+{
+    QSettings settings("V-Channel", "Megatron");
+    
+    int size = settings.beginReadArray("history");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        QString ip = settings.value("ip").toString();
+        ui->ipAddress->addItem(ip);
+    }
+    settings.endArray();
+    
+    size = settings.beginReadArray("buttons");
+    if (size > 0) {
+        for (int i = 0; i < size; ++i) {
+            settings.setArrayIndex(i);
+            ButtonConfig config;
+            config.name = settings.value("name").toString();
+            config.checkable = settings.value("checkable").toBool();
+            config.inverse = settings.value("inverse").toBool();
+            config.port = settings.value("port").toInt();
+            mInputButton[i]->setConfig(config);
+        }
+    } else {
+        for (int i = 0; i < 16; ++i) {
+            ButtonConfig config;
+            mInputButton[i]->setConfig(config);
+        }
+    }
+    settings.endArray();
+}
+
+void Client::saveSettings()
+{
+    QSettings settings("V-Channel", "Megatron");
+    
+    settings.beginWriteArray("history");
+    for (int i = 0; i < ui->ipAddress->count(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("ip", ui->ipAddress->itemText(i));
+    }
+    settings.endArray();
+    
+    settings.beginWriteArray("buttons");
+    for (int i = 0; i < 16; ++i) {
+        settings.setArrayIndex(i);
+        ButtonConfig config = mInputButton[i]->config();
+        settings.setValue("name", config.name);
+        settings.setValue("checkable", config.checkable);
+        settings.setValue("inverse", config.inverse);
+        settings.setValue("port", config.port);
+    }
+    settings.endArray();
 }
 
 void Client::connectInput(bool enabled)
@@ -120,7 +183,7 @@ void Client::setLevel(int port, bool value)
     }
 }
 
-void Client::setLevel(int port0, int level0, int port1, int level1)
+void Client::setLevel(const QVector<int>& values)
 {
     if (mServer.isOpen()) {
         QVariantMap map;
@@ -128,16 +191,12 @@ void Client::setLevel(int port0, int level0, int port1, int level1)
         map.insert("CommandType", CAN_SetValue);
 
         QVariantList list;
-
-        QVariantMap p0;
-        p0.insert("Port", port0);
-        p0.insert("Level", level0);
-        list.append(p0);
-
-        QVariantMap p1;
-        p1.insert("Port", port1);
-        p1.insert("Level", level1);
-        list.append(p1);
+        for (int i=0; i<values.count(); i++) {
+            QVariantMap p0;
+            p0.insert("Port", i);
+            p0.insert("Level", values[i]);
+            list.append(p0);
+        }
 
         map.insert("PortArray", list);
 
@@ -153,7 +212,7 @@ void Client::start(bool start)
         if (mServer.isOpen()) {
             mServer.close();
         }
-        mServer.connectToHost(ui->ipAddress->text(), SERVER_SOCKET);
+        mServer.connectToHost(ui->ipAddress->currentText(), SERVER_SOCKET);
     } else {
         if (mServer.isOpen()) {
             mServer.close();
@@ -179,10 +238,10 @@ void Client::onSokReadyRead()
             for (int i=0; i<types.count(); i++) {
                 QJsonValue type = types[i];
                 if (type.toInt() == CAN_2057) {
-                    ui->can_2057->setChecked(true);
+                    ui->can_2057->setEnabled(true);
                 }
                 if (type.toInt() == CAN_2088) {
-                    ui->joystick->setChecked(true);
+                    ui->joystick->setEnabled(true);
                 }
             }
         }
@@ -191,15 +250,19 @@ void Client::onSokReadyRead()
 
 void Client::onSokConnected()
 {
-    ui->connectButton->setText("Disconnect");
+    if (ui->ipAddress->findText(ui->ipAddress->currentText()) < 0) {
+        ui->ipAddress->insertItem(0, ui->ipAddress->currentText());
+    }
+    ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
 }
 
 void Client::onSokDisconnected()
 {
-    ui->can_2057->setChecked(false);
+    ui->can_2057->setEnabled(false);
+    ui->joystick->setEnabled(false);
     ui->connectButton->setChecked(false);
-    ui->connectButton->setText("Connect");
+    ui->connectButton->setText(tr("Соединить"));
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
 }
 

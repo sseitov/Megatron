@@ -11,6 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Megatron-client
 TEMPLATE = app
 
+MOC_DIR = tmp
+UI_DIR = tmp
+RCC_DIR = tmp
 
 SOURCES += main.cpp\
         client.cpp \
