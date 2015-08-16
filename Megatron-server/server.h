@@ -27,7 +27,7 @@ private slots:
 
 private:
     Ui::Server *ui;
-    QTcpServer *mServer;
+    QTcpServer mServer;
     QTcpSocket *mClient;
 
     QVector<QCheckBox*> mOutputIndicator;
@@ -36,6 +36,7 @@ private:
     void set2057Value(int port, bool isOn);
     void reset2057();
     void set2088Value(int port, int value);
+    void reset2088();
 };
 
 #endif // SERVER_H
