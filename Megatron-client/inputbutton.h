@@ -21,6 +21,7 @@ public:
     void setConfig(const ButtonConfig& config);
     void resetConfig();
     const ButtonConfig& config() { return mConfig; }
+    void uncheck();
 
 signals:
     void setLevel(int, bool);

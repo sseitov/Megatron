@@ -242,6 +242,7 @@ void Client::onSokReadyRead()
                 }
                 if (type.toInt() == CAN_2088) {
                     ui->joystick->setEnabled(true);
+                    ui->joystickMonitor->setTarget(0, 0);
                 }
             }
         }
@@ -259,6 +260,9 @@ void Client::onSokConnected()
 
 void Client::onSokDisconnected()
 {
+    for (int i=0; i<16; i++) {
+        mInputButton[i]->uncheck();
+    }
     ui->can_2057->setEnabled(false);
     ui->joystick->setEnabled(false);
     ui->connectButton->setChecked(false);

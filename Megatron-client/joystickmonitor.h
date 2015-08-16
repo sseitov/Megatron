@@ -9,6 +9,7 @@ class JoystickMonitor : public QWidget
     Q_OBJECT
 public:
     explicit JoystickMonitor(QWidget *parent = 0);
+    void setTarget(qreal x, qreal y);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -21,8 +22,6 @@ private:
     QImage mTargetImage;
     QPoint mDragPt;
     bool mDragging;
-
-    void setTarget(qreal x, qreal y);
 
 signals:
     void setLevel(const QVector<int>&);

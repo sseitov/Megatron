@@ -14,6 +14,14 @@ void InputButton::connectButton(QPushButton* button)
     connect(mButton, SIGNAL(released()), this, SLOT(levelOff()));
 }
 
+void InputButton::uncheck()
+{
+    if (mConfig.checkable) {
+        mButton->setChecked(false);
+        mButton->setStyleSheet("background-color : white; color : black;");
+    }
+}
+
 void InputButton::resetConfig()
 {
     setStyleSheet("QGroupBox { color : grey; }");
