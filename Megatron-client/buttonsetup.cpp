@@ -15,5 +15,10 @@ ButtonSetup::~ButtonSetup()
 
 void ButtonSetup::setupButton(InputButton* button)
 {
-    button->configure(ui->name->text(), ui->fixation->isChecked(), ui->inverse->isChecked(), ui->output->currentIndex());
+    ButtonConfig config;
+    config.name = ui->name->text();
+    config.checkable = ui->fixation->isChecked();
+    config.inverse = ui->inverse->isChecked();
+    config.port = ui->output->currentIndex();
+    button->setConfig(config);
 }

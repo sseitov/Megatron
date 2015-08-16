@@ -4,14 +4,23 @@
 #include <QGroupBox>
 #include <QPushButton>
 
+struct ButtonConfig {
+    ButtonConfig() : name(""), checkable(false), inverse(false), port(-1) {}
+    QString name;
+    bool checkable;
+    bool inverse;
+    int port;
+};
+
 class InputButton : public QGroupBox
 {
     Q_OBJECT
 public:
     explicit InputButton(QWidget *parent = 0);
     void connectButton(QPushButton* button);
+    void setConfig(const ButtonConfig& config);
     void resetConfig();
-    void configure(const QString& name, bool checkable, bool inverse, int port);
+    const ButtonConfig& config() { return mConfig; }
 
 signals:
     void setLevel(int, bool);
@@ -23,8 +32,7 @@ private slots:
 
 private:
     QPushButton* mButton;
-    bool mInverse;
-    int mPort;
+    ButtonConfig mConfig;
     void sendLevel(bool);
 };
 

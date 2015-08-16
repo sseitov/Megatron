@@ -40,7 +40,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ipAddress">
+       <widget class="QComboBox" name="ipAddress">
         <property name="minimumSize">
          <size>
           <width>200</width>
@@ -50,8 +50,11 @@
         <property name="maximumSize">
          <size>
           <width>200</width>
-          <height>16777215</height>
+          <height>30</height>
          </size>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -59,21 +62,40 @@
        <widget class="QPushButton" name="connectButton">
         <property name="minimumSize">
          <size>
-          <width>100</width>
+          <width>120</width>
           <height>30</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>100</width>
+          <width>120</width>
           <height>16777215</height>
          </size>
         </property>
         <property name="text">
-         <string>Connect</string>
+         <string>Соеденить</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clearHistory">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Очистить историю</string>
         </property>
        </widget>
       </item>
@@ -97,6 +119,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_18">
      <item>
       <widget class="QGroupBox" name="can_2057">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -113,7 +138,7 @@
         <string>CAN 2057</string>
        </property>
        <property name="checkable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -802,11 +827,14 @@
      </item>
      <item>
       <widget class="JoystickControl" name="joystick">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="title">
-        <string>JOYSTICK</string>
+        <string>CAN 2088</string>
        </property>
        <property name="checkable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="checked">
         <bool>false</bool>

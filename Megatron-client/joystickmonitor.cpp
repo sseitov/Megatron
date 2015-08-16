@@ -24,17 +24,24 @@ void JoystickMonitor::paintEvent(QPaintEvent *pe)
 
     if (isEnabled()) {
         QPen pen;
-        pen.setWidth(7);
+        pen.setWidth(4);
         pen.setCapStyle(Qt::RoundCap);
         if (mTarget.y() > 0) {
             pen.setColor(Qt::red);
         } else {
-            pen.setColor(Qt::darkGreen);
+            pen.setColor(Qt::darkCyan);
         }
+        
+        QVector<qreal> dashes;
+        qreal space = 3;
+        dashes << 1 << space << 3 << space << 9 << space
+        << 27 << space << 9 << space;
+        pen.setDashPattern(dashes);
         painter.setPen(pen);
+        
         QPoint org = QPoint(mTarget.x()+150, mTarget.y()+150);
         painter.drawLine(center, org);
-
+        
         QRect imageRect = QRect(org.x()-16, org.y()-16, 32, 32);
         painter.drawImage(imageRect, mTargetImage);
     }
@@ -88,19 +95,27 @@ void JoystickMonitor::setTarget(qreal x, qreal y)
 
     qreal port0, port1;
     if (x < 0) {
-        port0 = abs(y);
+        port0 = fabs(y);
         port1 = qSqrt(qPow(x,2)+qPow(y,2));
     } else {
-        port1 = abs(y);
+        port1 = fabs(y);
         port0 = qSqrt(qPow(x,2)+qPow(y,2));
     }
 
     port0 = (port0/150.0)*1000.0;
     port1 = (port1/150.0)*1000.0;
-
+    
+    QVector<int> values;
     if (y < 0) {
-        emit setLevel(0, port0, 1, port1);
+        values.append(port0);
+        values.append(port1);
+        values.append(0);
+        values.append(0);
     } else {
-        emit setLevel(2, port0, 3, port1);
+        values.append(0);
+        values.append(0);
+        values.append(port0);
+        values.append(port1);
     }
+    emit setLevel(values);
 }

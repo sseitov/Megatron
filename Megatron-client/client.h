@@ -21,18 +21,22 @@ public:
 private slots:
     void connectInput(bool);
     void setLevel(int, bool);
-    void setLevel(int, int, int, int);
+    void setLevel(const QVector<int>&);
     void start(bool);
     void onSokReadyRead();
     void onSokConnected();
     void onSokDisconnected();
     void onSokDisplayError(QAbstractSocket::SocketError);
+    
 private:
     Ui::Client *ui;
     QVector<InputButton*> mInputButton;
     QVector<QCheckBox*> mOutputIndicator;
 
     QTcpSocket mServer;
+    
+    void loadSettings();
+    void saveSettings();
 };
 
 #endif // CLIENT_H
