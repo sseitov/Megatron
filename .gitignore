@@ -4,5 +4,8 @@ Megatron-client/Info.plist
 Megatron-client/.qmake.stash
 Megatron-client/Megatron-client.build/
 Megatron-client/Megatron-client.xcodeproj/
+Megatron-client/Megatron-client.pro.user
+Megatron-server/Megatron-server.pro.user
+build/
 Megatron-client/Debug/
 Megatron-client/tmp/

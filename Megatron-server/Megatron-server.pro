@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += network widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Megatron-server
 TEMPLATE = app

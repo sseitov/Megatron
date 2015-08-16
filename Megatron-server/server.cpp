@@ -12,7 +12,7 @@
 
 Server::Server(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Server), mServer(0), mClient(0)
+    ui(new Ui::Server), mClient(0)
 {
     ui->setupUi(this);
     ui->startButton->setStyleSheet("background-color:green; color: white;");
@@ -39,6 +39,8 @@ Server::Server(QWidget *parent) :
     mOutputPulseIndicator.append(ui->po1);
     mOutputPulseIndicator.append(ui->po2);
     mOutputPulseIndicator.append(ui->po3);
+
+    connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
 }
 
 Server::~Server()
@@ -49,14 +51,9 @@ Server::~Server()
 void Server::start(bool start)
 {
     if (start) {
-        mServer = new QTcpServer(this);
-        connect(mServer, SIGNAL(newConnection()), this, SLOT(connection()));
-        if (!mServer->listen(QHostAddress::Any, SERVER_SOCKET)) {
-            QMessageBox::critical(0, "Unable to start the server", mServer->errorString(), QMessageBox::Ok);
+        if (!mServer.listen(QHostAddress::Any, SERVER_SOCKET)) {
+            QMessageBox::critical(0, "Unable to start the server", mServer.errorString(), QMessageBox::Ok);
         } else {
-            ui->can2057->setChecked(true);
-            ui->can2088->setChecked(true);
-            setWindowTitle(mServer->serverAddress().toString());
             ui->startButton->setText("Stop");
             ui->startButton->setStyleSheet("background-color:red; color: white;");
             QList<QHostAddress> list = QNetworkInterface::allAddresses();
@@ -74,13 +71,8 @@ void Server::start(bool start)
             mClient->close();
             mClient = 0;
         }
-        if (mServer) {
-            mServer->close();
-            delete mServer;
-            mServer = 0;
-        }
-        reset2057();
-        ui->can2057->setChecked(false);
+        mServer.close();
+
         ui->startButton->setText("Start");
         ui->startButton->setStyleSheet("background-color:green; color: white;");
         setWindowTitle("Megatron Server");
@@ -92,13 +84,19 @@ void Server::connection()
     if (mClient) {
         mClient->close();
     }
-    mClient = mServer->nextPendingConnection();
+    mClient = mServer.nextPendingConnection();
     connect(mClient, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(mClient, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
 
     QVariantMap map;
     map.insert("CommandType", CAN_Initialized);
-    QVariantList list; list.append(CAN_2057); list.append(CAN_2088);
+    QVariantList list;
+    if (ui->can2057->isEnabled()) {
+        list.append(CAN_2057);
+    }
+    if (ui->can2088->isEnabled()) {
+        list.append(CAN_2088);
+    }
     map.insert("CANType", list);
     QJsonObject command = QJsonObject::fromVariantMap(map);
     QByteArray data = QJsonDocument(command).toBinaryData();
@@ -108,6 +106,8 @@ void Server::connection()
 void Server::slotDisconnectClient()
 {
     mClient = 0;
+    reset2057();
+    reset2088();
 }
 
 void Server::slotReadClient()
@@ -147,11 +147,18 @@ void Server::set2057Value(int port, bool isOn)
 void Server::reset2057()
 {
     for (int i=0; i<16; i++) {
-        mOutputIndicator[1]->setChecked(false);
+        mOutputIndicator[i]->setChecked(false);
     }
 }
 
 void Server::set2088Value(int port, int value)
 {
     mOutputPulseIndicator[port]->setValue(value);
+}
+
+void Server::reset2088()
+{
+    for (int i=0; i<4; i++) {
+        mOutputPulseIndicator[i]->setValue(0);
+    }
 }
