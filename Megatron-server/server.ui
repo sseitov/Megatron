@@ -276,7 +276,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="lcdNumber">
+            <widget class="QLCDNumber" name="frequencyIndicator">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -291,7 +291,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QSlider" name="horizontalSlider">
+          <widget class="QSlider" name="frequency">
            <property name="maximum">
             <number>500</number>
            </property>
