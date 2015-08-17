@@ -101,7 +101,7 @@ void QCAN::CheckHighWriteSDO(CO_Data* d, UNS8 nodeid)
 /// \param parent
 ///
 QCAN::QCAN(QObject *parent) :
-    QObject(parent), mPort(0), mID(0), mNodeID(2)
+    QObject(parent), mPort(0), mID(0), mNodeID(0)
 {
     mData = (CO_Data*)malloc(sizeof(CANOpenShellSlaveOD_Data));
     memcpy(mData, &CANOpenShellSlaveOD_Data, sizeof(CANOpenShellSlaveOD_Data));
@@ -120,10 +120,9 @@ QCAN::~QCAN()
     pthread_cond_destroy(&mOperationFinish);
 }
 
-bool QCAN::init(const char* port)
+bool QCAN::init(const char* port,int node)
 {
-    if (!LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so"))
-        return false;
+    mNodeID = node;
     s_BOARD Board = {(char*)port, (char*)"125K"};
 
     /* Define callback functions */

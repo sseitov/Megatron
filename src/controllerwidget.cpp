@@ -68,13 +68,12 @@ ControllerWidget::ControllerWidget(QWidget *parent) :
     }
 
     // Start CAN Timer thread
-    TimerInit();
-    StartTimerLoop(&Init);
+    if (LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so")) {
+        TimerInit();
+        StartTimerLoop(&Init);
 
-    const char* port[2] = {"/dev/ttyUSB0", "/dev/ttyUSB1"};
-    for (int i=0; i<2; i++) {
-        if (m_can[i].init(port[i])) {
-            connect(&m_can[i], SIGNAL(initialized(QCAN*)), this, SLOT(canInitialized(QCAN*)));
+        if (m_can[0].init("/dev/ttyUSB0", 2)) {
+            connect(&m_can[0], SIGNAL(initialized(QCAN*)), this, SLOT(canInitialized(QCAN*)));
         }
     }
 

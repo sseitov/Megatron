@@ -33,6 +33,7 @@ private:
     QVector<QCheckBox*> mOutputIndicator;
     QVector<QProgressBar*> mOutputPulseIndicator;
 
+    bool isDriverLoaded;
     void set2057Value(int port, bool isOn);
     void reset2057();
     void set2088Value(int port, int value);

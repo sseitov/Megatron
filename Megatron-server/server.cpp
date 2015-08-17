@@ -9,6 +9,20 @@
 #include <QJsonArray>
 #include <QVariantMap>
 #include "../common.h"
+extern "C" {
+#include <canfestival.h>
+}
+
+/***************************  INITIALISATION  **********************************/
+
+void Init(CO_Data*, UNS32)
+{
+}
+
+/***************************  CLEANUP  *****************************************/
+void Exit(CO_Data*, UNS32)
+{
+}
 
 Server::Server(QWidget *parent) :
     QWidget(parent),
@@ -40,11 +54,23 @@ Server::Server(QWidget *parent) :
     mOutputPulseIndicator.append(ui->po2);
     mOutputPulseIndicator.append(ui->po3);
 
-    connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
+    isDriverLoaded = LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so");
+    if (!isDriverLoaded) {
+        QMessageBox::critical(0, "Startup Error!", "Can not load CAN driver!", QMessageBox::Ok);
+    } else {
+        TimerInit();
+        StartTimerLoop(&Init);
+        connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
+    }
 }
 
 Server::~Server()
 {
+    if (isDriverLoaded) {
+        // Stop timer thread
+        StopTimerLoop(&Exit);
+        TimerCleanup();
+    }
     delete ui;
 }
 
