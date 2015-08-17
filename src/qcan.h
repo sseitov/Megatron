@@ -17,7 +17,7 @@ public:
     explicit QCAN(QObject *parent = 0);
     ~QCAN();
 
-    bool init(const char* port, int node);
+    bool init();
     int getID();
     const QString& getTitle();
     void resetPwmOutput();
