@@ -9,24 +9,10 @@
 #include <QJsonArray>
 #include <QVariantMap>
 #include "../common.h"
-extern "C" {
-#include <canfestival.h>
-}
-
-/***************************  INITIALISATION  **********************************/
-
-void Init(CO_Data*, UNS32)
-{
-}
-
-/***************************  CLEANUP  *****************************************/
-void Exit(CO_Data*, UNS32)
-{
-}
 
 Server::Server(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Server), mClient(0)
+    ui(new Ui::Server), mClient(0), mNode2057(0), mNode2088(0)
 {
     ui->setupUi(this);
     ui->startButton->setStyleSheet("background-color:green; color: white;");
@@ -48,29 +34,29 @@ Server::Server(QWidget *parent) :
     mOutputIndicator.append(ui->d13);
     mOutputIndicator.append(ui->d14);
     mOutputIndicator.append(ui->d15);
+    for (int i=0; i<16; i++) {
+        mOutputIndicator[i]->setObjectName(QString::number(i));
+    }
 
     mOutputPulseIndicator.append(ui->po0);
     mOutputPulseIndicator.append(ui->po1);
     mOutputPulseIndicator.append(ui->po2);
     mOutputPulseIndicator.append(ui->po3);
+    for (int i=0; i<4; i++) {
+        mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+    }
 
-    isDriverLoaded = LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so");
-    if (!isDriverLoaded) {
+    connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
+    connect(&mCan, SIGNAL(initialized(int)), this, SLOT(canInitialized(int)));
+
+    if (!mCan.init()) {
         QMessageBox::critical(0, "Startup Error!", "Can not load CAN driver!", QMessageBox::Ok);
-    } else {
-        TimerInit();
-        StartTimerLoop(&Init);
-        connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
     }
 }
 
 Server::~Server()
 {
-    if (isDriverLoaded) {
-        // Stop timer thread
-        StopTimerLoop(&Exit);
-        TimerCleanup();
-    }
+    reset2057();
     delete ui;
 }
 
@@ -163,6 +149,36 @@ void Server::slotReadClient()
             }
         }
     }
+}
+
+void Server::canInitialized(int node)
+{
+    int canType = mCan.getCanType(node);
+    if (canType == 0x2088) {
+        mNode2088 = node;
+        ui->can2088->setEnabled(true);
+    } else if (canType == 0x2057) {
+        mNode2057 = node;
+        ui->can2057->setEnabled(true);
+        for (int i=0; i<16; i++) {
+            connect(mOutputIndicator[i], SIGNAL(stateChanged(int)), this, SLOT(set2057port(int)));
+        }
+        reset2057();
+    }
+}
+
+void Server::set2057port(int state)
+{
+    int port = sender()->objectName().toInt();
+    UNS8 value;
+    if (port < 8) {
+        m2057lowValue.set(port, state > 0 ? 1 : 0);
+        value = m2057lowValue.to_ulong();
+    } else {
+        m2057highValue.set(port-8, state > 0 ? 1 : 0);
+        value = m2057highValue.to_ulong();
+    }
+    mCan.setTrigger(mNode2057, port, value);
 }
 
 void Server::set2057Value(int port, bool isOn)

@@ -5,7 +5,9 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QCheckBox>
-#include <QProgressBar>
+#include <QSlider>
+#include "qcan.h"
+#include <bitset>
 
 namespace Ui {
 class Server;
@@ -24,16 +26,26 @@ private slots:
     void connection();
     void slotReadClient();
     void slotDisconnectClient();
+    void canInitialized(int);
+    void set2057port(int state);
 
 private:
     Ui::Server *ui;
     QTcpServer mServer;
     QTcpSocket *mClient;
+    QCan mCan;
+    int mNode2057;
+    int mNode2088;
 
     QVector<QCheckBox*> mOutputIndicator;
-    QVector<QProgressBar*> mOutputPulseIndicator;
+    QVector<QSlider*> mOutputPulseIndicator;
 
-    bool isDriverLoaded;
+
+    std::bitset<8> m2057lowValue;
+    std::bitset<8> m2057highValue;
+    std::bitset<8> m2057lowPolarity;
+    std::bitset<8> m2057highPolarity;
+
     void set2057Value(int port, bool isOn);
     void reset2057();
     void set2088Value(int port, int value);

@@ -120,9 +120,8 @@ QCAN::~QCAN()
     pthread_cond_destroy(&mOperationFinish);
 }
 
-bool QCAN::init(const char* port,int node)
+bool QCAN::init()
 {
-    mNodeID = node;
     s_BOARD Board = {(char*)port, (char*)"125K"};
 
     /* Define callback functions */
@@ -142,7 +141,7 @@ bool QCAN::init(const char* port,int node)
     // Defining the node Id
     setNodeId(mData, mNodeID);
     setState(mData, Initialisation);
-    masterSendNMTstateChange(mData, mNodeID, NMT_Reset_Node);
+//    masterSendNMTstateChange(mData, mNodeID, NMT_Reset_Node);
 
     return true;
 }
