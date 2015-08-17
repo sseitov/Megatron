@@ -23,7 +23,7 @@ public:
 
     // CAN-2088
     void setPulseOutput(int node, int port, bool isOn);
-    void setPulseFrequency(int node, int port, UNS32 value);
+    void setPulseFrequency(int node, UNS32 value);
     void setPulseDuty(int node, int port, UNS16 value);
 
 signals:

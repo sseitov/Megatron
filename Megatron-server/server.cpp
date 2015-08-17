@@ -57,6 +57,7 @@ Server::Server(QWidget *parent) :
 Server::~Server()
 {
     reset2057();
+    reset2088();
     delete ui;
 }
 
@@ -147,6 +148,12 @@ void Server::slotReadClient()
                     set2088Value(value.take("Port").toInt(), value.take("Level").toInt());
                 }
             }
+        } else if (commandType.toInt() == CAN_SetPreference) {
+            if (canType.toInt() == CAN_2057) {
+            } else if (canType.toInt() == CAN_2088) {
+                QJsonValue value = command.take("Value");
+                ui->frequency->setValue(value.toInt());
+            }
         }
     }
 }
@@ -157,6 +164,11 @@ void Server::canInitialized(int node)
     if (canType == 0x2088) {
         mNode2088 = node;
         ui->can2088->setEnabled(true);
+        for (int i=0; i<4; i++) {
+            connect(mOutputPulseIndicator[i], SIGNAL(valueChanged(int)), this, SLOT(set2088duty(int)));
+        }
+        connect(ui->frequency, SIGNAL(valueChanged(int)), this, SLOT(set2088frequency(int)));
+        set2088();
     } else if (canType == 0x2057) {
         mNode2057 = node;
         ui->can2057->setEnabled(true);
@@ -181,6 +193,18 @@ void Server::set2057port(int state)
     mCan.setTrigger(mNode2057, port, value);
 }
 
+void Server::set2088frequency(int value)
+{
+    ui->frequencyIndicator->display(value);
+    mCan.setPulseFrequency(mNode2088, value);
+}
+
+void Server::set2088duty(int value)
+{
+    int port = sender()->objectName().toInt();
+    mCan.setPulseDuty(mNode2088, port, value);
+}
+
 void Server::set2057Value(int port, bool isOn)
 {
     mOutputIndicator[port]->setChecked(isOn);
@@ -198,9 +222,19 @@ void Server::set2088Value(int port, int value)
     mOutputPulseIndicator[port]->setValue(value);
 }
 
+
+void Server::set2088()
+{
+    for (int i=0; i<4; i++) {
+        mCan.setPulseOutput(mNode2088, i, true);
+        mOutputPulseIndicator[i]->setValue(0);
+    }
+}
+
 void Server::reset2088()
 {
     for (int i=0; i<4; i++) {
+        mCan.setPulseOutput(mNode2088, i, false);
         mOutputPulseIndicator[i]->setValue(0);
     }
 }
