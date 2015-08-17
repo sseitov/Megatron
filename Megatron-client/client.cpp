@@ -262,6 +262,7 @@ void Client::onSokDisconnected()
 {
     for (int i=0; i<16; i++) {
         mInputButton[i]->uncheck();
+        mOutputIndicator[i]->setChecked(false);
     }
     ui->can_2057->setEnabled(false);
     ui->joystick->setEnabled(false);
