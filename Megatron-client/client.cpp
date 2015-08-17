@@ -50,8 +50,8 @@ Client::Client(QWidget *parent) :
 
     loadSettings();
     
-    ui->joystick->connectControls(ui->frequency, ui->frequencyIndicator,
-                                  ui->lowLimit, ui->lowLimitIndicator,
+    connect(ui->frequency, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
+    ui->joystick->connectControls(ui->lowLimit, ui->lowLimitIndicator,
                                   ui->highLimit, ui->highLimitIndicator,
                                   ui->joystickMonitor);
     connect(ui->joystickMonitor, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
@@ -177,6 +177,21 @@ void Client::setLevel(int port, bool value)
         map.insert("CommandType", CAN_SetValue);
         map.insert("Port", port);
         map.insert("Value", value);
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
+    }
+}
+
+void Client::setFrequency(int frequency)
+{
+    ui->frequencyIndicator->display(frequency);
+    if (mServer.isOpen()) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_SetPreference);
+        map.insert("Value", frequency);
+        
         QJsonObject command = QJsonObject::fromVariantMap(map);
         QByteArray data = QJsonDocument(command).toBinaryData();
         mServer.write(data);

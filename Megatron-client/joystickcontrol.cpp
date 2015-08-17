@@ -5,12 +5,8 @@ JoystickControl::JoystickControl(QWidget *parent) :
 {
 }
 
-void JoystickControl::connectControls(QSlider *fc, QLCDNumber *fi, QSlider *lc, QLCDNumber *li, QSlider *hc, QLCDNumber *hi, JoystickMonitor *monitor)
+void JoystickControl::connectControls(QSlider *lc, QLCDNumber *li, QSlider *hc, QLCDNumber *hi, JoystickMonitor *monitor)
 {
-    mFrequency = fc;
-    mFrequencyIndicator = fi;
-    connect(mFrequency, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
-
     mLowLimit = lc;
     mLowLimitIndicator = li;
     connect(mLowLimit, SIGNAL(valueChanged(int)), this, SLOT(setLowLimit(int)));
@@ -20,11 +16,6 @@ void JoystickControl::connectControls(QSlider *fc, QLCDNumber *fi, QSlider *lc, 
     connect(mHighLimit, SIGNAL(valueChanged(int)), this, SLOT(setHighLimit(int)));
 
     mMonitor = monitor;
-}
-
-void JoystickControl::setFrequency(int value)
-{
-    mFrequencyIndicator->display(value);
 }
 
 void JoystickControl::setLowLimit(int value)
