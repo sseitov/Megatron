@@ -190,19 +190,25 @@ void Server::set2057port(int state)
         m2057highValue.set(port-8, state > 0 ? 1 : 0);
         value = m2057highValue.to_ulong();
     }
-    mCan.setTrigger(mNode2057, port, value);
+    if (mNode2057 > 0) {
+        mCan.setTrigger(mNode2057, port, value);
+    }
 }
 
 void Server::set2088frequency(int value)
 {
     ui->frequencyIndicator->display(value);
-    mCan.setPulseFrequency(mNode2088, value);
+    if (mNode2088 > 0) {
+        mCan.setPulseFrequency(mNode2088, value);
+    }
 }
 
 void Server::set2088duty(int value)
 {
     int port = sender()->objectName().toInt();
-    mCan.setPulseDuty(mNode2088, port, value);
+    if (mNode2088 > 0) {
+        mCan.setPulseDuty(mNode2088, port, value);
+    }
 }
 
 void Server::set2057Value(int port, bool isOn)
@@ -226,7 +232,9 @@ void Server::set2088Value(int port, int value)
 void Server::set2088()
 {
     for (int i=0; i<4; i++) {
-        mCan.setPulseOutput(mNode2088, i, true);
+        if (mNode2088 > 0) {
+            mCan.setPulseOutput(mNode2088, i, true);
+        }
         mOutputPulseIndicator[i]->setValue(0);
     }
 }
@@ -234,7 +242,9 @@ void Server::set2088()
 void Server::reset2088()
 {
     for (int i=0; i<4; i++) {
-        mCan.setPulseOutput(mNode2088, i, false);
+        if (mNode2088 > 0) {
+            mCan.setPulseOutput(mNode2088, i, false);
+        }
         mOutputPulseIndicator[i]->setValue(0);
     }
 }
