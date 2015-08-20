@@ -93,7 +93,7 @@ bool QCan::init()
     TimerInit();
     StartTimerLoop(Init);
 
-    s_BOARD Board = {(char*)"/dev/ttyUSB0", (char*)"125K"};
+    s_BOARD Board = {(char*)"/dev/ttyUSB0", (char*)"50K"};
     mPort = canOpen(&Board, mData);
     if(!mPort)
         return false;
@@ -190,11 +190,11 @@ void QCan::setPulseOutput(int node, int port, bool isOn)
 void QCan::setPulseFrequency(int node, UNS32 value)
 {
     qDebug() << "FREQUENCY " << value;
-/*    for (int port=0; port<4; port++) {
+    for (int port=0; port<4; port++) {
         lock();
         writeNetworkDictCallBack(mData, node, 0x3102, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
         wait();
-    }*/
+    }
 }
 
 void QCan::setPulseDuty(int node, int port, UNS16 value)
