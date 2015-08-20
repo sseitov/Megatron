@@ -16,18 +16,22 @@ UI_DIR = tmp
 RCC_DIR = tmp
 
 SOURCES += main.cpp\
-        client.cpp \
+    client.cpp \
+    qjoystick.cpp \
     buttonsetup.cpp \
     inputbutton.cpp \
     joystickcontrol.cpp \
     joystickmonitor.cpp
 
 HEADERS  += client.h \
+    qjoystick.h \
     buttonsetup.h \
     inputbutton.h \
     ../common.h \
     joystickcontrol.h \
     joystickmonitor.h
+
+LIBS += -lSDL
 
 FORMS    += client.ui \
     buttonsetup.ui

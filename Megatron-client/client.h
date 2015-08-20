@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QCheckBox>
+#include <QTimer>
 #include "inputbutton.h"
 #include <QTcpSocket>
+#include "qjoystick.h"
 
 namespace Ui {
 class Client;
@@ -19,6 +21,7 @@ public:
     ~Client();
 
 private slots:
+    void updateData();
     void connectInput(bool);
     void setLevel(int, bool);
     void setFrequency(int frequency);
@@ -31,6 +34,9 @@ private slots:
     
 private:
     Ui::Client *ui;
+    QJoystick *m_joystick;
+    QTimer *m_updateTimer;
+
     QVector<InputButton*> mInputButton;
     QVector<QCheckBox*> mOutputIndicator;
 

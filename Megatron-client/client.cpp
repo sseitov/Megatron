@@ -88,6 +88,14 @@ Client::Client(QWidget *parent) :
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
     connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
+
+    m_joystick = new QJoystick();
+    if (m_joystick->init()) {
+        m_updateTimer = new QTimer;
+        m_updateTimer->setInterval(50);
+        connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
+        m_updateTimer->start();
+    }
 }
 
 Client::~Client()
@@ -149,6 +157,22 @@ void Client::saveSettings()
         settings.setValue("port", config.port);
     }
     settings.endArray();
+}
+
+void Client::updateData()
+{
+    if (m_joystick-> started()) {
+        QList<int> axis;
+        QList<bool> buttons;
+        m_joystick->getData(axis, buttons);
+
+        qreal x = axis[0];
+        qreal y = axis[1];
+
+        x = x/32765.0*150.0;
+        y = y/32765.0*150.0;
+        ui->joystickMonitor->setTarget(x, y);
+    }
 }
 
 void Client::connectInput(bool enabled)
