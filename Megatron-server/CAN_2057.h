@@ -7,11 +7,11 @@
 #include "data.h"
 
 /* Prototypes of function provided by object dictionnary */
-UNS32 _valueRangeTest (UNS8 typeValue, void * value);
-const indextable * _scanIndexOD (UNS16 wIndex, UNS32 * errorCode, ODCallback_t **callbacks);
+UNS32 CAN_2057_valueRangeTest (UNS8 typeValue, void * value);
+const indextable * CAN_2057_scanIndexOD (UNS16 wIndex, UNS32 * errorCode, ODCallback_t **callbacks);
 
 /* Master node data struct */
-extern CO_Data _Data;
+extern CO_Data CAN_2057_Data;
 extern UNS8 Power_On_Value_of_CAN_2000C_Module_Power_On_Value_of_1h_to_8h;		/* Mapped at index 0x2010, subindex 0x01 */
 extern UNS8 Power_On_Value_of_CAN_2000C_Module_Power_On_Value_of_9h_to_15h;		/* Mapped at index 0x2010, subindex 0x02 */
 extern UNS8 Write_Outputs_8_Bit[2];		/* Mapped at index 0x6200, subindex 0x01 - 0x02 */

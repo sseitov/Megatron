@@ -2,7 +2,8 @@
 #include <QDebug>
 
 extern "C" {
-#include "ObjDict.h"
+#include "CAN_2057.h"
+#include "CAN_2088.h"
 }
 
 /***************************  CALLBACK FUNCTIONS  *****************************************/
@@ -57,7 +58,7 @@ void QCan::post_SlaveBootup(CO_Data* d, UNS8 nodeid)
 /// \param parent
 ///
 
-QCan::QCan(QObject *parent) : QObject(parent), mPort(0), mData(&CANOpenShellSlaveOD_Data)
+QCan::QCan(QObject *parent) : QObject(parent), mPort(0), mData(&CAN_2057_Data)
 {
     // Define callback functions
     mData->classObject = this;

@@ -13,14 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        ObjDict.c \
-        server.cpp \
-    qcan.cpp
+    server.cpp \
+    qcan.cpp \
+    CAN_2057.c \
+    CAN_2088.c
 
 HEADERS  += server.h \
-    ObjDict.h \
     ../common.h \
-    qcan.h
+    qcan.h \
+    CAN_2057.h \
+    CAN_2088.h
 
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -L/usr/local/lib -lcanfestival -lcanfestival_unix -ldl -lrt
