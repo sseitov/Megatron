@@ -38,6 +38,7 @@ private:
 
     pthread_mutex_t mMutex;
     pthread_cond_t mOperationFinish;
+
     void lock();
     void wait();
     void signal();

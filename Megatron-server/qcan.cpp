@@ -57,9 +57,18 @@ void QCan::post_SlaveBootup(CO_Data* d, UNS8 nodeid)
 /// \param parent
 ///
 
-QCan::QCan(QObject *parent) :
-    QObject(parent), mPort(0), mData(&CANOpenShellSlaveOD_Data)
+QCan::QCan(QObject *parent) : QObject(parent), mPort(0), mData(&CANOpenShellSlaveOD_Data)
 {
+    // Define callback functions
+    mData->classObject = this;
+    mData->initialisation = &QCan::initialisation;
+    mData->preOperational = &QCan::preOperational;
+    mData->operational = &QCan::operational;
+    mData->stopped = &QCan::stopped;
+    mData->post_sync = &QCan::post_sync;
+    mData->post_TPDO = &QCan::post_TPDO;
+    mData->post_SlaveBootup = &QCan::post_SlaveBootup;
+
     pthread_mutex_init(&mMutex, NULL);
     pthread_cond_init(&mOperationFinish, NULL);
 }
@@ -80,20 +89,10 @@ bool QCan::init()
     if (!LoadCanDriver("/usr/local/lib/libcanfestival_can_vscom.so"))
         return false;
 
-    /* Define callback functions */
-    mData->classObject = this;
-    mData->initialisation = &QCan::initialisation;
-    mData->preOperational = &QCan::preOperational;
-    mData->operational = &QCan::operational;
-    mData->stopped = &QCan::stopped;
-    mData->post_sync = &QCan::post_sync;
-    mData->post_TPDO = &QCan::post_TPDO;
-    mData->post_SlaveBootup = &QCan::post_SlaveBootup;
-
     TimerInit();
     StartTimerLoop(Init);
 
-    s_BOARD Board = {(char*)"/dev/ttyUSB0", (char*)"50K"};
+    s_BOARD Board = {(char*)"/dev/ttyUSB0", (char*)"125K"};
     mPort = canOpen(&Board, mData);
     if(!mPort)
         return false;
@@ -163,6 +162,8 @@ void QCan::CheckWriteSDO(CO_Data* d, UNS8 nodeid)
     can->signal();
 }
 
+// CAN 2057 methods
+
 void QCan::setTrigger(int node, int port, UNS8 value)
 {
     int index = port < 8 ? 1 : 2;
@@ -179,6 +180,8 @@ void QCan::setTriggerPolarity(int node, int port, UNS8 value)
     wait();
 }
 
+// CAN 2088 methods
+
 void QCan::setPulseOutput(int node, int port, bool isOn)
 {
     UNS8 data = isOn ? 1 : 0;
@@ -189,10 +192,9 @@ void QCan::setPulseOutput(int node, int port, bool isOn)
 
 void QCan::setPulseFrequency(int node, UNS32 value)
 {
-    qDebug() << "FREQUENCY " << value;
     for (int port=0; port<4; port++) {
         lock();
-        writeNetworkDictCallBack(mData, node, 0x3102, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
+        writeNetworkDictCallBack(mData, node, 0x3102, port+1, 4, 0, &value, &QCan::CheckWriteSDO, 0);
         wait();
     }
 }

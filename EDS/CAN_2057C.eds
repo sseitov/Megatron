@@ -437,7 +437,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x300
+DefaultValue=$NODEID+0x300
 PDOMapping=0
 
 [1401sub2]
@@ -466,7 +466,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x400
+DefaultValue=$NODEID+0x400
 PDOMapping=0
 
 [1402sub2]
@@ -495,7 +495,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x500
+DefaultValue=$NODEID+0x500
 PDOMapping=0
 
 [1403sub2]
@@ -844,7 +844,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x180
+DefaultValue=$NODEID+0x180
 PDOMapping=0
 
 [1800sub2]
@@ -889,7 +889,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x280
+DefaultValue=$NODEID+0x280
 PDOMapping=0
 
 [1801sub2]
@@ -934,7 +934,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x380
+DefaultValue=$NODEID+0x380
 PDOMapping=0
 
 [1802sub2]
@@ -979,7 +979,7 @@ ParameterName=COB-ID used by PDO
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
-DefaultValue=$NODEID + 0x480
+DefaultValue=$NODEID+0x480
 PDOMapping=0
 
 [1803sub2]

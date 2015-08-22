@@ -93,7 +93,7 @@
       <item>
        <widget class="QGroupBox" name="can2057">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="minimumSize">
          <size>
@@ -239,7 +239,7 @@
       <item>
        <widget class="QGroupBox" name="can2088">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="minimumSize">
          <size>
@@ -292,8 +292,11 @@
          </item>
          <item>
           <widget class="QSlider" name="frequency">
+           <property name="minimum">
+            <number>2</number>
+           </property>
            <property name="maximum">
-            <number>500</number>
+            <number>5000000</number>
            </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
