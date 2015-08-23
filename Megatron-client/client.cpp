@@ -11,7 +11,7 @@
 
 Client::Client(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Client)
+    ui(new Ui::Client), m_updateTimer(0)
 {
     ui->setupUi(this);
 
@@ -91,6 +91,7 @@ Client::Client(QWidget *parent) :
 
     m_joystick = new QJoystick();
     if (m_joystick->init()) {
+        qDebug() << m_joystick->joystickName();
         m_updateTimer = new QTimer;
         m_updateTimer->setInterval(50);
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
@@ -100,6 +101,11 @@ Client::Client(QWidget *parent) :
 
 Client::~Client()
 {
+    if (m_updateTimer) {
+        m_updateTimer->stop();
+        delete m_updateTimer;
+    }
+    delete m_joystick;
     saveSettings();
     delete ui;
 }
@@ -170,7 +176,7 @@ void Client::updateData()
         qreal y = axis[1];
 
         x = x/32765.0*150.0;
-        y = y/32765.0*150.0;
+        y = y/32765.0*150.0*(-1);
         ui->joystickMonitor->setTarget(x, y);
     }
 }
@@ -209,7 +215,7 @@ void Client::setLevel(int port, bool value)
 
 void Client::setFrequency(int frequency)
 {
-    ui->frequencyIndicator->display(frequency);
+    ui->frequencyIndicator->display(frequency/10000);
     if (mServer.isOpen()) {
         QVariantMap map;
         map.insert("CANType", CAN_2088);
