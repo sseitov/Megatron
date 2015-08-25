@@ -2,6 +2,7 @@
 #include <QDebug>
 
 extern "C" {
+#include "CANOpenShellSlaveOD.h"
 #include "CAN_2057.h"
 #include "CAN_2088.h"
 }
@@ -58,7 +59,7 @@ void QCan::post_SlaveBootup(CO_Data* d, UNS8 nodeid)
 /// \param parent
 ///
 
-QCan::QCan(QObject *parent) : QObject(parent), mPort(0), mData(&CAN_2057_Data)
+QCan::QCan(QObject *parent) : QObject(parent), mPort(0), mData(&CANOpenShellSlaveOD_Data)
 {
     // Define callback functions
     mData->classObject = this;
@@ -200,9 +201,12 @@ void QCan::setPulseFrequency(int node, UNS32 value)
     }
 }
 
-void QCan::setPulseDuty(int node, int port, UNS16 value)
+void QCan::setPulseDuty(int node, int port, UNS16 value, bool inversion)
 {
     lock();
+    if (inversion) {
+        value = 1000 - value;
+    }
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();
 }

@@ -38,7 +38,6 @@ private:
     QTimer *m_updateTimer;
 
     QVector<InputButton*> mInputButton;
-    QVector<QCheckBox*> mOutputIndicator;
 
     QTcpSocket mServer;
     

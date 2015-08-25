@@ -4,6 +4,8 @@
 #include <QtCore/qmath.h>
 #include <QDebug>
 
+#define RADIUS  120.0
+
 JoystickMonitor::JoystickMonitor(QWidget *parent) :
     QWidget(parent)
 {
@@ -20,7 +22,7 @@ void JoystickMonitor::paintEvent(QPaintEvent *pe)
     QPoint center = QPoint(pe->rect().width()/2, pe->rect().height()/2);
     painter.drawLine(0, center.y(), pe->rect().width(), center.y());
     painter.drawLine(center.x(), 0, center.x(), pe->rect().height());
-    painter.drawEllipse(0, 0, pe->rect().width()-1, pe->rect().height()-1);
+    painter.drawRect(0, 0, pe->rect().width()-1, pe->rect().height()-1);
 
     if (isEnabled()) {
         QPen pen;
@@ -39,7 +41,7 @@ void JoystickMonitor::paintEvent(QPaintEvent *pe)
         pen.setDashPattern(dashes);
         painter.setPen(pen);
         
-        QPoint org = QPoint(mTarget.x()+150, mTarget.y()+150);
+        QPoint org = QPoint(mTarget.x()+RADIUS, mTarget.y()+RADIUS);
         painter.drawLine(center, org);
         
         QRect imageRect = QRect(org.x()-16, org.y()-16, 32, 32);
@@ -61,19 +63,19 @@ void JoystickMonitor::mouseMoveEvent(QMouseEvent *mouse)
         QPoint pt = mouse->pos();
 
         qreal x = mTarget.x() + (pt.x() - mDragPt.x());
-        if (x < -150) x = -150;
-        if (x > 150) x = 150;
+        if (x < -RADIUS) x = -RADIUS;
+        if (x > RADIUS) x = RADIUS;
 
         qreal y = mTarget.y() + (pt.y() - mDragPt.y());
-        if (y < -150) y = -150;
-        if (y > 150) y = 150;
-
+        if (y < -RADIUS) y = -RADIUS;
+        if (y > RADIUS) y = RADIUS;
+/*
         if (qPow(x,2)+qPow(y,2) > qPow(150,2)) {
             qreal alpha = qAtan2(y, x);
             x = qCos(alpha)*150.0;
             y = qSin(alpha)*150.0;
         }
-
+*/
         setTarget(x, y);
 
         mDragPt = pt;
@@ -93,29 +95,28 @@ void JoystickMonitor::setTarget(qreal x, qreal y)
     mTarget.setX(x);
     mTarget.setY(y);
 
-    qreal port0, port1;
-    if (x < 0) {
-        port0 = fabs(y);
-        port1 = qSqrt(qPow(x,2)+qPow(y,2));
+    qreal port0, port1, port2, port3;
+    if (y < 0) {
+        port0 = fabs(y)/RADIUS*1000.0;
+        port1 = 0;
     } else {
-        port1 = fabs(y);
-        port0 = qSqrt(qPow(x,2)+qPow(y,2));
+        port1 = fabs(y)/RADIUS*1000.0;
+        port0 = 0;
+    }
+    if (x < 0) {
+        port2 = fabs(x)/RADIUS*1000.0;
+        port3 = 0;
+    } else {
+        port3 = fabs(x)/RADIUS*1000.0;
+        port2 = 0;
     }
 
-    port0 = (port0/150.0)*1000.0;
-    port1 = (port1/150.0)*1000.0;
-    
+//    qDebug() << port0 << " : " << port1 << " : " << port2 << " : " << port3;
+
     QVector<int> values;
-    if (y < 0) {
-        values.append(port0);
-        values.append(port1);
-        values.append(0);
-        values.append(0);
-    } else {
-        values.append(0);
-        values.append(0);
-        values.append(port0);
-        values.append(port1);
-    }
+    values.append(port0);
+    values.append(port1);
+    values.append(port2);
+    values.append(port3);
     emit setLevel(values);
 }

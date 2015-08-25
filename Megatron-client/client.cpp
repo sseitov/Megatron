@@ -67,23 +67,6 @@ Client::Client(QWidget *parent) :
         connect(mInputButton[i], SIGNAL(setLevel(int,bool)), this, SLOT(setLevel(int,bool)));
     }
 
-    mOutputIndicator.append(ui->d0);
-    mOutputIndicator.append(ui->d1);
-    mOutputIndicator.append(ui->d2);
-    mOutputIndicator.append(ui->d3);
-    mOutputIndicator.append(ui->d4);
-    mOutputIndicator.append(ui->d5);
-    mOutputIndicator.append(ui->d6);
-    mOutputIndicator.append(ui->d7);
-    mOutputIndicator.append(ui->d8);
-    mOutputIndicator.append(ui->d9);
-    mOutputIndicator.append(ui->d10);
-    mOutputIndicator.append(ui->d11);
-    mOutputIndicator.append(ui->d12);
-    mOutputIndicator.append(ui->d13);
-    mOutputIndicator.append(ui->d14);
-    mOutputIndicator.append(ui->d15);
-
     connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
@@ -200,7 +183,6 @@ void Client::connectInput(bool enabled)
 
 void Client::setLevel(int port, bool value)
 {
-    mOutputIndicator[port]->setChecked(value);
     if (mServer.isOpen()) {
         QVariantMap map;
         map.insert("CANType", CAN_2057);
@@ -307,7 +289,6 @@ void Client::onSokDisconnected()
 {
     for (int i=0; i<16; i++) {
         mInputButton[i]->uncheck();
-        mOutputIndicator[i]->setChecked(false);
     }
     ui->can_2057->setEnabled(false);
     ui->joystick->setEnabled(false);

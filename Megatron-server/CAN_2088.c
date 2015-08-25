@@ -1320,5 +1320,5 @@ const quick_index CAN_2088_lastIndex = {
 
 const UNS16 CAN_2088_ObjdictSize = sizeof(CAN_2088_objdict)/sizeof(CAN_2088_objdict[0]);
 
-CO_Data CAN_2088__Data = CANOPEN_NODE_DATA_INITIALIZER(CAN_2088);
+CO_Data CAN_2088_Data = CANOPEN_NODE_DATA_INITIALIZER(CAN_2088);
 

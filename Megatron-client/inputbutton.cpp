@@ -25,7 +25,7 @@ void InputButton::uncheck()
 void InputButton::resetConfig()
 {
     setStyleSheet("QGroupBox { color : grey; }");
-    setTitle(tr("Подключить"));
+    setTitle(tr("Вкл"));
     mButton->setText("");
     mConfig.name = "";
     mConfig.checkable = false;
@@ -38,11 +38,11 @@ void InputButton::setConfig(const ButtonConfig& config)
     mConfig = config;
     if (mConfig.port < 0) {
         setStyleSheet("QGroupBox { color : grey; }");
-        setTitle(tr("Подключить"));
+        setTitle(tr("Вкл"));
         setChecked(false);
     } else {
         setStyleSheet("QGroupBox { color : black; }");
-        setTitle(tr("Отключить"));
+        setTitle(tr("Откл"));
         setChecked(true);
     }
     mButton->setText(mConfig.name);

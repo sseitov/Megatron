@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     server.cpp \
     qcan.cpp \
+    CANOpenShellSlaveOD.c \
     CAN_2057.c \
     CAN_2088.c
 
 HEADERS  += server.h \
     ../common.h \
     qcan.h \
+    CANOpenShellSlaveOD.h \
     CAN_2057.h \
     CAN_2088.h
 

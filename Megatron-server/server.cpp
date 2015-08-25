@@ -197,8 +197,8 @@ void Server::set2057port(int state)
 
 void Server::set2088frequency(int value)
 {
+    ui->frequencyIndicator->display(value/10000);
     if (mNode2088 > 0) {
-        ui->frequencyIndicator->display(value/10000);
         mCan.setPulseFrequency(mNode2088, value);
     }
 }
@@ -207,7 +207,7 @@ void Server::set2088duty(int value)
 {
     int port = sender()->objectName().toInt();
     if (mNode2088 > 0) {
-        mCan.setPulseDuty(mNode2088, port, value);
+        mCan.setPulseDuty(mNode2088, port, value, ui->inversion->isChecked());
     }
 }
 
