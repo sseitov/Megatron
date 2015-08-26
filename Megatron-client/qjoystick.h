@@ -5,7 +5,12 @@
 #include <QString>
 #include <QList>
 
+#ifdef Q_OS_OSX
+#include <SDL.h>
+#else
 #include <SDL/SDL.h>
+#endif
+
 
 class QJoystick : public QObject
 {

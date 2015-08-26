@@ -31,7 +31,18 @@ HEADERS  += client.h \
     joystickcontrol.h \
     joystickmonitor.h
 
-LIBS += -lSDL
+macx {
+    OBJECTIVE_HEADERS += SDLMain.h
+    OBJECTIVE_SOURCES += SDLMain.m
+    INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
+    LIBS += -framework Cocoa
+    LIBS += -F/Library/Frameworks
+    LIBS += -framework SDL
+}
+
+linux {
+    LIBS += -lSDL
+}
 
 FORMS    += client.ui \
     buttonsetup.ui
