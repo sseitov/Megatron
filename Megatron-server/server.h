@@ -22,7 +22,6 @@ public:
     ~Server();
 
 private slots:
-    void start(bool);
     void connection();
     void slotReadClient();
     void slotDisconnectClient();

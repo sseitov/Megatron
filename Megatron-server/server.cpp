@@ -15,8 +15,6 @@ Server::Server(QWidget *parent) :
     ui(new Ui::Server), mClient(0), mNode2057(0), mNode2088(0)
 {
     ui->setupUi(this);
-    ui->startButton->setStyleSheet("background-color:green; color: white;");
-    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 
     mOutputIndicator.append(ui->d0);
     mOutputIndicator.append(ui->d1);
@@ -51,24 +49,10 @@ Server::Server(QWidget *parent) :
 
     if (!mCan.init()) {
         QMessageBox::critical(0, "Startup Error!", "Can not load CAN driver!", QMessageBox::Ok);
-    }
-}
-
-Server::~Server()
-{
-    reset2057();
-    reset2088();
-    delete ui;
-}
-
-void Server::start(bool start)
-{
-    if (start) {
+    } else {
         if (!mServer.listen(QHostAddress::Any, SERVER_SOCKET)) {
             QMessageBox::critical(0, "Unable to start the server", mServer.errorString(), QMessageBox::Ok);
         } else {
-            ui->startButton->setText("Stop");
-            ui->startButton->setStyleSheet("background-color:red; color: white;");
             QList<QHostAddress> list = QNetworkInterface::allAddresses();
             for(int nIter=0; nIter<list.count(); nIter++) {
                 if(!list[nIter].isLoopback()) {
@@ -79,17 +63,19 @@ void Server::start(bool start)
                 }
             }
         }
-    } else {
-        if (mClient) {
-            mClient->close();
-            mClient = 0;
-        }
-        mServer.close();
-
-        ui->startButton->setText("Start");
-        ui->startButton->setStyleSheet("background-color:green; color: white;");
-        setWindowTitle("Megatron Server");
     }
+}
+
+Server::~Server()
+{
+    if (mClient) {
+        mClient->close();
+        mClient = 0;
+    }
+    mServer.close();
+    reset2057();
+    reset2088();
+    delete ui;
 }
 
 void Server::connection()
