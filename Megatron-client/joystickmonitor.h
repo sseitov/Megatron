@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QImage>
 
+#define JOYSTICK_RADIUS  120.0
+
 class JoystickMonitor : public QWidget
 {
     Q_OBJECT

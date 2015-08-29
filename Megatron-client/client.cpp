@@ -2,6 +2,7 @@
 #include "ui_client.h"
 #include "buttonsetup.h"
 #include "../common.h"
+#include "joystickmonitor.h"
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -74,7 +75,6 @@ Client::Client(QWidget *parent) :
 
     m_joystick = new QJoystick();
     if (m_joystick->init()) {
-        qDebug() << m_joystick->joystickName();
         m_updateTimer = new QTimer;
         m_updateTimer->setInterval(50);
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
@@ -158,8 +158,8 @@ void Client::updateData()
         qreal x = axis[0];
         qreal y = axis[1];
 
-        x = x/32765.0*150.0;
-        y = y/32765.0*150.0*(-1);
+        x = x/32765.0*JOYSTICK_RADIUS;
+        y = y/32765.0*JOYSTICK_RADIUS;
         ui->joystickMonitor->setTarget(x, y);
     }
 }

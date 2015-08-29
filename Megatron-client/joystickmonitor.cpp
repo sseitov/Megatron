@@ -4,8 +4,6 @@
 #include <QtCore/qmath.h>
 #include <QDebug>
 
-#define RADIUS  120.0
-
 JoystickMonitor::JoystickMonitor(QWidget *parent) :
     QWidget(parent)
 {
@@ -41,7 +39,7 @@ void JoystickMonitor::paintEvent(QPaintEvent *pe)
         pen.setDashPattern(dashes);
         painter.setPen(pen);
         
-        QPoint org = QPoint(mTarget.x()+RADIUS, mTarget.y()+RADIUS);
+        QPoint org = QPoint(mTarget.x()+JOYSTICK_RADIUS, mTarget.y()+JOYSTICK_RADIUS);
         painter.drawLine(center, org);
         
         QRect imageRect = QRect(org.x()-16, org.y()-16, 32, 32);
@@ -63,12 +61,12 @@ void JoystickMonitor::mouseMoveEvent(QMouseEvent *mouse)
         QPoint pt = mouse->pos();
 
         qreal x = mTarget.x() + (pt.x() - mDragPt.x());
-        if (x < -RADIUS) x = -RADIUS;
-        if (x > RADIUS) x = RADIUS;
+        if (x < -JOYSTICK_RADIUS) x = -JOYSTICK_RADIUS;
+        if (x > JOYSTICK_RADIUS) x = JOYSTICK_RADIUS;
 
         qreal y = mTarget.y() + (pt.y() - mDragPt.y());
-        if (y < -RADIUS) y = -RADIUS;
-        if (y > RADIUS) y = RADIUS;
+        if (y < -JOYSTICK_RADIUS) y = -JOYSTICK_RADIUS;
+        if (y > JOYSTICK_RADIUS) y = JOYSTICK_RADIUS;
 /*
         if (qPow(x,2)+qPow(y,2) > qPow(150,2)) {
             qreal alpha = qAtan2(y, x);
@@ -94,20 +92,21 @@ void JoystickMonitor::setTarget(qreal x, qreal y)
 {
     mTarget.setX(x);
     mTarget.setY(y);
+    repaint();
 
     qreal port0, port1, port2, port3;
     if (y < 0) {
-        port0 = fabs(y)/RADIUS*1000.0;
+        port0 = fabs(y)/JOYSTICK_RADIUS*1000.0;
         port1 = 0;
     } else {
-        port1 = fabs(y)/RADIUS*1000.0;
+        port1 = fabs(y)/JOYSTICK_RADIUS*1000.0;
         port0 = 0;
     }
     if (x < 0) {
-        port2 = fabs(x)/RADIUS*1000.0;
+        port2 = fabs(x)/JOYSTICK_RADIUS*1000.0;
         port3 = 0;
     } else {
-        port3 = fabs(x)/RADIUS*1000.0;
+        port3 = fabs(x)/JOYSTICK_RADIUS*1000.0;
         port2 = 0;
     }
 
