@@ -5,7 +5,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QCheckBox>
-#include <QSlider>
+#include <QProgressBar>
 #include "qcan.h"
 #include <bitset>
 
@@ -39,7 +39,7 @@ private:
     int mNode2088;
 
     QVector<QCheckBox*> mOutputIndicator;
-    QVector<QSlider*> mOutputPulseIndicator;
+    QVector<QProgressBar*> mOutputPulseIndicator;
 
 
     std::bitset<8> m2057lowValue;

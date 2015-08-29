@@ -41,7 +41,7 @@ Server::Server(QWidget *parent) :
     mOutputPulseIndicator.append(ui->po2);
     mOutputPulseIndicator.append(ui->po3);
     for (int i=0; i<4; i++) {
-        mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+       mOutputPulseIndicator[i]->setObjectName(QString::number(i));
     }
 
     connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
