@@ -57,7 +57,7 @@ Client::Client(QWidget *parent) :
                                   ui->joystickMonitor);
     connect(ui->joystickMonitor, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
 
-    connect(ui->clearHistory, SIGNAL(clicked()), ui->ipAddress, SLOT(clear()));
+    connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
     
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
@@ -91,6 +91,12 @@ Client::~Client()
     delete m_joystick;
     saveSettings();
     delete ui;
+}
+
+void Client::clearHistory()
+{
+    ui->ipAddress->clear();
+    saveSettings();
 }
 
 void Client::loadSettings()
@@ -175,6 +181,7 @@ void Client::connectInput(bool enabled)
             } else {
                 setup->setupButton(control);
             }
+            saveSettings();
         } else {
             control->resetConfig();
         }
@@ -280,6 +287,7 @@ void Client::onSokConnected()
 {
     if (ui->ipAddress->findText(ui->ipAddress->currentText()) < 0) {
         ui->ipAddress->insertItem(0, ui->ipAddress->currentText());
+        saveSettings();
     }
     ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");

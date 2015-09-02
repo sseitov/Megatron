@@ -22,6 +22,7 @@ public:
 
 private slots:
     void updateData();
+    void clearHistory();
     void connectInput(bool);
     void setLevel(int, bool);
     void setFrequency(int frequency);
