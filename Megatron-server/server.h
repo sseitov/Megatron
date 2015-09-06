@@ -8,6 +8,7 @@
 #include <QProgressBar>
 #include "qcan.h"
 #include <bitset>
+#include "cancontrol.h"
 
 namespace Ui {
 class Server;
@@ -27,8 +28,6 @@ private slots:
     void slotDisconnectClient();
     void canInitialized(int);
     void set2057port(int state);
-    void set2088duty(int value);
-    void set2088frequency(int value);
 
 private:
     Ui::Server *ui;
@@ -36,10 +35,9 @@ private:
     QTcpSocket *mClient;
     QCan mCan;
     int mNode2057;
-    int mNode2088;
-
     QVector<QCheckBox*> mOutputIndicator;
-    QVector<QProgressBar*> mOutputPulseIndicator;
+
+    CANControl mNode2088[3];
 
 
     std::bitset<8> m2057lowValue;
@@ -49,9 +47,7 @@ private:
 
     void set2057Value(int port, bool isOn);
     void reset2057();
-    void set2088Value(int port, int value);
-    void set2088();
-    void reset2088();
+
 };
 
 #endif // SERVER_H

@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     server.cpp \
     qcan.cpp \
-    CANOpenShellSlaveOD.c
+    CANOpenShellSlaveOD.c \
+    cancontrol.cpp
 
 HEADERS  += server.h \
     ../common.h \
     qcan.h \
-    CANOpenShellSlaveOD.h
+    CANOpenShellSlaveOD.h \
+    cancontrol.h
 
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -L/usr/local/lib -lcanfestival -lcanfestival_unix -ldl -lrt
