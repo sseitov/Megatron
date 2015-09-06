@@ -209,6 +209,7 @@ void Client::setFrequency(int frequency)
         QVariantMap map;
         map.insert("CANType", CAN_2088);
         map.insert("CommandType", CAN_SetPreference);
+        map.insert("Node", 3);
         map.insert("Value", frequency);
         
         QJsonObject command = QJsonObject::fromVariantMap(map);
@@ -227,8 +228,9 @@ void Client::setLevel(const QVector<int>& values)
         QVariantList list;
         for (int i=0; i<values.count(); i++) {
             QVariantMap p0;
+            p0.insert("Node", 3);
             p0.insert("Port", i);
-            p0.insert("Level", values[i]);
+            p0.insert("Value", values[i]);
             list.append(p0);
         }
 
@@ -265,12 +267,16 @@ void Client::onSokReadyRead()
         if (commandType == QJsonValue::Undefined)
             return;
         if (commandType.toInt() == CAN_Initialized) {
-            QJsonValue canTypes = command.take("CANType");
-            if (canTypes == QJsonValue::Undefined)
+            QJsonValue canArray = command.take("CANArray");
+            if (canArray == QJsonValue::Undefined)
                 return;
-            QJsonArray types = canTypes.toArray();
-            for (int i=0; i<types.count(); i++) {
-                QJsonValue type = types[i];
+            QJsonArray cans = canArray.toArray();
+            for (int i=0; i<cans.count(); i++) {
+                QJsonObject can = cans[i].toObject();
+                
+                QJsonValue type = can.take("CANType");
+                QJsonValue node = can.take("Node");
+
                 if (type.toInt() == CAN_2057) {
                     ui->can_2057->setEnabled(true);
                 }
