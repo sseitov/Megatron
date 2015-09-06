@@ -141,26 +141,14 @@ void Server::connection()
         m.insert("Node", mNode2057);
         list.append(m);
     }
-    if (ui->can2088_1->isEnabled()) {
-        QVariantMap m;
-        m.insert("CANType", CAN_2088);
-        m.insert("Node", mNode2088[0].mNode);
-        mNode2088[0].set();
-        list.append(m);
-    }
-    if (ui->can2088_2->isEnabled()) {
-        QVariantMap m;
-        m.insert("CANType", CAN_2088);
-        m.insert("Node", mNode2088[1].mNode);
-        mNode2088[1].set();
-        list.append(m);
-    }
-    if (ui->can2088_3->isEnabled()) {
-        QVariantMap m;
-        m.insert("CANType", CAN_2088);
-        m.insert("Node", mNode2088[2].mNode);
-        mNode2088[2].set();
-        list.append(m);
+    for (int i=0; i<3; i++) {
+        if (mNode2088[i].mNode >= 0) {
+            QVariantMap m;
+            m.insert("CANType", CAN_2088);
+            m.insert("Node", mNode2088[i].mNode);
+            mNode2088[i].set();
+            list.append(m);
+        }
     }
     map.insert("CANArray", list);
     QJsonObject command = QJsonObject::fromVariantMap(map);
