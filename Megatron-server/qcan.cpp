@@ -3,8 +3,6 @@
 
 extern "C" {
 #include "CANOpenShellSlaveOD.h"
-#include "CAN_2057.h"
-#include "CAN_2088.h"
 }
 
 /***************************  CALLBACK FUNCTIONS  *****************************************/
@@ -203,10 +201,11 @@ void QCan::setPulseFrequency(int node, UNS32 value)
 
 void QCan::setPulseDuty(int node, int port, UNS16 value, bool inversion)
 {
-    lock();
     if (inversion) {
         value = 1000 - value;
     }
+    qDebug() << "DUTY " << value << " ON PORT " << port;
+    lock();
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();
 }
