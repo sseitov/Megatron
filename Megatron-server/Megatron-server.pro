@@ -16,15 +16,13 @@ SOURCES += main.cpp\
     server.cpp \
     qcan.cpp \
     CANOpenShellSlaveOD.c \
-    CAN_2057.c \
-    CAN_2088.c
+    cancontrol.cpp
 
 HEADERS  += server.h \
     ../common.h \
     qcan.h \
     CANOpenShellSlaveOD.h \
-    CAN_2057.h \
-    CAN_2088.h
+    cancontrol.h
 
 INCLUDEPATH += /usr/local/include/canfestival
 LIBS += -L/usr/local/lib -lcanfestival -lcanfestival_unix -ldl -lrt

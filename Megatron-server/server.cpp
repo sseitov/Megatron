@@ -12,7 +12,7 @@
 
 Server::Server(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Server), mClient(0), mNode2057(0), mNode2088(0)
+    ui(new Ui::Server), mClient(0), mNode2057(0)
 {
     ui->setupUi(this);
 
@@ -36,12 +36,55 @@ Server::Server(QWidget *parent) :
         mOutputIndicator[i]->setObjectName(QString::number(i));
     }
 
-    mOutputPulseIndicator.append(ui->po0);
-    mOutputPulseIndicator.append(ui->po1);
-    mOutputPulseIndicator.append(ui->po2);
-    mOutputPulseIndicator.append(ui->po3);
-    for (int i=0; i<4; i++) {
-       mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+    mNode2088[0].mCan = &mCan;
+    mNode2088[0].mBox = ui->can2088_1;
+    mNode2088[0].mInversion = ui->inversion_1;
+    mNode2088[0].mFrequency = ui->frequency_1;
+    mNode2088[0].mFrequiencyIndicator = ui->frequencyIndicator_1;
+    mNode2088[0].mOutputPulseIndicator.append(ui->po0_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po1_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po2_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po3_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po4_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po5_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po6_1);
+    mNode2088[0].mOutputPulseIndicator.append(ui->po7_1);
+    for (int i=0; i<PWM_COUNT; i++) {
+       mNode2088[0].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+    }
+
+    mNode2088[1].mCan = &mCan;
+    mNode2088[1].mBox = ui->can2088_2;
+    mNode2088[1].mInversion = ui->inversion_2;
+    mNode2088[1].mFrequency = ui->frequency_2;
+    mNode2088[1].mFrequiencyIndicator = ui->frequencyIndicator_2;
+    mNode2088[1].mOutputPulseIndicator.append(ui->po0_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po1_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po2_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po3_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po4_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po5_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po6_2);
+    mNode2088[1].mOutputPulseIndicator.append(ui->po7_2);
+    for (int i=0; i<PWM_COUNT; i++) {
+       mNode2088[1].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+    }
+
+    mNode2088[2].mCan = &mCan;
+    mNode2088[2].mBox = ui->can2088_3;
+    mNode2088[2].mInversion = ui->inversion_3;
+    mNode2088[2].mFrequency = ui->frequency_3;
+    mNode2088[2].mFrequiencyIndicator = ui->frequencyIndicator_3;
+    mNode2088[2].mOutputPulseIndicator.append(ui->po0_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po1_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po2_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po3_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po4_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po5_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po6_3);
+    mNode2088[2].mOutputPulseIndicator.append(ui->po7_3);
+    for (int i=0; i<PWM_COUNT; i++) {
+       mNode2088[2].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
     }
 
     connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
@@ -74,7 +117,9 @@ Server::~Server()
     }
     mServer.close();
     reset2057();
-    reset2088();
+    for (int i=0; i<3; i++) {
+        mNode2088[i].reset();
+    }
     delete ui;
 }
 
@@ -91,12 +136,33 @@ void Server::connection()
     map.insert("CommandType", CAN_Initialized);
     QVariantList list;
     if (ui->can2057->isEnabled()) {
-        list.append(CAN_2057);
+        QVariantMap m;
+        m.insert("CANType", CAN_2057);
+        m.insert("Node", mNode2057);
+        list.append(m);
     }
-    if (ui->can2088->isEnabled()) {
-        list.append(CAN_2088);
+    if (ui->can2088_1->isEnabled()) {
+        QVariantMap m;
+        m.insert("CANType", CAN_2088);
+        m.insert("Node", mNode2088[0].mNode);
+        mNode2088[0].set();
+        list.append(m);
     }
-    map.insert("CANType", list);
+    if (ui->can2088_2->isEnabled()) {
+        QVariantMap m;
+        m.insert("CANType", CAN_2088);
+        m.insert("Node", mNode2088[1].mNode);
+        mNode2088[1].set();
+        list.append(m);
+    }
+    if (ui->can2088_3->isEnabled()) {
+        QVariantMap m;
+        m.insert("CANType", CAN_2088);
+        m.insert("Node", mNode2088[2].mNode);
+        mNode2088[2].set();
+        list.append(m);
+    }
+    map.insert("CANArray", list);
     QJsonObject command = QJsonObject::fromVariantMap(map);
     QByteArray data = QJsonDocument(command).toBinaryData();
     mClient->write(data);
@@ -106,7 +172,9 @@ void Server::slotDisconnectClient()
 {
     mClient = 0;
     reset2057();
-    reset2088();
+    for (int i=0; i<3; i++) {
+        mNode2088[i].reset();
+    }
 }
 
 void Server::slotReadClient()
@@ -130,15 +198,19 @@ void Server::slotReadClient()
             } else if (canType.toInt() == CAN_2088) {
                 QJsonArray values = command.take("PortArray").toArray();
                 for (int i=0; i<values.count(); i++) {
-                    QJsonObject value = values[i].toObject();
-                    set2088Value(value.take("Port").toInt(), value.take("Level").toInt());
+                    QJsonObject item = values[i].toObject();
+                    QJsonValue node = item.take("Node");
+                    QJsonValue port = item.take("Port");
+                    QJsonValue value = item.take("Value");
+                    mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
                 }
             }
         } else if (commandType.toInt() == CAN_SetPreference) {
             if (canType.toInt() == CAN_2057) {
             } else if (canType.toInt() == CAN_2088) {
+                QJsonValue node = command.take("Node");
                 QJsonValue value = command.take("Value");
-                ui->frequency->setValue(value.toInt());
+                mNode2088[node.toInt()-1].mFrequency->setValue(value.toInt());
             }
         }
     }
@@ -148,16 +220,13 @@ void Server::canInitialized(int node)
 {
     int canType = mCan.getCanType(node);
     if (canType == 0x2088) {
-        mNode2088 = node;
-        ui->can2088->setEnabled(true);
-        for (int i=0; i<4; i++) {
-            connect(mOutputPulseIndicator[i], SIGNAL(valueChanged(int)), this, SLOT(set2088duty(int)));
-        }
-        connect(ui->frequency, SIGNAL(valueChanged(int)), this, SLOT(set2088frequency(int)));
-        set2088();
+        mNode2088[node-1].mBox->setEnabled(true);
+        mNode2088[node-1].mBox->setTitle("2088 ["+QString::number(node)+"]");
+        mNode2088[node-1].start(node);
     } else if (canType == 0x2057) {
         mNode2057 = node;
         ui->can2057->setEnabled(true);
+        ui->can2057->setTitle("2057 ["+QString::number(node)+"]");
         for (int i=0; i<16; i++) {
             connect(mOutputIndicator[i], SIGNAL(stateChanged(int)), this, SLOT(set2057port(int)));
         }
@@ -181,22 +250,6 @@ void Server::set2057port(int state)
     }
 }
 
-void Server::set2088frequency(int value)
-{
-    ui->frequencyIndicator->display(value/10000);
-    if (mNode2088 > 0) {
-        mCan.setPulseFrequency(mNode2088, value);
-    }
-}
-
-void Server::set2088duty(int value)
-{
-    int port = sender()->objectName().toInt();
-    if (mNode2088 > 0) {
-        mCan.setPulseDuty(mNode2088, port, value, ui->inversion->isChecked());
-    }
-}
-
 void Server::set2057Value(int port, bool isOn)
 {
     mOutputIndicator[port]->setChecked(isOn);
@@ -206,31 +259,5 @@ void Server::reset2057()
 {
     for (int i=0; i<16; i++) {
         mOutputIndicator[i]->setChecked(false);
-    }
-}
-
-void Server::set2088Value(int port, int value)
-{
-    mOutputPulseIndicator[port]->setValue(value);
-}
-
-
-void Server::set2088()
-{
-    for (int i=0; i<4; i++) {
-        if (mNode2088 > 0) {
-            mCan.setPulseOutput(mNode2088, i, true);
-        }
-        mOutputPulseIndicator[i]->setValue(0);
-    }
-}
-
-void Server::reset2088()
-{
-    for (int i=0; i<4; i++) {
-        if (mNode2088 > 0) {
-            mCan.setPulseOutput(mNode2088, i, false);
-        }
-        mOutputPulseIndicator[i]->setValue(0);
     }
 }
