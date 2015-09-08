@@ -20,10 +20,13 @@ Client::Client(QWidget *parent) :
     loadSettings();
         
     ui->joystick_1->connectControls(ui->frequency_1, ui->frequencyIndicator_1, ui->lowLimit_1, ui->lowLimitIndicator_1,
-                                  ui->highLimit_1, ui->highLimitIndicator_1,
-                                  ui->joystickMonitor_1);
+                                  ui->highLimit_1, ui->highLimitIndicator_1, ui->joystickMonitor_1);
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
 
+    ui->joystick_2->connectControls(ui->frequency_2, ui->frequencyIndicator_2, ui->lowLimit_2, ui->lowLimitIndicator_2,
+                                    ui->highLimit_2, ui->highLimitIndicator_2, ui->joystickMonitor_2);
+    connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
+    
     connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
     
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
