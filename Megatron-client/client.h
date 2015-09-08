@@ -25,7 +25,6 @@ private slots:
     void clearHistory();
     void connectInput(bool);
     void setLevel(int, bool);
-    void setFrequency(int frequency);
     void setLevel(const QVector<int>&);
     void start(bool);
     void onSokReadyRead();

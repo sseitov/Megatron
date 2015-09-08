@@ -16,58 +16,25 @@ Client::Client(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->control0->connectButton(ui->button0);
-    mInputButton.append(ui->control0);
-    ui->control1->connectButton(ui->button1);
-    mInputButton.append(ui->control1);
-    ui->control2->connectButton(ui->button2);
-    mInputButton.append(ui->control2);
-    ui->control3->connectButton(ui->button3);
-    mInputButton.append(ui->control3);
-    ui->control4->connectButton(ui->button4);
-    mInputButton.append(ui->control4);
-    ui->control5->connectButton(ui->button5);
-    mInputButton.append(ui->control5);
-    ui->control6->connectButton(ui->button6);
-    mInputButton.append(ui->control6);
-    ui->control7->connectButton(ui->button7);
-    mInputButton.append(ui->control7);
-    ui->control8->connectButton(ui->button8);
-    mInputButton.append(ui->control8);
-    ui->control9->connectButton(ui->button9);
-    mInputButton.append(ui->control9);
-    ui->control10->connectButton(ui->button10);
-    mInputButton.append(ui->control10);
-    ui->control11->connectButton(ui->button11);
-    mInputButton.append(ui->control11);
-    ui->control12->connectButton(ui->button12);
-    mInputButton.append(ui->control12);
-    ui->control13->connectButton(ui->button13);
-    mInputButton.append(ui->control13);
-    ui->control14->connectButton(ui->button14);
-    mInputButton.append(ui->control14);
-    ui->control15->connectButton(ui->button15);
-    mInputButton.append(ui->control15);
 
     loadSettings();
-    
-    connect(ui->frequency, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
-    ui->joystick->connectControls(ui->lowLimit, ui->lowLimitIndicator,
-                                  ui->highLimit, ui->highLimitIndicator,
-                                  ui->joystickMonitor);
-    connect(ui->joystickMonitor, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
+        
+    ui->joystick_1->connectControls(ui->frequency_1, ui->frequencyIndicator_1, ui->lowLimit_1, ui->lowLimitIndicator_1,
+                                  ui->highLimit_1, ui->highLimitIndicator_1,
+                                  ui->joystickMonitor_1);
+    connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
 
     connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
     
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
-
+/*
     for (int i=0; i<16; i++) {
         mInputButton[i]->setObjectName(QString::number(i));
         connect(mInputButton[i], SIGNAL(toggled(bool)), this, SLOT(connectInput(bool)));
         connect(mInputButton[i], SIGNAL(setLevel(int,bool)), this, SLOT(setLevel(int,bool)));
     }
-
+*/
     connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
@@ -101,7 +68,7 @@ void Client::clearHistory()
 
 void Client::loadSettings()
 {
-    QSettings settings("V-Channel", "Megatron");
+    QSettings settings("V-Channel", "Megatron-client");
     
     int size = settings.beginReadArray("history");
     for (int i = 0; i < size; ++i) {
@@ -110,7 +77,7 @@ void Client::loadSettings()
         ui->ipAddress->addItem(ip);
     }
     settings.endArray();
-    
+ /*
     size = settings.beginReadArray("buttons");
     if (size > 0) {
         for (int i = 0; i < size; ++i) {
@@ -128,12 +95,12 @@ void Client::loadSettings()
             mInputButton[i]->setConfig(config);
         }
     }
-    settings.endArray();
+    settings.endArray();*/
 }
 
 void Client::saveSettings()
 {
-    QSettings settings("V-Channel", "Megatron");
+    QSettings settings("V-Channel", "Megatron-client");
     
     settings.beginWriteArray("history");
     for (int i = 0; i < ui->ipAddress->count(); ++i) {
@@ -141,7 +108,7 @@ void Client::saveSettings()
         settings.setValue("ip", ui->ipAddress->itemText(i));
     }
     settings.endArray();
-    
+/*
     settings.beginWriteArray("buttons");
     for (int i = 0; i < 16; ++i) {
         settings.setArrayIndex(i);
@@ -151,11 +118,11 @@ void Client::saveSettings()
         settings.setValue("inverse", config.inverse);
         settings.setValue("port", config.port);
     }
-    settings.endArray();
+    settings.endArray();*/
 }
 
 void Client::updateData()
-{
+{/*
     if (m_joystick-> started()) {
         QList<int> axis;
         QList<bool> buttons;
@@ -167,7 +134,7 @@ void Client::updateData()
         x = x/32765.0*JOYSTICK_RADIUS;
         y = y/32765.0*JOYSTICK_RADIUS;
         ui->joystickMonitor->setTarget(x, y);
-    }
+    }*/
 }
 
 void Client::connectInput(bool enabled)
@@ -196,22 +163,6 @@ void Client::setLevel(int port, bool value)
         map.insert("CommandType", CAN_SetValue);
         map.insert("Port", port);
         map.insert("Value", value);
-        QJsonObject command = QJsonObject::fromVariantMap(map);
-        QByteArray data = QJsonDocument(command).toBinaryData();
-        mServer.write(data);
-    }
-}
-
-void Client::setFrequency(int frequency)
-{
-    ui->frequencyIndicator->display(frequency/10000);
-    if (mServer.isOpen()) {
-        QVariantMap map;
-        map.insert("CANType", CAN_2088);
-        map.insert("CommandType", CAN_SetPreference);
-        map.insert("Node", 3);
-        map.insert("Value", frequency);
-        
         QJsonObject command = QJsonObject::fromVariantMap(map);
         QByteArray data = QJsonDocument(command).toBinaryData();
         mServer.write(data);
@@ -276,7 +227,7 @@ void Client::onSokReadyRead()
                 
                 QJsonValue type = can.take("CANType");
                 QJsonValue node = can.take("Node");
-
+/*
                 if (type.toInt() == CAN_2057) {
                     ui->can_2057->setEnabled(true);
                 }
@@ -284,6 +235,7 @@ void Client::onSokReadyRead()
                     ui->joystick->setEnabled(true);
                     ui->joystickMonitor->setTarget(0, 0);
                 }
+ */
             }
         }
     }
@@ -301,11 +253,6 @@ void Client::onSokConnected()
 
 void Client::onSokDisconnected()
 {
-    for (int i=0; i<16; i++) {
-        mInputButton[i]->uncheck();
-    }
-    ui->can_2057->setEnabled(false);
-    ui->joystick->setEnabled(false);
     ui->connectButton->setChecked(false);
     ui->connectButton->setText(tr("Соединить"));
     ui->connectButton->setStyleSheet("background-color:green; color: white;");

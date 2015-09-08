@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QImage>
 
-#define JOYSTICK_RADIUS  120.0
+#define JOYSTICK_RADIUS  70.0
 
 class JoystickMonitor : public QWidget
 {
