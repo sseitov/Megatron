@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QCheckBox>
-#include <QTimer>
 #include "inputbutton.h"
 #include <QTcpSocket>
 #include "qjoystick.h"
@@ -21,7 +20,7 @@ public:
     ~Client();
 
 private slots:
-    void updateData();
+    void setJoystickData(int, qreal, qreal, bool, bool);
     void clearHistory();
     void connectInput(bool);
     void setLevel(int, bool);
@@ -34,10 +33,9 @@ private slots:
     
 private:
     Ui::Client *ui;
-    QJoystick *m_joystick;
-    QTimer *m_updateTimer;
 
     QVector<InputButton*> mInputButton;
+    QVector<QJoystick*> mJoystick;
 
     QTcpSocket mServer;
     

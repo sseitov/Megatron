@@ -12,13 +12,18 @@
 
 Client::Client(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Client), m_updateTimer(0)
+    ui(new Ui::Client)
 {
     ui->setupUi(this);
 
 
     loadSettings();
-        
+    
+    connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
+    
+    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
+    
     ui->joystick_1->connectControls(ui->frequency_1, ui->frequencyIndicator_1, ui->lowLimit_1, ui->lowLimitIndicator_1,
                                   ui->highLimit_1, ui->highLimitIndicator_1, ui->joystickMonitor_1);
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
@@ -27,10 +32,6 @@ Client::Client(QWidget *parent) :
                                     ui->highLimit_2, ui->highLimitIndicator_2, ui->joystickMonitor_2);
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
     
-    connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
-    
-    ui->connectButton->setStyleSheet("background-color:green; color: white;");
-    connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 /*
     for (int i=0; i<16; i++) {
         mInputButton[i]->setObjectName(QString::number(i));
@@ -43,24 +44,44 @@ Client::Client(QWidget *parent) :
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
     connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
 
-    m_joystick = new QJoystick();
-    if (m_joystick->init()) {
-        m_updateTimer = new QTimer;
-        m_updateTimer->setInterval(50);
-        connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
-        m_updateTimer->start();
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
+    for (int i=0; i<SDL_NumJoysticks(); i++) {
+        QJoystick *joy = new QJoystick(i, SDL_JoystickOpen(i));
+        connect(joy, SIGNAL(setData(int, qreal, qreal, bool, bool)), this, SLOT(setJoystickData(int, qreal, qreal, bool, bool)));
+        mJoystick.append(joy);
+    }
+    if (mJoystick.size() < 2) {
+        ui->joystick_2->setEnabled(false);
+    }
+    if (mJoystick.size() < 1) {
+        ui->joystick_1->setEnabled(false);
     }
 }
 
 Client::~Client()
 {
-    if (m_updateTimer) {
-        m_updateTimer->stop();
-        delete m_updateTimer;
+    for (int i=0; i<mJoystick.size(); i++) {
+        QJoystick* joy = mJoystick[i];
+        delete joy;
     }
-    delete m_joystick;
+    SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
     saveSettings();
     delete ui;
+}
+
+void Client::setJoystickData(int num, qreal x, qreal y, bool b1, bool b2)
+{
+    x = x/32765.0*JOYSTICK_RADIUS;
+    y = y/32765.0*JOYSTICK_RADIUS;
+    if (num == 0) {
+        ui->joystickMonitor_1->setTarget(x, y);
+        ui->button1_1->setChecked(b1);
+        ui->button2_1->setChecked(b2);
+    } else {
+        ui->joystickMonitor_2->setTarget(x, y);
+        ui->button1_2->setChecked(b1);
+        ui->button2_2->setChecked(b2);
+    }
 }
 
 void Client::clearHistory()
@@ -122,22 +143,6 @@ void Client::saveSettings()
         settings.setValue("port", config.port);
     }
     settings.endArray();*/
-}
-
-void Client::updateData()
-{/*
-    if (m_joystick-> started()) {
-        QList<int> axis;
-        QList<bool> buttons;
-        m_joystick->getData(axis, buttons);
-
-        qreal x = axis[0];
-        qreal y = axis[1];
-
-        x = x/32765.0*JOYSTICK_RADIUS;
-        y = y/32765.0*JOYSTICK_RADIUS;
-        ui->joystickMonitor->setTarget(x, y);
-    }*/
 }
 
 void Client::connectInput(bool enabled)

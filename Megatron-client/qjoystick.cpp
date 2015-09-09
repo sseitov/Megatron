@@ -3,39 +3,20 @@
 
 #define POLL_INTERVAL 40
 
-QJoystick::QJoystick(QObject *parent) :
-    QObject(parent), m_joystick(0)
+QJoystick::QJoystick(int num, SDL_Joystick* joystick) :
+    QObject(0), mID(num), m_joystick(joystick)
 {
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
+    m_updateTimer = new QTimer;
+    m_updateTimer->setInterval(50);
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateData()));
+    m_updateTimer->start();
 }
 
 QJoystick::~QJoystick()
 {
-    if (m_joystick) {
-        SDL_JoystickClose(m_joystick);
-    }
-    SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
-}
-
-bool QJoystick::init()
-{
-    if (SDL_NumJoysticks() < 1) {
-        m_joystick = 0;
-        return false;
-    } else {
-        m_joystick = SDL_JoystickOpen(0);
-        return true;
-    }
-}
-
-bool QJoystick::started()
-{
-    return (m_joystick != 0);
-}
-
-QString QJoystick::joystickName()
-{
-    return QString(SDL_JoystickName(0));
+    m_updateTimer->stop();
+    delete m_updateTimer;
+    SDL_JoystickClose(m_joystick);
 }
 
 int QJoystick::joystickNumAxes()
@@ -62,4 +43,18 @@ void QJoystick::getData(QList<int> &axis, QList<bool> &buttons)
     {
         buttons.append(SDL_JoystickGetButton(m_joystick,i));
     }
+}
+
+void QJoystick::updateData()
+{
+    QList<int> axis;
+    QList<bool> buttons;
+    getData(axis, buttons);
+    
+    qreal x = axis[0];
+    qreal y = axis[1];
+    bool b1 = buttons[0];
+    bool b2 = buttons[1];
+    
+    emit setData(mID, x, y, b1, b2);
 }
