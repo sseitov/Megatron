@@ -19,17 +19,17 @@ SOURCES += main.cpp\
     client.cpp \
     qjoystick.cpp \
     buttonsetup.cpp \
-    inputbutton.cpp \
     joystickcontrol.cpp \
-    joystickmonitor.cpp
+    joystickmonitor.cpp \
+    controlbutton.cpp
 
 HEADERS  += client.h \
     qjoystick.h \
     buttonsetup.h \
-    inputbutton.h \
     ../common.h \
     joystickcontrol.h \
-    joystickmonitor.h
+    joystickmonitor.h \
+    controlbutton.h
 
 macx {
     OBJECTIVE_HEADERS += SDLMain.h

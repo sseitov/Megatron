@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo usermod -a -G dialout prs3
+sudo usermod -a -G dialout sseitov

@@ -14,6 +14,9 @@ public:
     void connectControls(QSlider *fc, QLCDNumber *fi, QSlider *lc, QLCDNumber *li, QSlider *hc, QLCDNumber *hi, JoystickMonitor *monitor);
 
 signals:
+    void sendLowLimit(int);
+    void sendHighLimit(int);
+    void sendFrequency(int frequency);
 
 private slots:
     void setLowLimit(int);

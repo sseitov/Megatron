@@ -1,7 +1,6 @@
-#ifndef INPUTBUTTON_H
-#define INPUTBUTTON_H
+#ifndef CONTROLBUTTON_H
+#define CONTROLBUTTON_H
 
-#include <QGroupBox>
 #include <QPushButton>
 
 struct ButtonConfig {
@@ -12,16 +11,13 @@ struct ButtonConfig {
     int port;
 };
 
-class InputButton : public QGroupBox
+class ControlButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit InputButton(QWidget *parent = 0);
-    void connectButton(QPushButton* button);
+    explicit ControlButton(QWidget *parent = 0);
     void setConfig(const ButtonConfig& config);
-    void resetConfig();
     const ButtonConfig& config() { return mConfig; }
-    void uncheck();
 
 signals:
     void setLevel(int, bool);
@@ -32,9 +28,8 @@ private slots:
     void levelOff();
 
 private:
-    QPushButton* mButton;
     ButtonConfig mConfig;
     void sendLevel(bool);
 };
 
-#endif // INPUTBUTTON_H
+#endif // CONTROLBUTTON_H

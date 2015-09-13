@@ -13,7 +13,7 @@ ButtonSetup::~ButtonSetup()
     delete ui;
 }
 
-void ButtonSetup::setupButton(InputButton* button)
+void ButtonSetup::setupButton(ControlButton* button)
 {
     ButtonConfig config;
     config.name = ui->name->text();

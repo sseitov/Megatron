@@ -25,27 +25,17 @@ void JoystickControl::connectControls(QSlider *fc, QLCDNumber *fi, QSlider *lc, 
 void JoystickControl::setLowLimit(int value)
 {
     mLowLimitIndicator->display(value);
+    emit sendLowLimit(value);
 }
 
 void JoystickControl::setHighLimit(int value)
 {
     mHighLimitIndicator->display(value);
+    emit sendHighLimit(value);
 }
 
 void JoystickControl::setFrequency(int frequency)
 {
     mFrequencyIndicator->display(frequency/10000);
-/*
-    if (mServer.isOpen()) {
-        QVariantMap map;
-        map.insert("CANType", CAN_2088);
-        map.insert("CommandType", CAN_SetPreference);
-        map.insert("Node", 3);
-        map.insert("Value", frequency);
-        
-        QJsonObject command = QJsonObject::fromVariantMap(map);
-        QByteArray data = QJsonDocument(command).toBinaryData();
-        mServer.write(data);
-    }
- */
+    emit sendFrequency(frequency);
 }

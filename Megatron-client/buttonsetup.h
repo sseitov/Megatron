@@ -2,7 +2,7 @@
 #define BUTTONSETUP_H
 
 #include <QDialog>
-#include "inputbutton.h"
+#include "controlbutton.h"
 
 namespace Ui {
 class ButtonSetup;
@@ -15,7 +15,7 @@ class ButtonSetup : public QDialog
 public:
     explicit ButtonSetup(QWidget *parent = 0);
     ~ButtonSetup();
-    void setupButton(InputButton* button);
+    void setupButton(ControlButton* button);
 
 private:
     Ui::ButtonSetup *ui;
