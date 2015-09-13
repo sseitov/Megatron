@@ -166,6 +166,7 @@ void Client::clearControls()
         delete w;
     }
     mControlButtons[mCurrentMode].clear();
+    saveSettings();
 }
 
 void Client::addControl()
@@ -181,6 +182,8 @@ void Client::addControl()
     }
     saveSettings();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Client::loadSettings()
 {
@@ -278,6 +281,8 @@ void Client::saveSettings()
     settings.endArray();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Client::setInversion(bool isOn)
 {
     if (sender() == ui->inversion_1) {
@@ -286,28 +291,6 @@ void Client::setInversion(bool isOn)
         mRightInversion[mCurrentMode] = isOn;
     }
     saveSettings();
-}
-
-void Client::setFrequency(int frequency)
-{
-    if (sender() == ui->joystick_1) {
-        mLeftFrequency[mCurrentMode] = frequency;
-    } else if (sender() == ui->joystick_2) {
-        mRightFrequency[mCurrentMode] = frequency;
-    }
-    saveSettings();
-
-    if (mServer.isOpen()) {
-        QVariantMap map;
-        map.insert("CANType", CAN_2088);
-        map.insert("CommandType", CAN_SetPreference);
-        map.insert("Node", 3);
-        map.insert("Value", frequency);
-
-        QJsonObject command = QJsonObject::fromVariantMap(map);
-        QByteArray data = QJsonDocument(command).toBinaryData();
-        mServer.write(data);
-    }
 }
 
 void Client::setLowLevel(int level)
@@ -328,6 +311,28 @@ void Client::setHighLevel(int level)
         mRightTopLevel[mCurrentMode] = level;
     }
     saveSettings();
+}
+
+void Client::setFrequency(int frequency)
+{
+    if (sender() == ui->joystick_1) {
+        mLeftFrequency[mCurrentMode] = frequency;
+    } else if (sender() == ui->joystick_2) {
+        mRightFrequency[mCurrentMode] = frequency;
+    }
+    saveSettings();
+    
+    if (mServer.isOpen()) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_SetPreference);
+        map.insert("Node", 3);
+        map.insert("Value", frequency);
+        
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
+    }
 }
 
 void Client::setLevel(int port, bool value)
@@ -374,6 +379,8 @@ void Client::setLevel(const QVector<int>& values)
         mServer.write(data);
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Client::start(bool start)
 {
