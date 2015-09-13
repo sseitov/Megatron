@@ -20,6 +20,8 @@ Client::Client(QWidget *parent) :
     loadSettings();
     
     connect(ui->clearHistory, SIGNAL(clicked()), this, SLOT(clearHistory()));
+    connect(ui->addControl, SIGNAL(clicked()), this, SLOT(addControl()));
+    connect(ui->clearControls, SIGNAL(clicked()), this, SLOT(clearControls()));
     
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
@@ -88,6 +90,19 @@ void Client::clearHistory()
 {
     ui->ipAddress->clear();
     saveSettings();
+}
+
+void Client::clearControls()
+{
+    ui->clearControls->setEnabled(true);
+}
+
+void Client::addControl()
+{
+    QPushButton *btn = new QPushButton("button", this);
+    btn->setMinimumHeight(40);
+    ui->controlLayout->addWidget(btn);
+    ui->clearControls->setEnabled(true);
 }
 
 void Client::loadSettings()

@@ -11,6 +11,8 @@ namespace Ui {
 class Client;
 }
 
+#define NUM_MODE    4
+
 class Client : public QWidget
 {
     Q_OBJECT
@@ -22,6 +24,8 @@ public:
 private slots:
     void setJoystickData(int, qreal, qreal, bool, bool);
     void clearHistory();
+    void addControl();
+    void clearControls();
     void connectInput(bool);
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
