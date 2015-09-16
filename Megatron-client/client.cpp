@@ -41,33 +41,15 @@ Client::Client(QWidget *parent) :
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
     
     // left joystick panel
-
-    connect(ui->inversion_1, SIGNAL(toggled(bool)), this, SLOT(setInversion(bool)));
-    connect(ui->inversion_2, SIGNAL(toggled(bool)), this, SLOT(setInversion(bool)));
-
-    ui->joystick_1->connectControls(ui->frequency_1, ui->frequencyIndicator_1, ui->lowLimit_1, ui->lowLimitIndicator_1,
-                                  ui->highLimit_1, ui->highLimitIndicator_1, ui->joystickMonitor_1);
-    connect(ui->joystick_1, SIGNAL(sendFrequency(int)), this, SLOT(setFrequency(int)));
-    connect(ui->joystick_1, SIGNAL(sendLowLimit(int)), this, SLOT(setLowLevel(int)));
-    connect(ui->joystick_1, SIGNAL(sendHighLimit(int)), this, SLOT(setHighLevel(int)));
+    connect(ui->frequency_1, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
     ui->frequency_1->setValue(mLeftFrequency[0]);
-    ui->inversion_1->setChecked(mLeftInversion[0]);
-    ui->highLimit_1->setValue(mLeftTopLevel[0]);
-    ui->lowLimit_1->setValue(mLeftLowLevel[0]);
 
     // right joystick panel
 
-    ui->joystick_2->connectControls(ui->frequency_2, ui->frequencyIndicator_2, ui->lowLimit_2, ui->lowLimitIndicator_2,
-                                    ui->highLimit_2, ui->highLimitIndicator_2, ui->joystickMonitor_2);
-    connect(ui->joystick_2, SIGNAL(sendFrequency(int)), this, SLOT(setFrequency(int)));
-    connect(ui->joystick_2, SIGNAL(sendLowLimit(int)), this, SLOT(setLowLevel(int)));
-    connect(ui->joystick_2, SIGNAL(sendHighLimit(int)), this, SLOT(setHighLevel(int)));
+    connect(ui->frequency_2, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
     ui->frequency_2->setValue(mRightFrequency[0]);
-    ui->inversion_2->setChecked(mRightInversion[0]);
-    ui->highLimit_2->setValue(mRightTopLevel[0]);
-    ui->lowLimit_2->setValue(mRightLowLevel[0]);
 
     // server
 
@@ -130,12 +112,6 @@ void Client::switchMode(bool isOn)
         }
         ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
         ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
-        ui->inversion_1->setChecked(mLeftInversion[mCurrentMode]);
-        ui->inversion_2->setChecked(mRightInversion[mCurrentMode]);
-        ui->highLimit_1->setValue(mLeftTopLevel[mCurrentMode]);
-        ui->highLimit_2->setValue(mRightTopLevel[mCurrentMode]);
-        ui->lowLimit_1->setValue(mLeftLowLevel[mCurrentMode]);
-        ui->lowLimit_2->setValue(mRightLowLevel[mCurrentMode]);
 
         if (mJoystick.size() > 0 && mLeftNode[mCurrentMode] > 0) {
             ui->joystick_1->setEnabled(true);
@@ -202,13 +178,6 @@ void Client::loadSettings()
         settings.setArrayIndex(m);
         mLeftFrequency[m] = settings.value("leftFreq").toInt();
         mRightFrequency[m] = settings.value("rightFreq").toInt();
-        mLeftInversion[m] = settings.value("leftInvert").toBool();
-        mRightInversion[m] = settings.value("rightInvert").toBool();
-
-        mLeftTopLevel[m] = settings.value("leftTopLevel").toInt();
-        mLeftLowLevel[m] = settings.value("leftLowLevel").toInt();
-        mRightTopLevel[m] = settings.value("rightTopLevel").toInt();
-        mRightLowLevel[m] = settings.value("rightLowLevel").toInt();
 
         int num_buttons = settings.value("buttons_count").toInt();
         if (num_buttons > 0) {
@@ -255,13 +224,6 @@ void Client::saveSettings()
         settings.setArrayIndex(m);
         settings.setValue("leftFreq", mLeftFrequency[m]);
         settings.setValue("rightFreq", mRightFrequency[m]);
-        settings.setValue("leftInvert", mLeftInversion[m]);
-        settings.setValue("rightInvert", mRightInversion[m]);
-
-        settings.setValue("leftTopLevel", mLeftTopLevel[m]);
-        settings.setValue("leftLowLevel", mLeftLowLevel[m]);
-        settings.setValue("rightTopLevel", mRightTopLevel[m]);
-        settings.setValue("rightLowLevel", mRightLowLevel[m]);
 
         settings.setValue("buttons_count", mControlButtons[m].size());
         if (mControlButtons[m].size() > 0) {
@@ -283,50 +245,25 @@ void Client::saveSettings()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Client::setInversion(bool isOn)
-{
-    if (sender() == ui->inversion_1) {
-        mLeftInversion[mCurrentMode] = isOn;
-    } else if (sender() == ui->inversion_1) {
-        mRightInversion[mCurrentMode] = isOn;
-    }
-    saveSettings();
-}
-
-void Client::setLowLevel(int level)
-{
-    if (sender() == ui->joystick_1) {
-        mLeftLowLevel[mCurrentMode] = level;
-    } else if (sender() == ui->joystick_2) {
-        mRightLowLevel[mCurrentMode] = level;
-    }
-    saveSettings();
-}
-
-void Client::setHighLevel(int level)
-{
-    if (sender() == ui->joystick_1) {
-        mLeftTopLevel[mCurrentMode] = level;
-    } else if (sender() == ui->joystick_2) {
-        mRightTopLevel[mCurrentMode] = level;
-    }
-    saveSettings();
-}
-
 void Client::setFrequency(int frequency)
 {
+    int node = 0;
     if (sender() == ui->joystick_1) {
+        ui->frequencyIndicator_1 ->display(frequency/10000);
         mLeftFrequency[mCurrentMode] = frequency;
+        node = mLeftNode[mCurrentMode];
     } else if (sender() == ui->joystick_2) {
+        ui->frequencyIndicator_1 ->display(frequency/10000);
         mRightFrequency[mCurrentMode] = frequency;
+        node = mRightNode[mCurrentMode];
     }
     saveSettings();
     
-    if (mServer.isOpen()) {
+    if (mServer.isOpen() && node > 0) {
         QVariantMap map;
         map.insert("CANType", CAN_2088);
         map.insert("CommandType", CAN_SetPreference);
-        map.insert("Node", 3);
+        map.insert("Node", node);
         map.insert("Value", frequency);
         
         QJsonObject command = QJsonObject::fromVariantMap(map);
@@ -358,7 +295,7 @@ void Client::setLevel(const QVector<int>& values)
         node = mRightNode[mCurrentMode];
     }
 
-    if (mServer.isOpen()) {
+    if (mServer.isOpen() && node > 0) {
         QVariantMap map;
         map.insert("CANType", CAN_2088);
         map.insert("CommandType", CAN_SetValue);

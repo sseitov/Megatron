@@ -28,11 +28,8 @@ private slots:
     void addControl();
     void clearControls();
     void switchMode(bool);
+    
     void setFrequency(int frequency);
-    void setInversion(bool isOn);
-    void setLowLevel(int);
-    void setHighLevel(int);
-
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
     void start(bool);
@@ -50,12 +47,6 @@ private:
     QVector<ControlButton*> mControlButtons[NUM_MODE];
     int mLeftFrequency[NUM_MODE];
     int mRightFrequency[NUM_MODE];
-    bool mLeftInversion[NUM_MODE];
-    bool mRightInversion[NUM_MODE];
-    int mLeftTopLevel[NUM_MODE];
-    int mLeftLowLevel[NUM_MODE];
-    int mRightTopLevel[NUM_MODE];
-    int mRightLowLevel[NUM_MODE];
     int mLeftNode[NUM_MODE];
     int mRightNode[NUM_MODE];
 
