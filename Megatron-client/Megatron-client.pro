@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     client.cpp \
     qjoystick.cpp \
     buttonsetup.cpp \
-    joystickcontrol.cpp \
     joystickmonitor.cpp \
     controlbutton.cpp
 
@@ -27,7 +26,6 @@ HEADERS  += client.h \
     qjoystick.h \
     buttonsetup.h \
     ../common.h \
-    joystickcontrol.h \
     joystickmonitor.h \
     controlbutton.h
 
