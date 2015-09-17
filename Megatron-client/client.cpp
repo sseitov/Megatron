@@ -43,13 +43,13 @@ Client::Client(QWidget *parent) :
     // left joystick panel
     connect(ui->frequency_1, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_1->setValue(mLeftFrequency[0]);
+    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
 
     // right joystick panel
 
     connect(ui->frequency_2, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_2->setValue(mRightFrequency[0]);
+    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 
     // server
 
@@ -64,9 +64,13 @@ Client::Client(QWidget *parent) :
         connect(joy, SIGNAL(setData(int, qreal, qreal, bool, bool)), this, SLOT(setJoystickData(int, qreal, qreal, bool, bool)));
         mJoystick.append(joy);
     }
+/*
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
+*/
+    ui->joystick_1->setEnabled(true);
+    ui->joystick_2->setEnabled(true);
 }
 
 Client::~Client()
@@ -112,7 +116,7 @@ void Client::switchMode(bool isOn)
         }
         ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
         ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
-
+/*
         if (mJoystick.size() > 0 && mLeftNode[mCurrentMode] > 0) {
             ui->joystick_1->setEnabled(true);
         } else {
@@ -123,7 +127,7 @@ void Client::switchMode(bool isOn)
         } else {
             ui->joystick_2->setEnabled(false);
         }
-
+*/
     } else {
         for (int i=0; i<mControlButtons[mCurrentMode].size(); i++) {
             QWidget *w = mControlButtons[mCurrentMode].at(i);
@@ -248,12 +252,12 @@ void Client::saveSettings()
 void Client::setFrequency(int frequency)
 {
     int node = 0;
-    if (sender() == ui->joystick_1) {
-        ui->frequencyIndicator_1 ->display(frequency/10000);
+    if (sender() == ui->frequency_1) {
+        ui->frequencyIndicator_1->display(frequency/10000);
         mLeftFrequency[mCurrentMode] = frequency;
         node = mLeftNode[mCurrentMode];
-    } else if (sender() == ui->joystick_2) {
-        ui->frequencyIndicator_1 ->display(frequency/10000);
+    } else if (sender() == ui->frequency_2) {
+        ui->frequencyIndicator_2->display(frequency/10000);
         mRightFrequency[mCurrentMode] = frequency;
         node = mRightNode[mCurrentMode];
     }
@@ -289,9 +293,9 @@ void Client::setLevel(int port, bool value)
 void Client::setLevel(const QVector<int>& values)
 {
     int node = 0;
-    if (sender() == ui->joystick_1) {
+    if (sender() == ui->joystickMonitor_1) {
         node = mLeftNode[mCurrentMode];
-    } else if (sender() == ui->joystick_2) {
+    } else if (sender() == ui->joystickMonitor_2) {
         node = mRightNode[mCurrentMode];
     }
 
@@ -299,18 +303,19 @@ void Client::setLevel(const QVector<int>& values)
         QVariantMap map;
         map.insert("CANType", CAN_2088);
         map.insert("CommandType", CAN_SetValue);
-
+        
         QVariantList list;
         for (int i=0; i<values.count(); i++) {
             QVariantMap p0;
             p0.insert("Node", node);
             p0.insert("Port", i);
             p0.insert("Value", values[i]);
+            qDebug() << i << ":" << values[i];
             list.append(p0);
         }
-
+        
         map.insert("PortArray", list);
-
+        
         QJsonObject command = QJsonObject::fromVariantMap(map);
         QByteArray data = QJsonDocument(command).toBinaryData();
         mServer.write(data);
@@ -375,6 +380,10 @@ void Client::onSokConnected()
     }
     ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
+    emit ui->frequency_1->valueChanged(mLeftFrequency[mCurrentMode]);
+    emit ui->frequency_2->valueChanged(mRightFrequency[mCurrentMode]);
+//    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
+//    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 }
 
 void Client::onSokDisconnected()

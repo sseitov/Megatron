@@ -110,8 +110,6 @@ void JoystickMonitor::setTarget(qreal x, qreal y)
         port2 = 0;
     }
 
-//    qDebug() << port0 << " : " << port1 << " : " << port2 << " : " << port3;
-
     QVector<int> values;
     values.append(port0);
     values.append(port1);
