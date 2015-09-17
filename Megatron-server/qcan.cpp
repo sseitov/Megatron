@@ -190,21 +190,15 @@ void QCan::setPulseOutput(int node, int port, bool isOn)
     wait();
 }
 
-void QCan::setPulseFrequency(int node, UNS32 value)
+void QCan::setPulseFrequency(int node, int port, UNS32 value)
 {
-    for (int port=0; port<4; port++) {
-        lock();
-        writeNetworkDictCallBack(mData, node, 0x3102, port+1, 4, 0, &value, &QCan::CheckWriteSDO, 0);
-        wait();
-    }
+    lock();
+    writeNetworkDictCallBack(mData, node, 0x3102, port+1, 4, 0, &value, &QCan::CheckWriteSDO, 0);
+    wait();
 }
 
-void QCan::setPulseDuty(int node, int port, UNS16 value, bool inversion)
+void QCan::setPulseDuty(int node, int port, UNS16 value)
 {
-    if (inversion) {
-        value = 1000 - value;
-    }
-    qDebug() << "DUTY " << value << " ON PORT " << port;
     lock();
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();

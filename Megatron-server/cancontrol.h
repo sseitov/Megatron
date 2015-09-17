@@ -7,9 +7,10 @@
 #include <QGroupBox>
 #include <QProgressBar>
 #include <QSlider>
+#include <QSpinBox>
 #include "qcan.h"
 
-#define PWM_COUNT 8
+#define PWM_COUNT 4
 
 class CANControl : public QObject
 {
@@ -24,8 +25,9 @@ public:
     QGroupBox *mBox;
     QVector<QProgressBar*> mOutputPulseIndicator;
     QCheckBox *mInversion;
-    QSlider *mFrequency;
     QLCDNumber *mFrequiencyIndicator;
+    QVector<QSpinBox*> hiLimit;
+    QVector<QSpinBox*> loLimit;
 
     void setValue(int port, int value);
     void set();

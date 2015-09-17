@@ -11,21 +11,24 @@ void CANControl::start(int node)
     for (int i=0; i<PWM_COUNT; i++) {
         connect(mOutputPulseIndicator[i], SIGNAL(valueChanged(int)), this, SLOT(setDuty(int)));
     }
-    connect(mFrequency, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
 }
 
 void CANControl::setFrequency(int value)
 {
     if (mNode < 0) return;
     mFrequiencyIndicator->display(value/10000);
-    mCan->setPulseFrequency(mNode, value);
+    for (int i=0; i<PWM_COUNT; i++) {
+        mCan->setPulseFrequency(mNode, i, value);
+    }
 }
 
 void CANControl::setDuty(int value)
 {
     if (mNode < 0) return;
     int port = sender()->objectName().toInt();
-    mCan->setPulseDuty(mNode, port, value, mInversion->isChecked());
+    if (mInversion->isChecked())
+        value = 1000 - value;
+    mCan->setPulseDuty(mNode, port, value);
 }
 
 void CANControl::setValue(int port, int value)
