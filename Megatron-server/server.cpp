@@ -36,56 +36,91 @@ Server::Server(QWidget *parent) :
         mOutputIndicator[i]->setObjectName(QString::number(i));
     }
 
+    ///////////////////////////////////////////////////////////
+
     mNode2088[0].mCan = &mCan;
     mNode2088[0].mBox = ui->can2088_1;
     mNode2088[0].mInversion = ui->inversion_1;
-    mNode2088[0].mFrequency = ui->frequency_1;
     mNode2088[0].mFrequiencyIndicator = ui->frequencyIndicator_1;
+
     mNode2088[0].mOutputPulseIndicator.append(ui->po0_1);
     mNode2088[0].mOutputPulseIndicator.append(ui->po1_1);
     mNode2088[0].mOutputPulseIndicator.append(ui->po2_1);
     mNode2088[0].mOutputPulseIndicator.append(ui->po3_1);
-    mNode2088[0].mOutputPulseIndicator.append(ui->po4_1);
-    mNode2088[0].mOutputPulseIndicator.append(ui->po5_1);
-    mNode2088[0].mOutputPulseIndicator.append(ui->po6_1);
-    mNode2088[0].mOutputPulseIndicator.append(ui->po7_1);
+
+    mNode2088[0].hiLimit.append(ui->hi0_1);
+    mNode2088[0].hiLimit.append(ui->hi1_1);
+    mNode2088[0].hiLimit.append(ui->hi2_1);
+    mNode2088[0].hiLimit.append(ui->hi3_1);
+
+    mNode2088[0].loLimit.append(ui->lo0_1);
+    mNode2088[0].loLimit.append(ui->lo1_1);
+    mNode2088[0].loLimit.append(ui->lo2_1);
+    mNode2088[0].loLimit.append(ui->lo3_1);
+
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[0].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+       mNode2088[0].hiLimit[i]->setObjectName(QString::number(i));
+       mNode2088[0].loLimit[i]->setObjectName(QString::number(i));
     }
+
+    ///////////////////////////////////////////////////////////
 
     mNode2088[1].mCan = &mCan;
     mNode2088[1].mBox = ui->can2088_2;
     mNode2088[1].mInversion = ui->inversion_2;
-    mNode2088[1].mFrequency = ui->frequency_2;
     mNode2088[1].mFrequiencyIndicator = ui->frequencyIndicator_2;
+
     mNode2088[1].mOutputPulseIndicator.append(ui->po0_2);
     mNode2088[1].mOutputPulseIndicator.append(ui->po1_2);
     mNode2088[1].mOutputPulseIndicator.append(ui->po2_2);
     mNode2088[1].mOutputPulseIndicator.append(ui->po3_2);
-    mNode2088[1].mOutputPulseIndicator.append(ui->po4_2);
-    mNode2088[1].mOutputPulseIndicator.append(ui->po5_2);
-    mNode2088[1].mOutputPulseIndicator.append(ui->po6_2);
-    mNode2088[1].mOutputPulseIndicator.append(ui->po7_2);
+
+    mNode2088[1].hiLimit.append(ui->hi0_2);
+    mNode2088[1].hiLimit.append(ui->hi1_2);
+    mNode2088[1].hiLimit.append(ui->hi2_2);
+    mNode2088[1].hiLimit.append(ui->hi3_2);
+
+    mNode2088[1].loLimit.append(ui->lo0_2);
+    mNode2088[1].loLimit.append(ui->lo1_2);
+    mNode2088[1].loLimit.append(ui->lo2_2);
+    mNode2088[1].loLimit.append(ui->lo3_2);
+
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[1].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+       mNode2088[1].hiLimit[i]->setObjectName(QString::number(i));
+       mNode2088[1].loLimit[i]->setObjectName(QString::number(i));
     }
+
+    ///////////////////////////////////////////////////////////
 
     mNode2088[2].mCan = &mCan;
     mNode2088[2].mBox = ui->can2088_3;
     mNode2088[2].mInversion = ui->inversion_3;
-    mNode2088[2].mFrequency = ui->frequency_3;
     mNode2088[2].mFrequiencyIndicator = ui->frequencyIndicator_3;
+
     mNode2088[2].mOutputPulseIndicator.append(ui->po0_3);
     mNode2088[2].mOutputPulseIndicator.append(ui->po1_3);
     mNode2088[2].mOutputPulseIndicator.append(ui->po2_3);
     mNode2088[2].mOutputPulseIndicator.append(ui->po3_3);
-    mNode2088[2].mOutputPulseIndicator.append(ui->po4_3);
-    mNode2088[2].mOutputPulseIndicator.append(ui->po5_3);
-    mNode2088[2].mOutputPulseIndicator.append(ui->po6_3);
-    mNode2088[2].mOutputPulseIndicator.append(ui->po7_3);
+
+    mNode2088[2].hiLimit.append(ui->hi0_3);
+    mNode2088[2].hiLimit.append(ui->hi1_3);
+    mNode2088[2].hiLimit.append(ui->hi2_3);
+    mNode2088[2].hiLimit.append(ui->hi3_3);
+
+    mNode2088[2].loLimit.append(ui->lo0_3);
+    mNode2088[2].loLimit.append(ui->lo1_3);
+    mNode2088[2].loLimit.append(ui->lo2_3);
+    mNode2088[2].loLimit.append(ui->lo3_3);
+
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[2].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
+       mNode2088[2].hiLimit[i]->setObjectName(QString::number(i));
+       mNode2088[2].loLimit[i]->setObjectName(QString::number(i));
     }
+
+    ///////////////////////////////////////////////////////////
 
     connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
     connect(&mCan, SIGNAL(initialized(int)), this, SLOT(canInitialized(int)));
@@ -198,7 +233,7 @@ void Server::slotReadClient()
             } else if (canType.toInt() == CAN_2088) {
                 QJsonValue node = command.take("Node");
                 QJsonValue value = command.take("Value");
-                mNode2088[node.toInt()-1].mFrequency->setValue(value.toInt());
+                mNode2088[node.toInt()-1].setFrequency(value.toInt());
             }
         }
     }
