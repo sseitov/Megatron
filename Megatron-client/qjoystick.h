@@ -20,21 +20,21 @@ public:
     QJoystick(int num, SDL_Joystick* joystick);
     ~QJoystick();
 
-    int joystickNumAxes();
-    int joystickNumButtons();
-
-    void getData(QList<int> &axis, QList<bool> &buttons);
-
 private:
     int mID;
     SDL_Joystick* m_joystick;
     QTimer *m_updateTimer;
+    int mX;
+    int mY;
+    bool mButton1;
+    bool mButton2;
     
 private slots:
     void updateData();
     
 signals:
-    void setData(int, qreal, qreal, bool, bool);
+    void setAxiz(int, int, int);
+    void setButtons(int, bool, bool);
     
 };
 

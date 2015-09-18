@@ -61,16 +61,18 @@ Client::Client(QWidget *parent) :
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
     for (int i=0; i<SDL_NumJoysticks(); i++) {
         QJoystick *joy = new QJoystick(i, SDL_JoystickOpen(i));
-        connect(joy, SIGNAL(setData(int, qreal, qreal, bool, bool)), this, SLOT(setJoystickData(int, qreal, qreal, bool, bool)));
+        connect(joy, SIGNAL(setAxiz(int, int, int)), this, SLOT(setJoystickAxiz(int, int, int)));
+        connect(joy, SIGNAL(setButtons(int, bool, bool)), this, SLOT(setJoystickButtons(int, bool, bool)));
         mJoystick.append(joy);
     }
-/*
+
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
-*/
+/*
     ui->joystick_1->setEnabled(true);
     ui->joystick_2->setEnabled(true);
+ */
 }
 
 Client::~Client()
@@ -82,21 +84,6 @@ Client::~Client()
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
     saveSettings();
     delete ui;
-}
-
-void Client::setJoystickData(int num, qreal x, qreal y, bool b1, bool b2)
-{
-    x = x/32765.0*JOYSTICK_RADIUS;
-    y = y/32765.0*JOYSTICK_RADIUS;
-    if (num == 0) {
-        ui->joystickMonitor_1->setTarget(x, y);
-        ui->button1_1->setChecked(b1);
-        ui->button2_1->setChecked(b2);
-    } else {
-        ui->joystickMonitor_2->setTarget(x, y);
-        ui->button1_2->setChecked(b1);
-        ui->button2_2->setChecked(b2);
-    }
 }
 
 void Client::clearHistory()
@@ -116,7 +103,7 @@ void Client::switchMode(bool isOn)
         }
         ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
         ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
-/*
+
         if (mJoystick.size() > 0 && mLeftNode[mCurrentMode] > 0) {
             ui->joystick_1->setEnabled(true);
         } else {
@@ -127,7 +114,7 @@ void Client::switchMode(bool isOn)
         } else {
             ui->joystick_2->setEnabled(false);
         }
-*/
+
     } else {
         for (int i=0; i<mControlButtons[mCurrentMode].size(); i++) {
             QWidget *w = mControlButtons[mCurrentMode].at(i);
@@ -249,6 +236,29 @@ void Client::saveSettings()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void Client::setJoystickAxiz(int num, int x, int y)
+{
+    qDebug() << "AXIZ " << x << " :: " << y;
+    qreal xAxiz = (qreal)x/100.0*JOYSTICK_RADIUS;
+    qreal yAxiz = (qreal)y/100.0*JOYSTICK_RADIUS;
+    if (num == 0) {
+        ui->joystickMonitor_1->setTarget(xAxiz, yAxiz);
+    } else {
+        ui->joystickMonitor_2->setTarget(xAxiz, yAxiz);
+    }
+}
+
+void Client::setJoystickButtons(int num, bool b1, bool b2)
+{
+    if (num == 0) {
+        ui->button1_1->setChecked(b1);
+        ui->button2_1->setChecked(b2);
+    } else {
+        ui->button1_2->setChecked(b1);
+        ui->button2_2->setChecked(b2);
+    }
+}
+
 void Client::setFrequency(int frequency)
 {
     int node = 0;
@@ -310,7 +320,6 @@ void Client::setLevel(const QVector<int>& values)
             p0.insert("Node", node);
             p0.insert("Port", i);
             p0.insert("Value", values[i]);
-            qDebug() << i << ":" << values[i];
             list.append(p0);
         }
         

@@ -23,7 +23,8 @@ public:
     ~Client();
 
 private slots:
-    void setJoystickData(int, qreal, qreal, bool, bool);
+    void setJoystickAxiz(int, int, int);
+    void setJoystickButtons(int, bool, bool);
     void clearHistory();
     void addControl();
     void clearControls();
