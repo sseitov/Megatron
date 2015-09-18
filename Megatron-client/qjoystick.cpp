@@ -30,6 +30,13 @@ void QJoystick::updateData()
     int x = rx/32765.0*100;
     int y = ry/32765.0*100;
     
+    if (abs(x) < 3) {
+        x = 0;
+    }
+    if (abs(y) < 3) {
+        y = 0;
+    }
+    
     bool b1 = SDL_JoystickGetButton(m_joystick, 0);
     bool b2 = SDL_JoystickGetButton(m_joystick, 1);
     

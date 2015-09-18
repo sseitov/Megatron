@@ -69,10 +69,6 @@ Client::Client(QWidget *parent) :
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
-/*
-    ui->joystick_1->setEnabled(true);
-    ui->joystick_2->setEnabled(true);
- */
 }
 
 Client::~Client()
