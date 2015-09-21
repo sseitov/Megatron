@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QVariantMap>
+#include <QSettings>
 #include "../common.h"
 
 Server::Server(QWidget *parent) :
@@ -41,6 +42,7 @@ Server::Server(QWidget *parent) :
     mNode2088[0].mCan = &mCan;
     mNode2088[0].mBox = ui->can2088_1;
     mNode2088[0].mInversion = ui->inversion_1;
+    connect(mNode2088[0].mInversion, SIGNAL(toggled(bool)), &mNode2088[0], SLOT(setInversion(bool)));
     mNode2088[0].mFrequiencyIndicator = ui->frequencyIndicator_1;
 
     mNode2088[0].mOutputPulseIndicator.append(ui->po0_1);
@@ -69,6 +71,7 @@ Server::Server(QWidget *parent) :
     mNode2088[1].mCan = &mCan;
     mNode2088[1].mBox = ui->can2088_2;
     mNode2088[1].mInversion = ui->inversion_2;
+    connect(mNode2088[1].mInversion, SIGNAL(toggled(bool)), &mNode2088[1], SLOT(setInversion(bool)));
     mNode2088[1].mFrequiencyIndicator = ui->frequencyIndicator_2;
 
     mNode2088[1].mOutputPulseIndicator.append(ui->po0_2);
@@ -97,6 +100,7 @@ Server::Server(QWidget *parent) :
     mNode2088[2].mCan = &mCan;
     mNode2088[2].mBox = ui->can2088_3;
     mNode2088[2].mInversion = ui->inversion_3;
+    connect(mNode2088[2].mInversion, SIGNAL(toggled(bool)), &mNode2088[2], SLOT(setInversion(bool)));
     mNode2088[2].mFrequiencyIndicator = ui->frequencyIndicator_3;
 
     mNode2088[2].mOutputPulseIndicator.append(ui->po0_3);
@@ -119,6 +123,8 @@ Server::Server(QWidget *parent) :
        mNode2088[2].hiLimit[i]->setObjectName(QString::number(i));
        mNode2088[2].loLimit[i]->setObjectName(QString::number(i));
     }
+
+    loadSettings();
 
     ///////////////////////////////////////////////////////////
 
@@ -146,6 +152,7 @@ Server::Server(QWidget *parent) :
 
 Server::~Server()
 {
+    saveSettings();
     if (mClient) {
         mClient->close();
         mClient = 0;
@@ -156,6 +163,42 @@ Server::~Server()
         mNode2088[i].reset();
     }
     delete ui;
+}
+
+void Server::loadSettings()
+{
+    QSettings settings("V-Channel", "Megatron-server");
+    int size = settings.beginReadArray("Nodes");
+    for (int i=0; i<size; i++) {
+        settings.setArrayIndex(i);
+        mNode2088[i].mInversion->setChecked(settings.value("inversion").toBool());
+        settings.beginReadArray("Ports");
+        for (int port=0; port<PWM_COUNT; port++) {
+            settings.setArrayIndex(port);
+            mNode2088[i].hiLimit[port]->setValue(settings.value("hiLimit").toInt());
+            mNode2088[i].loLimit[port]->setValue(settings.value("loLimit").toInt());
+        }
+        settings.endArray();
+    }
+    settings.endArray();
+}
+
+void Server::saveSettings()
+{
+    QSettings settings("V-Channel", "Megatron-server");
+    settings.beginWriteArray("Nodes");
+    for (int i=0; i<3; i++) {
+        settings.setArrayIndex(i);
+        settings.setValue("inversion", mNode2088[i].mInversion->isChecked());
+        settings.beginWriteArray("Ports");
+        for (int port=0; port<PWM_COUNT; port++) {
+            settings.setArrayIndex(port);
+            settings.setValue("hiLimit", mNode2088[i].hiLimit[port]->value());
+            settings.setValue("loLimit", mNode2088[i].loLimit[port]->value());
+        }
+        settings.endArray();
+    }
+    settings.endArray();
 }
 
 void Server::connection()
@@ -189,6 +232,7 @@ void Server::connection()
     QJsonObject command = QJsonObject::fromVariantMap(map);
     QByteArray data = QJsonDocument(command).toBinaryData();
     mClient->write(data);
+    saveSettings();
 }
 
 void Server::slotDisconnectClient()
@@ -198,6 +242,7 @@ void Server::slotDisconnectClient()
     for (int i=0; i<3; i++) {
         mNode2088[i].reset();
     }
+    saveSettings();
 }
 
 void Server::slotReadClient()
@@ -255,6 +300,7 @@ void Server::canInitialized(int node)
         }
         reset2057();
     }
+    saveSettings();
 }
 
 void Server::set2057port(int state)

@@ -144,7 +144,7 @@ void QCan::CheckReadId(CO_Data* d, UNS8 nodeid)
 
     QCan* can = (QCan*)d->classObject;
     if(getReadResultNetworkDict(d, nodeid, &data, &size, &abortCode) != SDO_FINISHED) {
-        printf("Master : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+        printf("Master : Failed in reading information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
     } else {
         can->mID = data;
     }
@@ -157,7 +157,7 @@ void QCan::CheckWriteSDO(CO_Data* d, UNS8 nodeid)
     UNS32 abortCode;
     QCan* can = (QCan*)d->classObject;
     if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
-        printf("\nResult : Failed in getting information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+        printf("\nResult : Failed in writing information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
     can->signal();
 }
@@ -199,6 +199,8 @@ void QCan::setPulseFrequency(int node, int port, UNS32 value)
 
 void QCan::setPulseDuty(int node, int port, UNS16 value)
 {
+    if (port == 0)
+        qDebug() << "DUTY " << value;
     lock();
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();

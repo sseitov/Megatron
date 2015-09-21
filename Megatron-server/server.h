@@ -48,6 +48,8 @@ private:
     void set2057Value(int port, bool isOn);
     void reset2057();
 
+    void loadSettings();
+    void saveSettings();
 };
 
 #endif // SERVER_H

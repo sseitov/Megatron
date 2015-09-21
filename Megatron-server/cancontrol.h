@@ -33,12 +33,14 @@ public:
     void set();
     void reset();
 
-signals:
-
 public slots:
     void setDuty(int value);
     void setFrequency(int value);
+    void setInversion(bool);
 
+private:
+    int mDuty[PWM_COUNT];
+    int mOriginDuty[PWM_COUNT];
 };
 
 #endif // CANCONTROL_H
