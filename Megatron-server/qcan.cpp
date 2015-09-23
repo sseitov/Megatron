@@ -182,11 +182,16 @@ void QCan::setTriggerPolarity(int node, int port, UNS8 value)
 
 // CAN 2088 methods
 
-void QCan::setPulseOutput(int node, int port, bool isOn)
+void QCan::setPulseOutput(int node, int port, bool inversion)
 {
-    UNS8 data = isOn ? 1 : 0;
+    UNS8 data = 1;
     lock();
     writeNetworkDictCallBack(mData, node, 0x3100, port+1, 1, 0, &data, &QCan::CheckWriteSDO, 0);
+    wait();
+
+    UNS16 value = inversion ? 999 : 1;
+    lock();
+    writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();
 }
 
@@ -199,8 +204,6 @@ void QCan::setPulseFrequency(int node, int port, UNS32 value)
 
 void QCan::setPulseDuty(int node, int port, UNS16 value)
 {
-    if (port == 0)
-        qDebug() << "DUTY " << value;
     lock();
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();

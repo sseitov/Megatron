@@ -22,7 +22,7 @@ public:
     void setTriggerPolarity(int node, int port, UNS8 value);
 
     // CAN-2088
-    void setPulseOutput(int node, int port, bool isOn);
+    void setPulseOutput(int node, int port, bool inversion);
     void setPulseFrequency(int node, int port, UNS32 value);
     void setPulseDuty(int node, int port, UNS16 value);
 

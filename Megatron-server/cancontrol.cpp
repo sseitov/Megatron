@@ -73,7 +73,7 @@ void CANControl::set()
 {
     if (mNode < 0) return;
     for (int i=0; i<PWM_COUNT; i++) {
-        mCan->setPulseOutput(mNode, i, true);
+        mCan->setPulseOutput(mNode, i, mInversion->isChecked());
         mOutputPulseIndicator[i]->setValue(0);
     }
 }
@@ -84,7 +84,7 @@ void CANControl::reset()
     for (int i=0; i<PWM_COUNT; i++) {
         mDuty[i] = 0;
         mOriginDuty[i] = 0;
-        mCan->setPulseOutput(mNode, i, false);
+        mCan->setPulseOutput(mNode, i, mInversion->isChecked());
         mOutputPulseIndicator[i]->setValue(0);
     }
 }
