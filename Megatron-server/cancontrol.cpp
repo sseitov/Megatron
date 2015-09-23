@@ -22,7 +22,7 @@ void CANControl::setFrequency(int value)
     if (mNode < 0) return;
     mFrequiencyIndicator->display(value/10000);
     for (int i=0; i<PWM_COUNT; i++) {
-        mCan->setPulseFrequency(mNode, i, value);
+        mCan->setPulseFrequency(mNode, i, value/10);
     }
 }
 
