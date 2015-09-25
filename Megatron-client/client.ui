@@ -10,25 +10,25 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>800</width>
-    <height>600</height>
+    <height>530</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
-    <height>600</height>
+    <height>530</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Megatron</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="maximumSize">
@@ -186,13 +186,13 @@
        <property name="minimumSize">
         <size>
          <width>220</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>220</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="title">
@@ -325,19 +325,6 @@
           </item>
          </layout>
         </item>
-        <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>103</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </widget>
      </item>
@@ -349,13 +336,13 @@
        <property name="minimumSize">
         <size>
          <width>280</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>280</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="title">
@@ -373,7 +360,7 @@
           <property name="minimumSize">
            <size>
             <width>250</width>
-            <height>330</height>
+            <height>260</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -433,13 +420,13 @@
        <property name="minimumSize">
         <size>
          <width>220</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>220</width>
-         <height>420</height>
+         <height>350</height>
         </size>
        </property>
        <property name="title">
@@ -451,7 +438,7 @@
        <property name="checked">
         <bool>false</bool>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_23">
           <item>
@@ -571,19 +558,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>18</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
