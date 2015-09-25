@@ -66,6 +66,16 @@ Client::Client(QWidget *parent) :
         mJoystick.append(joy);
     }
 
+    connect(ui->button1_1, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button1_1->setObjectName(QString::number(1));
+    connect(ui->button2_1, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button2_1->setObjectName(QString::number(2));
+
+    connect(ui->button1_2, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button1_2->setObjectName(QString::number(3));
+    connect(ui->button2_2, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button2_2->setObjectName(QString::number(4));
+    
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
@@ -252,6 +262,56 @@ void Client::setJoystickButtons(int num, bool b1, bool b2)
     } else {
         ui->button1_2->setChecked(b1);
         ui->button2_2->setChecked(b2);
+    }
+}
+
+void Client::setButton(bool checked)
+{
+    int node = 0;
+    int port = 0;
+    int num = sender()->objectName().toInt();
+
+    switch (num) {
+        case 1:
+            node = mLeftNode[mCurrentMode];
+            port = 6;
+            break;
+        case 2:
+            node = mLeftNode[mCurrentMode];
+            port = 7;
+            break;
+        case 3:
+            node = mRightNode[mCurrentMode];
+            port = 6;
+            break;
+        case 4:
+            node = mRightNode[mCurrentMode];
+            port = 7;
+            break;
+        default:
+            return;
+    }
+    
+    
+    if (mServer.isOpen() && node > 0) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_SetValue);
+        
+        QVariantList list;
+        
+        QVariantMap p;
+        p.insert("Node", node);
+        p.insert("Port", port);
+        int value = checked ? 999 : 1;
+        p.insert("Value", value);
+        list.append(p);
+        
+        map.insert("PortArray", list);
+        
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
     }
 }
 

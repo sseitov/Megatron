@@ -30,6 +30,7 @@ private slots:
     void clearControls();
     void switchMode(bool);
     
+    void setButton(bool checked);
     void setFrequency(int frequency);
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
