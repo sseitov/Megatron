@@ -65,7 +65,20 @@ void CANControl::setInversion(bool)
 void CANControl::setValue(int port, int value)
 {
     if (mNode < 0) return;
-    mOutputPulseIndicator[port]->setValue(value);
+    if (port < PWM_COUNT) {
+        mOutputPulseIndicator[port]->setValue(value);
+    } else {
+        if (mInversion->isChecked()) {
+            value = 1000 - value;
+        }
+        if (port == 6) {
+            mButtons[0]->setChecked(value > 1);
+            mCan->setPulseDuty(mNode, 6, value);
+        } else if (port == 7) {
+            mButtons[1]->setChecked(value > 1);
+            mCan->setPulseDuty(mNode, 7, value);
+        }
+    }
 }
 
 
@@ -76,6 +89,8 @@ void CANControl::set()
         mCan->setPulseOutput(mNode, i, mInversion->isChecked());
         mOutputPulseIndicator[i]->setValue(0);
     }
+    mCan->setPulseOutput(mNode, 6, mInversion->isChecked());
+    mCan->setPulseOutput(mNode, 7, mInversion->isChecked());
 }
 
 void CANControl::reset()

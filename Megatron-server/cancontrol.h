@@ -25,6 +25,7 @@ public:
     QGroupBox *mBox;
     QVector<QProgressBar*> mOutputPulseIndicator;
     QCheckBox *mInversion;
+    QCheckBox *mButtons[2];
     QLCDNumber *mFrequiencyIndicator;
     QVector<QSpinBox*> hiLimit;
     QVector<QSpinBox*> loLimit;
@@ -41,6 +42,7 @@ public slots:
 private:
     int mDuty[PWM_COUNT];
     int mOriginDuty[PWM_COUNT];
+
 };
 
 #endif // CANCONTROL_H

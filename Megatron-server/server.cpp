@@ -42,6 +42,8 @@ Server::Server(QWidget *parent) :
     mNode2088[0].mCan = &mCan;
     mNode2088[0].mBox = ui->can2088_1;
     mNode2088[0].mInversion = ui->inversion_1;
+    mNode2088[0].mButtons[0] = ui->po6_1;
+    mNode2088[0].mButtons[1] = ui->po7_1;
     connect(mNode2088[0].mInversion, SIGNAL(toggled(bool)), &mNode2088[0], SLOT(setInversion(bool)));
     mNode2088[0].mFrequiencyIndicator = ui->frequencyIndicator_1;
 
@@ -71,6 +73,8 @@ Server::Server(QWidget *parent) :
     mNode2088[1].mCan = &mCan;
     mNode2088[1].mBox = ui->can2088_2;
     mNode2088[1].mInversion = ui->inversion_2;
+    mNode2088[1].mButtons[0] = ui->po6_2;
+    mNode2088[1].mButtons[1] = ui->po7_2;
     connect(mNode2088[1].mInversion, SIGNAL(toggled(bool)), &mNode2088[1], SLOT(setInversion(bool)));
     mNode2088[1].mFrequiencyIndicator = ui->frequencyIndicator_2;
 
@@ -100,6 +104,8 @@ Server::Server(QWidget *parent) :
     mNode2088[2].mCan = &mCan;
     mNode2088[2].mBox = ui->can2088_3;
     mNode2088[2].mInversion = ui->inversion_3;
+    mNode2088[2].mButtons[0] = ui->po6_3;
+    mNode2088[2].mButtons[1] = ui->po7_3;
     connect(mNode2088[2].mInversion, SIGNAL(toggled(bool)), &mNode2088[2], SLOT(setInversion(bool)));
     mNode2088[2].mFrequiencyIndicator = ui->frequencyIndicator_3;
 
