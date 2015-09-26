@@ -14,6 +14,8 @@ Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
 {
+    QMessageBox::information(0, "Debug message", "Program starting...", QMessageBox::Ok);
+
     ui->setupUi(this);
 
     mLeftNode[0] = 3; mRightNode[0] = 0;
@@ -79,6 +81,8 @@ Client::Client(QWidget *parent) :
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
+    move(0, 0);
+    QMessageBox::information(0, "Debug message", "Program ready and started!", QMessageBox::Ok);
 }
 
 Client::~Client()
