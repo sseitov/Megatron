@@ -215,7 +215,7 @@ void Server::connection()
     mClient = mServer.nextPendingConnection();
     connect(mClient, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(mClient, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
-
+/*
     QVariantMap map;
     map.insert("CommandType", CAN_Initialized);
     QVariantList list;
@@ -238,6 +238,7 @@ void Server::connection()
     QJsonObject command = QJsonObject::fromVariantMap(map);
     QByteArray data = QJsonDocument(command).toBinaryData();
     mClient->write(data);
+*/
     saveSettings();
 }
 
@@ -279,14 +280,15 @@ void Server::slotReadClient()
                     mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
                 }
             }
-        } else if (commandType.toInt() == CAN_SetPreference) {
+        }
+/*        else if (commandType.toInt() == CAN_SetPreference) {
             if (canType.toInt() == CAN_2057) {
             } else if (canType.toInt() == CAN_2088) {
                 QJsonValue node = command.take("Node");
                 QJsonValue value = command.take("Value");
                 mNode2088[node.toInt()-1].setFrequency(value.toInt());
             }
-        }
+        }*/
     }
 }
 
