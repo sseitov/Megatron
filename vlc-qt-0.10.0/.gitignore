@@ -1,0 +1,13 @@
+# Possible build dirs:
+build*/
+release/
+
+# System files
+*.DS_Store*
+
+# Project files
+CMakeLists.txt.user*
+demo-player.pro.user*
+
+# Debian/build
+obj*
