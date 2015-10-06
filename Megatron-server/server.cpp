@@ -137,9 +137,9 @@ Server::Server(QWidget *parent) :
     connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
     connect(&mCan, SIGNAL(initialized(int)), this, SLOT(canInitialized(int)));
 
-    if (!mCan.init()) {
-        QMessageBox::critical(0, "Startup Error!", "Can not load CAN driver!", QMessageBox::Ok);
-    } else {
+//    if (!mCan.init()) {
+//        QMessageBox::critical(0, "Startup Error!", "Can not load CAN driver!", QMessageBox::Ok);
+//    } else {
         if (!mServer.listen(QHostAddress::Any, SERVER_SOCKET)) {
             QMessageBox::critical(0, "Unable to start the server", mServer.errorString(), QMessageBox::Ok);
         } else {
@@ -153,7 +153,7 @@ Server::Server(QWidget *parent) :
                 }
             }
         }
-    }
+//    }
 }
 
 Server::~Server()
