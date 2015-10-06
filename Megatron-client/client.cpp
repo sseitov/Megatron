@@ -48,7 +48,7 @@ Client::Client(QWidget *parent) :
 
     // server
 
-    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
+//    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
     connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
@@ -393,6 +393,7 @@ void Client::start(bool start)
     }
 }
 
+/*
 void Client::onSokReadyRead()
 {
     QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
@@ -413,7 +414,7 @@ void Client::onSokReadyRead()
                 
                 QJsonValue type = can.take("CANType");
                 QJsonValue node = can.take("Node");
-/*
+
                 if (type.toInt() == CAN_2057) {
                     ui->can_2057->setEnabled(true);
                 }
@@ -421,11 +422,12 @@ void Client::onSokReadyRead()
                     ui->joystick->setEnabled(true);
                     ui->joystickMonitor->setTarget(0, 0);
                 }
- */
+ 
             }
         }
     }
 }
+*/
 
 void Client::onSokConnected()
 {

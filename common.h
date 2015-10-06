@@ -10,9 +10,9 @@ enum CANType {
 };
 
 enum CommandType {
-    CAN_Acknowledge,
-    CAN_Initialized,
-    CAN_SetPreference,
+//    CAN_Acknowledge,
+//    CAN_Initialized,
+//    CAN_SetPreference,
     CAN_SetValue
 };
 
