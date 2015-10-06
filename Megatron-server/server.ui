@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>500</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>640</width>
-    <height>500</height>
+    <height>580</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>640</width>
-    <height>500</height>
+    <height>680</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -234,7 +234,7 @@
      <property name="maximumSize">
       <size>
        <width>160</width>
-       <height>600</height>
+       <height>560</height>
       </size>
      </property>
      <property name="title">
@@ -281,12 +281,32 @@
        </layout>
       </item>
       <item>
+       <widget class="QSlider" name="frequencySlider_1">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
          <widget class="QLabel" name="label_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -298,11 +318,17 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="0" column="1">
          <widget class="QLabel" name="label_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -316,6 +342,12 @@
         </item>
         <item row="1" column="0">
          <widget class="QSpinBox" name="hi0_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -333,8 +365,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QSpinBox" name="hi1_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -356,14 +394,14 @@
          <widget class="QProgressBar" name="po0_1">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>24</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="minimum">
@@ -383,18 +421,18 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po1_1">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -413,6 +451,12 @@
         </item>
         <item row="3" column="0">
          <widget class="QSpinBox" name="lo0_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -427,8 +471,14 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="2">
+        <item row="3" column="1">
          <widget class="QSpinBox" name="lo1_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -443,11 +493,28 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
          <widget class="QLabel" name="label_4">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -459,11 +526,17 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
+        <item row="0" column="1">
          <widget class="QLabel" name="label_5">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -475,8 +548,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
+        <item row="1" column="0">
          <widget class="QSpinBox" name="hi2_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -494,8 +573,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
+        <item row="1" column="1">
          <widget class="QSpinBox" name="hi3_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -513,18 +598,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="2" column="0">
          <widget class="QProgressBar" name="po2_1">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -541,18 +626,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po3_1">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -569,8 +654,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="3" column="0">
          <widget class="QSpinBox" name="lo2_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -585,8 +676,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1" colspan="2">
+        <item row="3" column="1">
          <widget class="QSpinBox" name="lo3_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -601,14 +698,230 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 4</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_7">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 5</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="hi2_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="hi3_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QProgressBar" name="po4_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QProgressBar" name="po5_1">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QSpinBox" name="lo2_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="lo3_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
          <widget class="QCheckBox" name="po6_1">
           <property name="text">
            <string>PO 6</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="2">
+        <item row="0" column="1">
          <widget class="QCheckBox" name="po7_1">
           <property name="text">
            <string>PO 7</string>
@@ -616,6 +929,13 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="inversion_1">
@@ -641,7 +961,7 @@
      <property name="maximumSize">
       <size>
        <width>160</width>
-       <height>600</height>
+       <height>560</height>
       </size>
      </property>
      <property name="title">
@@ -657,7 +977,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_8">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -688,12 +1008,32 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <widget class="QSlider" name="frequencySlider_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="label_9">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -705,11 +1045,17 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_8">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_10">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -723,6 +1069,12 @@
         </item>
         <item row="1" column="0">
          <widget class="QSpinBox" name="hi0_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -740,8 +1092,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QSpinBox" name="hi1_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -763,14 +1121,14 @@
          <widget class="QProgressBar" name="po0_2">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>24</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="minimum">
@@ -790,18 +1148,18 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po1_2">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -820,6 +1178,12 @@
         </item>
         <item row="3" column="0">
          <widget class="QSpinBox" name="lo0_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -834,8 +1198,14 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="2">
+        <item row="3" column="1">
          <widget class="QSpinBox" name="lo1_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -850,11 +1220,28 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_9">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_7">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -866,11 +1253,17 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
-         <widget class="QLabel" name="label_10">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_12">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -882,8 +1275,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QSpinBox" name="hi2_2">
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="hi2_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -901,8 +1300,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QSpinBox" name="hi3_2">
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="hi3_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -920,18 +1325,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="2" column="0">
          <widget class="QProgressBar" name="po2_2">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -948,18 +1353,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po3_2">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -976,8 +1381,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QSpinBox" name="lo2_2">
+        <item row="3" column="0">
+         <widget class="QSpinBox" name="lo2_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -992,8 +1403,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1" colspan="2">
-         <widget class="QSpinBox" name="lo3_2">
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="lo3_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1008,14 +1425,230 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_13">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 4</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_14">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 5</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="hi2_4">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="hi3_4">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QProgressBar" name="po4_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QProgressBar" name="po5_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QSpinBox" name="lo2_4">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="lo3_4">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_9">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
          <widget class="QCheckBox" name="po6_2">
           <property name="text">
            <string>PO 6</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="2">
+        <item row="0" column="1">
          <widget class="QCheckBox" name="po7_2">
           <property name="text">
            <string>PO 7</string>
@@ -1023,6 +1656,13 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="inversion_2">
@@ -1048,7 +1688,7 @@
      <property name="maximumSize">
       <size>
        <width>160</width>
-       <height>600</height>
+       <height>560</height>
       </size>
      </property>
      <property name="title">
@@ -1064,7 +1704,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
-         <widget class="QLabel" name="label_11">
+         <widget class="QLabel" name="label_15">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -1095,12 +1735,32 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout_3">
+       <widget class="QSlider" name="frequencySlider_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_11">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_9">
         <item row="0" column="0">
-         <widget class="QLabel" name="label_12">
+         <widget class="QLabel" name="label_16">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -1112,11 +1772,17 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_13">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_17">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -1130,6 +1796,12 @@
         </item>
         <item row="1" column="0">
          <widget class="QSpinBox" name="hi0_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1147,8 +1819,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QSpinBox" name="hi1_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1170,14 +1848,14 @@
          <widget class="QProgressBar" name="po0_3">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>24</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="minimum">
@@ -1197,18 +1875,18 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po1_3">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -1227,6 +1905,12 @@
         </item>
         <item row="3" column="0">
          <widget class="QSpinBox" name="lo0_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1241,8 +1925,14 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="2">
+        <item row="3" column="1">
          <widget class="QSpinBox" name="lo1_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1257,11 +1947,28 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_14">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_12">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -1273,11 +1980,17 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
-         <widget class="QLabel" name="label_15">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_19">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -1289,8 +2002,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QSpinBox" name="hi2_3">
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="hi2_5">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1308,8 +2027,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QSpinBox" name="hi3_3">
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="hi3_5">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1327,18 +2052,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="2" column="0">
          <widget class="QProgressBar" name="po2_3">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -1355,18 +2080,18 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="2">
+        <item row="2" column="1">
          <widget class="QProgressBar" name="po3_3">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="maximum">
@@ -1383,8 +2108,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QSpinBox" name="lo2_3">
+        <item row="3" column="0">
+         <widget class="QSpinBox" name="lo2_5">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1399,8 +2130,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1" colspan="2">
-         <widget class="QSpinBox" name="lo3_3">
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="lo3_5">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>50</width>
@@ -1415,14 +2152,230 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_11">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_20">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 4</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_21">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>PO 5</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="hi2_6">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="hi3_6">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+          <property name="value">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QProgressBar" name="po4_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QProgressBar" name="po5_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QSpinBox" name="lo2_6">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="lo3_6">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_14">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="0">
          <widget class="QCheckBox" name="po6_3">
           <property name="text">
            <string>PO 6</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="2">
+        <item row="0" column="1">
          <widget class="QCheckBox" name="po7_3">
           <property name="text">
            <string>PO 7</string>
@@ -1430,6 +2383,13 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_15">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="inversion_3">
