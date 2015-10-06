@@ -31,7 +31,6 @@ private slots:
     void switchMode(bool);
     
     void setButton(bool checked);
-    void setFrequency(int frequency);
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
     void start(bool);
@@ -47,8 +46,6 @@ private:
     QVector<QJoystick*> mJoystick;
     QRadioButton* mModes[NUM_MODE];
     QVector<ControlButton*> mControlButtons[NUM_MODE];
-    int mLeftFrequency[NUM_MODE];
-    int mRightFrequency[NUM_MODE];
     int mLeftNode[NUM_MODE];
     int mRightNode[NUM_MODE];
 

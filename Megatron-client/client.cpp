@@ -14,8 +14,6 @@ Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
 {
-    QMessageBox::information(0, "Debug message", "Program starting...", QMessageBox::Ok);
-
     ui->setupUi(this);
 
     mLeftNode[0] = 3; mRightNode[0] = 0;
@@ -43,15 +41,10 @@ Client::Client(QWidget *parent) :
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
     
     // left joystick panel
-    connect(ui->frequency_1, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
 
     // right joystick panel
-
-    connect(ui->frequency_2, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 
     // server
 
@@ -82,7 +75,6 @@ Client::Client(QWidget *parent) :
         ui->joystick_1->setEnabled(true);
     }
     move(0, 0);
-    QMessageBox::information(0, "Debug message", "Program ready and started!", QMessageBox::Ok);
 }
 
 Client::~Client()
@@ -111,8 +103,6 @@ void Client::switchMode(bool isOn)
             w->setHidden(false);
             ui->controlLayout->addWidget(w);
         }
-        ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
-        ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 
         if (mJoystick.size() > 0 && mLeftNode[mCurrentMode] > 0) {
             ui->joystick_1->setEnabled(true);
@@ -177,8 +167,6 @@ void Client::loadSettings()
     size = settings.beginReadArray("modes");
     for (int m=0; m<NUM_MODE; m++) {
         settings.setArrayIndex(m);
-        mLeftFrequency[m] = settings.value("leftFreq").toInt();
-        mRightFrequency[m] = settings.value("rightFreq").toInt();
 
         int num_buttons = settings.value("buttons_count").toInt();
         if (num_buttons > 0) {
@@ -223,8 +211,6 @@ void Client::saveSettings()
     settings.beginWriteArray("modes");
     for (int m=0; m<NUM_MODE; m++) {
         settings.setArrayIndex(m);
-        settings.setValue("leftFreq", mLeftFrequency[m]);
-        settings.setValue("rightFreq", mRightFrequency[m]);
 
         settings.setValue("buttons_count", mControlButtons[m].size());
         if (mControlButtons[m].size() > 0) {
@@ -318,7 +304,7 @@ void Client::setButton(bool checked)
         mServer.write(data);
     }
 }
-
+/*
 void Client::setFrequency(int frequency)
 {
     int node = 0;
@@ -345,7 +331,7 @@ void Client::setFrequency(int frequency)
         mServer.write(data);
     }
 }
-
+*/
 void Client::setLevel(int port, bool value)
 {
     if (mServer.isOpen()) {
@@ -449,10 +435,6 @@ void Client::onSokConnected()
     }
     ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
-    emit ui->frequency_1->valueChanged(mLeftFrequency[mCurrentMode]);
-    emit ui->frequency_2->valueChanged(mRightFrequency[mCurrentMode]);
-//    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
-//    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 }
 
 void Client::onSokDisconnected()
