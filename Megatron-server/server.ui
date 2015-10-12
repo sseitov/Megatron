@@ -288,6 +288,9 @@
       </item>
       <item>
        <widget class="QSlider" name="frequencySlider_1">
+        <property name="maximum">
+         <number>500000</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -767,7 +770,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QSpinBox" name="hi2_2">
+         <widget class="QSpinBox" name="hi4_1">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -792,7 +795,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="hi3_2">
+         <widget class="QSpinBox" name="hi5_1">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -873,7 +876,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QSpinBox" name="lo2_2">
+         <widget class="QSpinBox" name="lo4_1">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -895,7 +898,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QSpinBox" name="lo3_2">
+         <widget class="QSpinBox" name="lo5_1">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1038,6 +1041,9 @@
       </item>
       <item>
        <widget class="QSlider" name="frequencySlider_2">
+        <property name="maximum">
+         <number>500000</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -1312,7 +1318,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QSpinBox" name="hi2_3">
+         <widget class="QSpinBox" name="hi2_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1337,7 +1343,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="hi3_3">
+         <widget class="QSpinBox" name="hi3_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1418,7 +1424,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QSpinBox" name="lo2_3">
+         <widget class="QSpinBox" name="lo2_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1440,7 +1446,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QSpinBox" name="lo3_3">
+         <widget class="QSpinBox" name="lo3_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1517,7 +1523,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QSpinBox" name="hi2_4">
+         <widget class="QSpinBox" name="hi4_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1542,7 +1548,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="hi3_4">
+         <widget class="QSpinBox" name="hi5_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1623,7 +1629,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QSpinBox" name="lo2_4">
+         <widget class="QSpinBox" name="lo4_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1645,7 +1651,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QSpinBox" name="lo3_4">
+         <widget class="QSpinBox" name="lo5_2">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -1788,6 +1794,9 @@
       </item>
       <item>
        <widget class="QSlider" name="frequencySlider_3">
+        <property name="maximum">
+         <number>500000</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -2055,7 +2064,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QSpinBox" name="hi2_5">
+         <widget class="QSpinBox" name="hi2_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2080,7 +2089,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QSpinBox" name="hi3_5">
+         <widget class="QSpinBox" name="hi3_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2133,7 +2142,7 @@
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QSpinBox" name="lo2_5">
+         <widget class="QSpinBox" name="lo2_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2183,7 +2192,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QSpinBox" name="lo3_5">
+         <widget class="QSpinBox" name="lo3_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2267,7 +2276,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QSpinBox" name="hi2_6">
+         <widget class="QSpinBox" name="hi4_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2292,7 +2301,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="hi3_6">
+         <widget class="QSpinBox" name="hi5_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2373,7 +2382,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QSpinBox" name="lo2_6">
+         <widget class="QSpinBox" name="lo4_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -2395,7 +2404,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QSpinBox" name="lo3_6">
+         <widget class="QSpinBox" name="lo5_3">
           <property name="minimumSize">
            <size>
             <width>80</width>
