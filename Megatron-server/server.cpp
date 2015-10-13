@@ -268,6 +268,11 @@ void Server::connection()
     mClient = mServer.nextPendingConnection();
     connect(mClient, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(mClient, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
+    for (int i=0; i<3; i++) {
+        if (mNode2088[i].mNode >= 0) {
+            mNode2088[i].set();
+        }
+    }
 /*
     QVariantMap map;
     map.insert("CommandType", CAN_Initialized);
