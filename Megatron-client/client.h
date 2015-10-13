@@ -23,7 +23,7 @@ public:
     ~Client();
 
 private slots:
-    void setJoystickAxiz(int, int, int);
+    void setJoystickAxiz(int, int, int, int);
     void setJoystickButtons(int, bool, bool);
     void clearHistory();
     void addControl();
@@ -53,6 +53,7 @@ private:
     
     void loadSettings();
     void saveSettings();
+    void writeValuesToNode(const QVector<int>& values, int node);
 };
 
 #endif // CLIENT_H

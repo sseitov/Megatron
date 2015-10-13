@@ -11,7 +11,7 @@ class JoystickMonitor : public QWidget
     Q_OBJECT
 public:
     explicit JoystickMonitor(QWidget *parent = 0);
-    void setTarget(qreal x, qreal y);
+    void setTarget(qreal x, qreal y, qreal z);
 
 protected:
     void paintEvent(QPaintEvent *);
