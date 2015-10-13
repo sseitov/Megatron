@@ -23,6 +23,7 @@ public:
     ~Server();
 
 private slots:
+    void saveSettings();
     void connection();
     void slotReadClient();
     void slotDisconnectClient();
@@ -49,7 +50,6 @@ private:
     void reset2057();
 
     void loadSettings();
-    void saveSettings();
 };
 
 #endif // SERVER_H

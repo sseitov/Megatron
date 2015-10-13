@@ -41,19 +41,14 @@ Client::Client(QWidget *parent) :
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
     
     // left joystick panel
-    connect(ui->frequency_1, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_1, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
 
     // right joystick panel
-
-    connect(ui->frequency_2, SIGNAL(valueChanged(int)), this, SLOT(setFrequency(int)));
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
-    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 
     // server
 
-    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
+//    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
     connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
@@ -66,9 +61,20 @@ Client::Client(QWidget *parent) :
         mJoystick.append(joy);
     }
 
+    connect(ui->button1_1, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button1_1->setObjectName(QString::number(1));
+    connect(ui->button2_1, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button2_1->setObjectName(QString::number(2));
+
+    connect(ui->button1_2, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button1_2->setObjectName(QString::number(3));
+    connect(ui->button2_2, SIGNAL(toggled(bool)), this, SLOT(setButton(bool)));
+    ui->button2_2->setObjectName(QString::number(4));
+    
     if (mJoystick.size() > 0 ) {
         ui->joystick_1->setEnabled(true);
     }
+    move(0, 0);
 }
 
 Client::~Client()
@@ -97,8 +103,6 @@ void Client::switchMode(bool isOn)
             w->setHidden(false);
             ui->controlLayout->addWidget(w);
         }
-        ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
-        ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 
         if (mJoystick.size() > 0 && mLeftNode[mCurrentMode] > 0) {
             ui->joystick_1->setEnabled(true);
@@ -163,8 +167,6 @@ void Client::loadSettings()
     size = settings.beginReadArray("modes");
     for (int m=0; m<NUM_MODE; m++) {
         settings.setArrayIndex(m);
-        mLeftFrequency[m] = settings.value("leftFreq").toInt();
-        mRightFrequency[m] = settings.value("rightFreq").toInt();
 
         int num_buttons = settings.value("buttons_count").toInt();
         if (num_buttons > 0) {
@@ -209,8 +211,6 @@ void Client::saveSettings()
     settings.beginWriteArray("modes");
     for (int m=0; m<NUM_MODE; m++) {
         settings.setArrayIndex(m);
-        settings.setValue("leftFreq", mLeftFrequency[m]);
-        settings.setValue("rightFreq", mRightFrequency[m]);
 
         settings.setValue("buttons_count", mControlButtons[m].size());
         if (mControlButtons[m].size() > 0) {
@@ -255,6 +255,56 @@ void Client::setJoystickButtons(int num, bool b1, bool b2)
     }
 }
 
+void Client::setButton(bool checked)
+{
+    int node = 0;
+    int port = 0;
+    int num = sender()->objectName().toInt();
+
+    switch (num) {
+        case 1:
+            node = mLeftNode[mCurrentMode];
+            port = 6;
+            break;
+        case 2:
+            node = mLeftNode[mCurrentMode];
+            port = 7;
+            break;
+        case 3:
+            node = mRightNode[mCurrentMode];
+            port = 6;
+            break;
+        case 4:
+            node = mRightNode[mCurrentMode];
+            port = 7;
+            break;
+        default:
+            return;
+    }
+    
+    
+    if (mServer.isOpen() && node > 0) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_SetValue);
+        
+        QVariantList list;
+        
+        QVariantMap p;
+        p.insert("Node", node);
+        p.insert("Port", port);
+        int value = checked ? 999 : 1;
+        p.insert("Value", value);
+        list.append(p);
+        
+        map.insert("PortArray", list);
+        
+        QJsonObject command = QJsonObject::fromVariantMap(map);
+        QByteArray data = QJsonDocument(command).toBinaryData();
+        mServer.write(data);
+    }
+}
+/*
 void Client::setFrequency(int frequency)
 {
     int node = 0;
@@ -281,7 +331,7 @@ void Client::setFrequency(int frequency)
         mServer.write(data);
     }
 }
-
+*/
 void Client::setLevel(int port, bool value)
 {
     if (mServer.isOpen()) {
@@ -343,6 +393,7 @@ void Client::start(bool start)
     }
 }
 
+/*
 void Client::onSokReadyRead()
 {
     QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
@@ -363,7 +414,7 @@ void Client::onSokReadyRead()
                 
                 QJsonValue type = can.take("CANType");
                 QJsonValue node = can.take("Node");
-/*
+
                 if (type.toInt() == CAN_2057) {
                     ui->can_2057->setEnabled(true);
                 }
@@ -371,11 +422,12 @@ void Client::onSokReadyRead()
                     ui->joystick->setEnabled(true);
                     ui->joystickMonitor->setTarget(0, 0);
                 }
- */
+ 
             }
         }
     }
 }
+*/
 
 void Client::onSokConnected()
 {
@@ -385,10 +437,6 @@ void Client::onSokConnected()
     }
     ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
-    emit ui->frequency_1->valueChanged(mLeftFrequency[mCurrentMode]);
-    emit ui->frequency_2->valueChanged(mRightFrequency[mCurrentMode]);
-//    ui->frequency_1->setValue(mLeftFrequency[mCurrentMode]);
-//    ui->frequency_2->setValue(mRightFrequency[mCurrentMode]);
 }
 
 void Client::onSokDisconnected()
