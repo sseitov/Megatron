@@ -56,7 +56,7 @@ Client::Client(QWidget *parent) :
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
     for (int i=0; i<SDL_NumJoysticks(); i++) {
         QJoystick *joy = new QJoystick(i, SDL_JoystickOpen(i));
-        connect(joy, SIGNAL(setAxiz(int, int, int)), this, SLOT(setJoystickAxiz(int, int, int)));
+        connect(joy, SIGNAL(setAxiz(int, int, int, int)), this, SLOT(setJoystickAxiz(int, int, int, int)));
         connect(joy, SIGNAL(setButtons(int, bool, bool)), this, SLOT(setJoystickButtons(int, bool, bool)));
         mJoystick.append(joy);
     }
@@ -232,15 +232,16 @@ void Client::saveSettings()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Client::setJoystickAxiz(int num, int x, int y)
+void Client::setJoystickAxiz(int num, int x, int y, int z)
 {
     qDebug() << "AXIZ " << x << " :: " << y;
     qreal xAxiz = (qreal)x/100.0*JOYSTICK_RADIUS;
     qreal yAxiz = (qreal)y/100.0*JOYSTICK_RADIUS;
+    qreal zAxiz = (qreal)z/100.0*JOYSTICK_RADIUS;
     if (num == 0) {
-        ui->joystickMonitor_1->setTarget(xAxiz, yAxiz);
+        ui->joystickMonitor_1->setTarget(xAxiz, yAxiz, zAxiz);
     } else {
-        ui->joystickMonitor_2->setTarget(xAxiz, yAxiz);
+        ui->joystickMonitor_2->setTarget(xAxiz, yAxiz, zAxiz);
     }
 }
 
@@ -290,13 +291,20 @@ void Client::setButton(bool checked)
         
         QVariantList list;
         
-        QVariantMap p;
-        p.insert("Node", node);
-        p.insert("Port", port);
+        QVariantMap p0;
+        p0.insert("Node", node);
+        p0.insert("Port", port);
         int value = checked ? 999 : 1;
-        p.insert("Value", value);
-        list.append(p);
-        
+        p0.insert("Value", value);
+        list.append(p0);
+        if (node < 3) {
+            QVariantMap p1;
+            p1.insert("Node", 3);
+            p1.insert("Port", 4);
+            int value = checked ? 999 : 1;
+            p1.insert("Value", value);
+            list.append(p1);
+        }
         map.insert("PortArray", list);
         
         QJsonObject command = QJsonObject::fromVariantMap(map);
@@ -355,26 +363,41 @@ void Client::setLevel(const QVector<int>& values)
         node = mRightNode[mCurrentMode];
     }
 
+
     if (mServer.isOpen() && node > 0) {
-        QVariantMap map;
-        map.insert("CANType", CAN_2088);
-        map.insert("CommandType", CAN_SetValue);
-        
-        QVariantList list;
-        for (int i=0; i<values.count(); i++) {
-            QVariantMap p0;
-            p0.insert("Node", node);
-            p0.insert("Port", i);
-            p0.insert("Value", values[i]);
-            list.append(p0);
-        }
-        
-        map.insert("PortArray", list);
-        
-        QJsonObject command = QJsonObject::fromVariantMap(map);
-        QByteArray data = QJsonDocument(command).toBinaryData();
-        mServer.write(data);
+        writeValuesToNode(values, node);
     }
+}
+
+void Client::writeValuesToNode(const QVector<int>& values, int node)
+{
+    QVariantMap map;
+    map.insert("CANType", CAN_2088);
+    map.insert("CommandType", CAN_SetValue);
+
+    int additionalPort = 1;
+    QVariantList list;
+    for (int i=0; i<values.count(); i++) {
+        QVariantMap p0;
+        p0.insert("Node", node);
+        p0.insert("Port", i);
+        p0.insert("Value", values[i]);
+        if (values[i] > 0)
+            additionalPort = 999;
+        list.append(p0);
+    }
+    if (node < 3) {
+        QVariantMap p1;
+        p1.insert("Node", 3);
+        p1.insert("Port", 4);
+        p1.insert("Value", additionalPort);
+        list.append(p1);
+    }
+    map.insert("PortArray", list);
+
+    QJsonObject command = QJsonObject::fromVariantMap(map);
+    QByteArray data = QJsonDocument(command).toBinaryData();
+    mServer.write(data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

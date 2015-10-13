@@ -26,6 +26,7 @@ private:
     QTimer *m_updateTimer;
     int mX;
     int mY;
+    int mZ;
     bool mButton1;
     bool mButton2;
     
@@ -33,7 +34,7 @@ private slots:
     void updateData();
     
 signals:
-    void setAxiz(int, int, int);
+    void setAxiz(int, int, int, int);
     void setButtons(int, bool, bool);
     
 };

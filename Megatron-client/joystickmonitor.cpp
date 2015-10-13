@@ -74,7 +74,7 @@ void JoystickMonitor::mouseMoveEvent(QMouseEvent *mouse)
             y = qSin(alpha)*150.0;
         }
 */
-        setTarget(x, y);
+        setTarget(x, y, 0);
 
         mDragPt = pt;
         repaint();
@@ -88,13 +88,13 @@ void JoystickMonitor::mouseReleaseEvent(QMouseEvent *mouse)
     }
 }
 
-void JoystickMonitor::setTarget(qreal x, qreal y)
+void JoystickMonitor::setTarget(qreal x, qreal y, qreal z)
 {
     mTarget.setX(x);
     mTarget.setY(y);
     repaint();
 
-    qreal port0, port1, port2, port3;
+    qreal port0, port1, port2, port3, port4, port5;
     if (y < 0) {
         port0 = fabs(y)/JOYSTICK_RADIUS*1000.0;
         port1 = 0;
@@ -109,11 +109,20 @@ void JoystickMonitor::setTarget(qreal x, qreal y)
         port3 = fabs(x)/JOYSTICK_RADIUS*1000.0;
         port2 = 0;
     }
+    if (z < 0) {
+        port4 = fabs(z)/JOYSTICK_RADIUS*1000.0;
+        port5 = 0;
+    } else {
+        port5 = fabs(z)/JOYSTICK_RADIUS*1000.0;
+        port4 = 0;
+    }
 
     QVector<int> values;
     values.append(port0);
     values.append(port1);
     values.append(port2);
     values.append(port3);
+    values.append(port4);
+    values.append(port5);
     emit setLevel(values);
 }
