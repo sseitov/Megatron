@@ -30,11 +30,11 @@ private slots:
     void clearControls();
     void switchMode(bool);
     
-    void setFrequency(int frequency);
+    void setButton(bool checked);
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
     void start(bool);
-    void onSokReadyRead();
+//    void onSokReadyRead();
     void onSokConnected();
     void onSokDisconnected();
     void onSokDisplayError(QAbstractSocket::SocketError);
@@ -46,8 +46,6 @@ private:
     QVector<QJoystick*> mJoystick;
     QRadioButton* mModes[NUM_MODE];
     QVector<ControlButton*> mControlButtons[NUM_MODE];
-    int mLeftFrequency[NUM_MODE];
-    int mRightFrequency[NUM_MODE];
     int mLeftNode[NUM_MODE];
     int mRightNode[NUM_MODE];
 

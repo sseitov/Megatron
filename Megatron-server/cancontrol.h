@@ -10,7 +10,7 @@
 #include <QSpinBox>
 #include "qcan.h"
 
-#define PWM_COUNT 4
+#define PWM_COUNT 6
 
 class CANControl : public QObject
 {
@@ -25,6 +25,8 @@ public:
     QGroupBox *mBox;
     QVector<QProgressBar*> mOutputPulseIndicator;
     QCheckBox *mInversion;
+    QCheckBox *mButtons[2];
+    QSlider    *mFrequency;
     QLCDNumber *mFrequiencyIndicator;
     QVector<QSpinBox*> hiLimit;
     QVector<QSpinBox*> loLimit;
@@ -41,6 +43,7 @@ public slots:
 private:
     int mDuty[PWM_COUNT];
     int mOriginDuty[PWM_COUNT];
+
 };
 
 #endif // CANCONTROL_H
