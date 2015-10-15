@@ -211,6 +211,10 @@ void Server::loadSettings()
     QSettings settings("V-Channel", "Megatron-server");
     int size = settings.beginReadArray("Nodes");
     for (int i=0; i<size; i++) {
+        for (int j=0; j<PWM_COUNT; j++) {
+            connect(mNode2088[i].mOutputPulseIndicator[j], SIGNAL(valueChanged(int)), &mNode2088[i], SLOT(setDuty(int)));
+        }
+
         settings.setArrayIndex(i);
         mNode2088[i].mInversion->setChecked(settings.value("inversion").toBool());
         int val = settings.value("frequency").toInt();
@@ -230,7 +234,6 @@ void Server::loadSettings()
     for (int i=0; i<3; i++) {
         connect(mNode2088[i].mInversion, SIGNAL(toggled(bool)), this, SLOT(saveSettings()));
         connect(mNode2088[i].mFrequency, SIGNAL(sliderReleased()), this, SLOT(saveSettings()));
-        connect(&mNode2088[i], SIGNAL(saveSettings()), this, SLOT(saveSettings()));
         for (int j=0; j<PWM_COUNT; j++) {
            connect(mNode2088[i].hiLimit[j], SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
            connect(mNode2088[i].loLimit[j], SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
@@ -247,7 +250,7 @@ void Server::saveSettings()
         settings.setArrayIndex(i);
         settings.setValue("inversion", mNode2088[i].mInversion->isChecked());
         int val = mNode2088[i].mFrequency->value();
-        qDebug() << "Save frequency for (" << i << ") to " << val;
+//        qDebug() << "Save frequency for (" << i << ") to " << val;
         settings.setValue("frequency", val);
         settings.beginWriteArray("Ports");
         for (int port=0; port<PWM_COUNT; port++) {
@@ -273,30 +276,6 @@ void Server::connection()
             mNode2088[i].set();
         }
     }
-/*
-    QVariantMap map;
-    map.insert("CommandType", CAN_Initialized);
-    QVariantList list;
-    if (ui->can2057->isEnabled()) {
-        QVariantMap m;
-        m.insert("CANType", CAN_2057);
-        m.insert("Node", mNode2057);
-        list.append(m);
-    }
-    for (int i=0; i<3; i++) {
-        if (mNode2088[i].mNode >= 0) {
-            QVariantMap m;
-            m.insert("CANType", CAN_2088);
-            m.insert("Node", mNode2088[i].mNode);
-            mNode2088[i].set();
-            list.append(m);
-        }
-    }
-    map.insert("CANArray", list);
-    QJsonObject command = QJsonObject::fromVariantMap(map);
-    QByteArray data = QJsonDocument(command).toBinaryData();
-    mClient->write(data);
-*/
 }
 
 void Server::slotDisconnectClient()
@@ -333,18 +312,11 @@ void Server::slotReadClient()
                     QJsonValue node = item.take("Node");
                     QJsonValue port = item.take("Port");
                     QJsonValue value = item.take("Value");
+//                    qDebug() << "node " << node.toInt() << " port " << port.toInt() << " value " << value.toInt();
                     mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
                 }
             }
         }
-/*        else if (commandType.toInt() == CAN_SetPreference) {
-            if (canType.toInt() == CAN_2057) {
-            } else if (canType.toInt() == CAN_2088) {
-                QJsonValue node = command.take("Node");
-                QJsonValue value = command.take("Value");
-                mNode2088[node.toInt()-1].setFrequency(value.toInt());
-            }
-        }*/
     }
 }
 

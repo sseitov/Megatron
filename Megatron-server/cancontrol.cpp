@@ -1,4 +1,5 @@
 #include "cancontrol.h"
+#include <QDebug>
 
 CANControl::CANControl(QObject *parent) :
     QObject(parent), mNode(-1)
@@ -12,9 +13,6 @@ CANControl::CANControl(QObject *parent) :
 void CANControl::start(int node)
 {
     mNode = node;
-    for (int i=0; i<PWM_COUNT; i++) {
-        connect(mOutputPulseIndicator[i], SIGNAL(valueChanged(int)), this, SLOT(setDuty(int)));
-    }
     if (mNode < 0) return;
     for (int i=0; i<PWM_COUNT; i++) {
         mCan->setPulseFrequency(mNode, i, mFrequency->value()/10);
@@ -32,9 +30,11 @@ void CANControl::setFrequency(int value)
 
 void CANControl::setDuty(int value)
 {
-    if (mNode < 0) return;
     int port = sender()->objectName().toInt();
-
+    if (mNode < 0) {
+//        qDebug() << "set port " << port << " to value " << value;
+        return;
+    }
     mOriginDuty[port] = value;
 
     int hi = hiLimit[port]->value();
