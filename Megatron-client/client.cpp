@@ -48,7 +48,6 @@ Client::Client(QWidget *parent) :
 
     // server
 
-//    connect(&mServer, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
     connect(&mServer, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
@@ -312,34 +311,7 @@ void Client::setButton(bool checked)
         mServer.write(data);
     }
 }
-/*
-void Client::setFrequency(int frequency)
-{
-    int node = 0;
-    if (sender() == ui->frequency_1) {
-        ui->frequencyIndicator_1->display(frequency/10000);
-        mLeftFrequency[mCurrentMode] = frequency;
-        node = mLeftNode[mCurrentMode];
-    } else if (sender() == ui->frequency_2) {
-        ui->frequencyIndicator_2->display(frequency/10000);
-        mRightFrequency[mCurrentMode] = frequency;
-        node = mRightNode[mCurrentMode];
-    }
-    saveSettings();
-    
-    if (mServer.isOpen() && node > 0) {
-        QVariantMap map;
-        map.insert("CANType", CAN_2088);
-        map.insert("CommandType", CAN_SetPreference);
-        map.insert("Node", node);
-        map.insert("Value", frequency);
-        
-        QJsonObject command = QJsonObject::fromVariantMap(map);
-        QByteArray data = QJsonDocument(command).toBinaryData();
-        mServer.write(data);
-    }
-}
-*/
+
 void Client::setLevel(int port, bool value)
 {
     if (mServer.isOpen()) {
@@ -415,42 +387,6 @@ void Client::start(bool start)
         }
     }
 }
-
-/*
-void Client::onSokReadyRead()
-{
-    QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
-    if (server) {
-        QByteArray data = server->readAll();
-        QJsonDocument request = QJsonDocument::fromBinaryData(data);
-        QJsonObject command = request.object();
-        QJsonValue commandType = command.take("CommandType");
-        if (commandType == QJsonValue::Undefined)
-            return;
-        if (commandType.toInt() == CAN_Initialized) {
-            QJsonValue canArray = command.take("CANArray");
-            if (canArray == QJsonValue::Undefined)
-                return;
-            QJsonArray cans = canArray.toArray();
-            for (int i=0; i<cans.count(); i++) {
-                QJsonObject can = cans[i].toObject();
-                
-                QJsonValue type = can.take("CANType");
-                QJsonValue node = can.take("Node");
-
-                if (type.toInt() == CAN_2057) {
-                    ui->can_2057->setEnabled(true);
-                }
-                if (type.toInt() == CAN_2088) {
-                    ui->joystick->setEnabled(true);
-                    ui->joystickMonitor->setTarget(0, 0);
-                }
- 
-            }
-        }
-    }
-}
-*/
 
 void Client::onSokConnected()
 {
