@@ -313,8 +313,6 @@ void Server::slotReadClient()
                     QJsonValue port = item.take("Port");
                     QJsonValue value = item.take("Value");
 //                    qDebug() << "node " << node.toInt() << " port " << port.toInt() << " value " << value.toInt();
-                    if (node.toInt() == 3 && (port.toInt() == 4 || port.toInt() == 5))
-                        continue;
                     mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
                 }
             }
