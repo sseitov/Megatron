@@ -271,11 +271,6 @@ void Server::connection()
     mClient = mServer.nextPendingConnection();
     connect(mClient, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(mClient, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
-    for (int i=0; i<3; i++) {
-        if (mNode2088[i].mNode >= 0) {
-            mNode2088[i].set();
-        }
-    }
 }
 
 void Server::slotDisconnectClient()
@@ -327,6 +322,7 @@ void Server::canInitialized(int node)
         mNode2088[node-1].mBox->setEnabled(true);
         mNode2088[node-1].mBox->setTitle("2088 ["+QString::number(node)+"]");
         mNode2088[node-1].start(node);
+        mNode2088[node-1].set();
     } else if (canType == 0x2057) {
         mNode2057 = node;
         ui->can2057->setEnabled(true);
