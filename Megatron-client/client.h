@@ -34,7 +34,6 @@ private slots:
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
     void start(bool);
-//    void onSokReadyRead();
     void onSokConnected();
     void onSokDisconnected();
     void onSokDisplayError(QAbstractSocket::SocketError);

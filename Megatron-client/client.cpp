@@ -303,6 +303,13 @@ void Client::setButton(bool checked)
             int value = checked ? 999 : 1;
             p1.insert("Value", value);
             list.append(p1);
+        } else if (mCurrentMode == 1) {
+            QVariantMap p1;
+            p1.insert("Node", 1);
+            p1.insert("Port", port);
+            int value = checked ? 999 : 1;
+            p1.insert("Value", value);
+            list.append(p1);
         }
         map.insert("PortArray", list);
         
