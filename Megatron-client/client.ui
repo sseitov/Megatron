@@ -168,7 +168,7 @@
     <item>
      <widget class="QRadioButton" name="mode_3">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="text">
        <string>Стол разбора</string>
@@ -178,7 +178,7 @@
     <item>
      <widget class="QRadioButton" name="mode_4">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="text">
        <string>БРД</string>
@@ -187,7 +187,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
