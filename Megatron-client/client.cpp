@@ -354,7 +354,7 @@ void Client::writeValuesToNode(const QVector<int>& values, int node)
     map.insert("CANType", CAN_2088);
     map.insert("CommandType", CAN_SetValue);
 
-    int additionalPort = 1;
+    int additionalPort = 800;
     QVariantList list;
     for (int i=0; i<values.count(); i++) {
         QVariantMap p0;
@@ -362,7 +362,7 @@ void Client::writeValuesToNode(const QVector<int>& values, int node)
         p0.insert("Port", i);
         p0.insert("Value", values[i]);
         if (values[i] > 0)
-            additionalPort = 999;
+            additionalPort = 1;
         list.append(p0);
     }
     if (node < 3) {
