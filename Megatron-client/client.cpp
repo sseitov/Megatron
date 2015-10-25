@@ -357,6 +357,8 @@ void Client::writeValuesToNode(const QVector<int>& values, int node)
     int additionalPort = 800;
     QVariantList list;
     for (int i=0; i<values.count(); i++) {
+        if (mCurrentMode == 0 && (i == 4 || i == 5))
+            continue;
         QVariantMap p0;
         p0.insert("Node", node);
         p0.insert("Port", i);
