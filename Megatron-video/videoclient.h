@@ -3,7 +3,8 @@
 
 #include <QWidget>
 #include <QTcpSocket>
-#include "controlbutton.h"
+#include <QProcess>
+#include "../Megatron-client/controlbutton.h"
 
 namespace Ui {
 class VideoClient;

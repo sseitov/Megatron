@@ -1,6 +1,6 @@
 #include "videoclient.h"
 #include "ui_videoclient.h"
-#include "buttonsetup.h"
+#include "../Megatron-client/buttonsetup.h"
 #include "../common.h"
 #include <QMessageBox>
 #include <QJsonDocument>
@@ -229,5 +229,13 @@ void VideoClient::onSokDisplayError(QAbstractSocket::SocketError)
 
 void VideoClient::videoStart()
 {
-    
+    QProcess *process = new QProcess(this);
+    QString program = "mplayer -geometry 0:0 ";
+    process->start(program + ui->videoURL->currentText());
+    if (process->waitForStarted()) {
+        if (ui->videoURL->findText(ui->videoURL->currentText()) < 0) {
+            ui->videoURL->insertItem(0, ui->videoURL->currentText());
+            saveSettings();
+        }
+    }
 }
