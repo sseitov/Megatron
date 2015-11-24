@@ -33,20 +33,20 @@ private slots:
 private:
     Ui::Server *ui;
     QTcpServer mServer;
-    QTcpSocket *mClient;
+//    QTcpSocket *mClient;
     QCan mCan;
-    int mNode2057;
-    QVector<QCheckBox*> mOutputIndicator;
 
     CANControl mNode2088[3];
 
+    int mNode2057[2];
+    QVector<QCheckBox*> mOutputIndicator[2];
 
-    std::bitset<8> m2057lowValue;
-    std::bitset<8> m2057highValue;
-    std::bitset<8> m2057lowPolarity;
-    std::bitset<8> m2057highPolarity;
+    std::bitset<8> m2057lowValue[2];
+    std::bitset<8> m2057highValue[2];
+    std::bitset<8> m2057lowPolarity[2];
+    std::bitset<8> m2057highPolarity[2];
 
-    void set2057Value(int port, bool isOn);
+    void set2057Value(int node, int port, bool isOn);
     void reset2057();
 
     void loadSettings();

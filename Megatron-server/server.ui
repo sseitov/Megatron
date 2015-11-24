@@ -12,14 +12,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>640</width>
+    <width>800</width>
     <height>580</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
-    <height>680</height>
+    <height>580</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -27,19 +27,19 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QGroupBox" name="can2057">
+    <widget class="QGroupBox" name="can2057_1">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="minimumSize">
       <size>
-       <width>80</width>
+       <width>70</width>
        <height>480</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>80</width>
+       <width>70</width>
        <height>480</height>
       </size>
      </property>
@@ -56,9 +56,9 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_17">
         <item>
-         <widget class="QCheckBox" name="d0">
+         <widget class="QCheckBox" name="d0_1">
           <property name="text">
-           <string>D0</string>
+           <string>0</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -66,9 +66,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d1">
+         <widget class="QCheckBox" name="d1_1">
           <property name="text">
-           <string>D1</string>
+           <string>1</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -76,9 +76,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d2">
+         <widget class="QCheckBox" name="d2_1">
           <property name="text">
-           <string>D2</string>
+           <string>2</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -86,9 +86,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d3">
+         <widget class="QCheckBox" name="d3_1">
           <property name="text">
-           <string>D3</string>
+           <string>3</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -96,9 +96,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d4">
+         <widget class="QCheckBox" name="d4_1">
           <property name="text">
-           <string>D4</string>
+           <string>4</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -106,9 +106,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d5">
+         <widget class="QCheckBox" name="d5_1">
           <property name="text">
-           <string>D5</string>
+           <string>5</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -116,9 +116,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d6">
+         <widget class="QCheckBox" name="d6_1">
           <property name="text">
-           <string>D6</string>
+           <string>6</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -126,9 +126,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d7">
+         <widget class="QCheckBox" name="d7_1">
           <property name="text">
-           <string>D7</string>
+           <string>7</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -136,9 +136,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d8">
+         <widget class="QCheckBox" name="d8_1">
           <property name="text">
-           <string>D8</string>
+           <string>8</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -146,9 +146,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d9">
+         <widget class="QCheckBox" name="d9_1">
           <property name="text">
-           <string>D9</string>
+           <string>9</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -156,9 +156,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d10">
+         <widget class="QCheckBox" name="d10_1">
           <property name="text">
-           <string>D10</string>
+           <string>10</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -166,9 +166,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d11">
+         <widget class="QCheckBox" name="d11_1">
           <property name="text">
-           <string>D11</string>
+           <string>11</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -176,9 +176,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d12">
+         <widget class="QCheckBox" name="d12_1">
           <property name="text">
-           <string>D12</string>
+           <string>12</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -186,9 +186,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d13">
+         <widget class="QCheckBox" name="d13_1">
           <property name="text">
-           <string>D13</string>
+           <string>13</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -196,9 +196,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d14">
+         <widget class="QCheckBox" name="d14_1">
           <property name="text">
-           <string>D14</string>
+           <string>14</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -206,9 +206,203 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="d15">
+         <widget class="QCheckBox" name="d15_1">
           <property name="text">
-           <string>D15</string>
+           <string>15</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="can2057_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>70</width>
+       <height>480</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>70</width>
+       <height>480</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Video</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_18">
+        <item>
+         <widget class="QCheckBox" name="d0_2">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d1_2">
+          <property name="text">
+           <string>1</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d2_2">
+          <property name="text">
+           <string>2</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d3_2">
+          <property name="text">
+           <string>3</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d4_2">
+          <property name="text">
+           <string>4</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d5_2">
+          <property name="text">
+           <string>5</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d6_2">
+          <property name="text">
+           <string>6</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d7_2">
+          <property name="text">
+           <string>7</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d8_2">
+          <property name="text">
+           <string>8</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d9_2">
+          <property name="text">
+           <string>9</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d10_2">
+          <property name="text">
+           <string>10</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d11_2">
+          <property name="text">
+           <string>11</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d12_2">
+          <property name="text">
+           <string>12</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d13_2">
+          <property name="text">
+           <string>13</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d14_2">
+          <property name="text">
+           <string>14</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="d15_2">
+          <property name="text">
+           <string>15</string>
           </property>
           <property name="checkable">
            <bool>true</bool>

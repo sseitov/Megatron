@@ -12,29 +12,51 @@
 #include "../common.h"
 
 Server::Server(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Server), mClient(0), mNode2057(0)
+    QWidget(parent), ui(new Ui::Server)
 {
     ui->setupUi(this);
 
-    mOutputIndicator.append(ui->d0);
-    mOutputIndicator.append(ui->d1);
-    mOutputIndicator.append(ui->d2);
-    mOutputIndicator.append(ui->d3);
-    mOutputIndicator.append(ui->d4);
-    mOutputIndicator.append(ui->d5);
-    mOutputIndicator.append(ui->d6);
-    mOutputIndicator.append(ui->d7);
-    mOutputIndicator.append(ui->d8);
-    mOutputIndicator.append(ui->d9);
-    mOutputIndicator.append(ui->d10);
-    mOutputIndicator.append(ui->d11);
-    mOutputIndicator.append(ui->d12);
-    mOutputIndicator.append(ui->d13);
-    mOutputIndicator.append(ui->d14);
-    mOutputIndicator.append(ui->d15);
+    mNode2057[0] = 0;
+    mNode2057[1] = 0;
+
+    mOutputIndicator[0].append(ui->d0_1);
+    mOutputIndicator[0].append(ui->d1_1);
+    mOutputIndicator[0].append(ui->d2_1);
+    mOutputIndicator[0].append(ui->d3_1);
+    mOutputIndicator[0].append(ui->d4_1);
+    mOutputIndicator[0].append(ui->d5_1);
+    mOutputIndicator[0].append(ui->d6_1);
+    mOutputIndicator[0].append(ui->d7_1);
+    mOutputIndicator[0].append(ui->d8_1);
+    mOutputIndicator[0].append(ui->d9_1);
+    mOutputIndicator[0].append(ui->d10_1);
+    mOutputIndicator[0].append(ui->d11_1);
+    mOutputIndicator[0].append(ui->d12_1);
+    mOutputIndicator[0].append(ui->d13_1);
+    mOutputIndicator[0].append(ui->d14_1);
+    mOutputIndicator[0].append(ui->d15_1);
     for (int i=0; i<16; i++) {
-        mOutputIndicator[i]->setObjectName(QString::number(i));
+        mOutputIndicator[0][i]->setObjectName(QString::number(i));
+    }
+
+    mOutputIndicator[1].append(ui->d0_2);
+    mOutputIndicator[1].append(ui->d1_2);
+    mOutputIndicator[1].append(ui->d2_2);
+    mOutputIndicator[1].append(ui->d3_2);
+    mOutputIndicator[1].append(ui->d4_2);
+    mOutputIndicator[1].append(ui->d5_2);
+    mOutputIndicator[1].append(ui->d6_2);
+    mOutputIndicator[1].append(ui->d7_2);
+    mOutputIndicator[1].append(ui->d8_2);
+    mOutputIndicator[1].append(ui->d9_2);
+    mOutputIndicator[1].append(ui->d10_2);
+    mOutputIndicator[1].append(ui->d11_2);
+    mOutputIndicator[1].append(ui->d12_2);
+    mOutputIndicator[1].append(ui->d13_2);
+    mOutputIndicator[1].append(ui->d14_2);
+    mOutputIndicator[1].append(ui->d15_2);
+    for (int i=0; i<16; i++) {
+        mOutputIndicator[1][i]->setObjectName(QString::number(i+16));
     }
 
     ///////////////////////////////////////////////////////////
@@ -194,12 +216,9 @@ Server::Server(QWidget *parent) :
 Server::~Server()
 {
     saveSettings();
-    if (mClient) {
-        mClient->close();
-        mClient = 0;
-    }
     mServer.close();
     reset2057();
+
     for (int i=0; i<3; i++) {
         mNode2088[i].reset();
     }
@@ -265,17 +284,13 @@ void Server::saveSettings()
 
 void Server::connection()
 {
-    if (mClient) {
-        mClient->close();
-    }
-    mClient = mServer.nextPendingConnection();
-    connect(mClient, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
-    connect(mClient, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
+    QTcpSocket *client = mServer.nextPendingConnection();
+    connect(client, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
+    connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
 }
 
 void Server::slotDisconnectClient()
 {
-    mClient = 0;
     reset2057();
     for (int i=0; i<3; i++) {
         mNode2088[i].reset();
@@ -297,9 +312,10 @@ void Server::slotReadClient()
             return;
         if (commandType.toInt() == CAN_SetValue) {
             if (canType.toInt() == CAN_2057) {
+                QJsonValue node = command.take("Node");
                 QJsonValue port = command.take("Port");
                 QJsonValue value = command.take("Value");
-                set2057Value(port.toInt(), value.toBool());
+                set2057Value(node.toInt(), port.toInt(), value.toBool());
             } else if (canType.toInt() == CAN_2088) {
                 QJsonArray values = command.take("PortArray").toArray();
                 for (int i=0; i<values.count(); i++) {
@@ -324,40 +340,52 @@ void Server::canInitialized(int node)
         mNode2088[node-1].start(node);
         mNode2088[node-1].set();
     } else if (canType == 0x2057) {
-        mNode2057 = node;
-        ui->can2057->setEnabled(true);
-        ui->can2057->setTitle("2057 ["+QString::number(node)+"]");
-        for (int i=0; i<16; i++) {
-            connect(mOutputIndicator[i], SIGNAL(stateChanged(int)), this, SLOT(set2057port(int)));
+        int index = node == 5 ? 1 : 0;
+        mNode2057[index] = node;
+        if (index == 0) {
+            ui->can2057_1->setEnabled(true);
+            ui->can2057_1->setTitle("2057 ["+QString::number(node)+"]");
+        } else {
+            ui->can2057_2->setEnabled(true);
         }
-        reset2057();
+        for (int i=0; i<16; i++) {
+            connect(mOutputIndicator[index][i], SIGNAL(stateChanged(int)), this, SLOT(set2057port(int)));
+        }
     }
 }
 
 void Server::set2057port(int state)
 {
     int port = sender()->objectName().toInt();
+    int index = 0;
+    if (port >= 16) {
+        port -= 16;
+        index = 1;
+    }
     UNS8 value;
     if (port < 8) {
-        m2057lowValue.set(port, state > 0 ? 1 : 0);
-        value = m2057lowValue.to_ulong();
+        m2057lowValue[index].set(port, state > 0 ? 1 : 0);
+        value = m2057lowValue[index].to_ulong();
     } else {
-        m2057highValue.set(port-8, state > 0 ? 1 : 0);
-        value = m2057highValue.to_ulong();
+        m2057highValue[index].set(port-8, state > 0 ? 1 : 0);
+        value = m2057highValue[index].to_ulong();
     }
-    if (mNode2057 > 0) {
-        mCan.setTrigger(mNode2057, port, value);
+    if (mNode2057[index] > 0) {
+        mCan.setTrigger(mNode2057[index], port, value);
     }
 }
 
-void Server::set2057Value(int port, bool isOn)
+void Server::set2057Value(int node, int port, bool isOn)
 {
-    mOutputIndicator[port]->setChecked(isOn);
+    int index = node == 5 ? 1 : 0;
+    mOutputIndicator[index][port]->setChecked(isOn);
 }
 
 void Server::reset2057()
 {
-    for (int i=0; i<16; i++) {
-        mOutputIndicator[i]->setChecked(false);
+    for (int index=0; index<2; index++) {
+        for (int i=0; i<16; i++) {
+            mOutputIndicator[index][i]->setChecked(false);
+        }
     }
 }
