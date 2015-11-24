@@ -10,6 +10,8 @@
 #include <QJsonArray>
 #include <QSettings>
 
+#define NODE_2057   4
+
 Client::Client(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Client)
@@ -325,6 +327,7 @@ void Client::setLevel(int port, bool value)
         QVariantMap map;
         map.insert("CANType", CAN_2057);
         map.insert("CommandType", CAN_SetValue);
+        map.insert("Node", NODE_2057);
         map.insert("Port", port);
         map.insert("Value", value);
         QJsonObject command = QJsonObject::fromVariantMap(map);
