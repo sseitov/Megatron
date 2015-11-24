@@ -4,17 +4,26 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Megatron-video
 TEMPLATE = app
 
+MOC_DIR = tmp
+UI_DIR = tmp
+RCC_DIR = tmp
 
 SOURCES += main.cpp\
-        videoclient.cpp
+        videoclient.cpp \
+        ../Megatron-client/buttonsetup.cpp \
+        ../Megatron-client/controlbutton.cpp
 
-HEADERS  += videoclient.h
+HEADERS  += videoclient.h \
+        ../Megatron-client/buttonsetup.h \
+        ../common.h \
+        ../Megatron-client/controlbutton.h
 
-FORMS    += videoclient.ui
+FORMS    += videoclient.ui \
+    ../Megatron-client/buttonsetup.ui
