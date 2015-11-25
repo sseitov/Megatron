@@ -24,7 +24,7 @@ VideoClient::VideoClient(QWidget *parent) :
     connect(ui->addControl, SIGNAL(clicked()), this, SLOT(addControl()));
     connect(ui->clearControls, SIGNAL(clicked()), this, SLOT(clearControls()));
     
-    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+//    ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 
     connect(ui->videoConnectButton, SIGNAL(clicked()), this, SLOT(videoStart()));
@@ -90,7 +90,9 @@ void VideoClient::loadSettings()
     for (int i=0; i<mControlButtons.size(); i++) {
         QWidget *w = mControlButtons.at(i);
         w->setHidden(false);
-        ui->controlLayout->addWidget(w);
+        int row = i % 4;
+        int column = i / 4;
+        ui->controlLayout->addWidget(w, row, column, Qt::AlignTop | Qt::AlignCenter);
     }
 }
 
@@ -162,7 +164,10 @@ void VideoClient::addControl()
         setup->setupButton(control);
         control->setMinimumHeight(40);
         mControlButtons.append(control);
-        ui->controlLayout->addWidget(control);
+        int row = (mControlButtons.size()-1) % 4;
+        int column = (mControlButtons.size()-1) / 4;
+
+        ui->controlLayout->addWidget(control, row, column, Qt::AlignTop | Qt::AlignCenter);
     }
     saveSettings();
 }
@@ -212,7 +217,7 @@ void VideoClient::onSokDisconnected()
 {
     ui->connectButton->setChecked(false);
     ui->connectButton->setText(tr("Соединить"));
-    ui->connectButton->setStyleSheet("background-color:green; color: white;");
+//    ui->connectButton->setStyleSheet("background-color:green; color: white;");
 }
 
 void VideoClient::onSokDisplayError(QAbstractSocket::SocketError)
