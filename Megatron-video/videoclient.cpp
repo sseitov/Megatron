@@ -134,18 +134,33 @@ void VideoClient::saveSettings()
 
 void VideoClient::clearHistory()
 {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Подтверждение", "Очистить историю соединений с управляющим сервером?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::No) {
+        return;
+    }
     ui->ipAddress->clear();
     saveSettings();
 }
 
 void VideoClient::clearVideoHistory()
 {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Подтверждение", "Очистить историю соединений с видео сервером?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::No) {
+        return;
+    }
     ui->videoURL->clear();
     saveSettings();
 }
 
 void VideoClient::clearControls()
 {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Подтверждение", "Удалить все созданные элементы управления?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::No) {
+        return;
+    }
     for (int i=0; i<mControlButtons.size(); i++) {
         QWidget *w = mControlButtons.at(i);
         ui->controlLayout->removeWidget(w);
@@ -235,7 +250,8 @@ void VideoClient::onSokDisplayError(QAbstractSocket::SocketError)
 void VideoClient::videoStart()
 {
     QProcess *process = new QProcess(this);
-    QString program = "mplayer -geometry 0:0 ";
+//    QString program = "mplayer -geometry 0:0 ";
+    QString program = "vlc ";
     process->start(program + ui->videoURL->currentText());
     if (process->waitForStarted()) {
         if (ui->videoURL->findText(ui->videoURL->currentText()) < 0) {
