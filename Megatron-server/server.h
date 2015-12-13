@@ -33,7 +33,6 @@ private slots:
 private:
     Ui::Server *ui;
     QTcpServer mServer;
-//    QTcpSocket *mClient;
     QCan mCan;
 
     CANControl mNode2088[3];
@@ -50,6 +49,7 @@ private:
     void reset2057();
 
     void loadSettings();
+    void shutdown();
 };
 
 #endif // SERVER_H
