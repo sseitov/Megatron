@@ -299,7 +299,6 @@ void Server::shutdown()
 
 void Server::slotDisconnectClient()
 {
-    shutdown();
 }
 
 void Server::slotReadClient()
