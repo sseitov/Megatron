@@ -19,6 +19,7 @@ void ButtonSetup::setupButton(ControlButton* button)
     config.name = ui->name->text();
     config.checkable = ui->fixation->isChecked();
     config.inverse = ui->inverse->isChecked();
+    config.canID = ui->canID->currentText().toInt();
     config.port = ui->output->currentIndex();
     button->setConfig(config);
 }

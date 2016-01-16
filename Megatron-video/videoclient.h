@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QProcess>
-#include "../Megatron-client/controlbutton.h"
+#include "controlbutton.h"
 
 namespace Ui {
 class VideoClient;
@@ -24,7 +24,7 @@ private slots:
     void addControl();
     void clearControls();
 
-    void setLevel(int, bool);
+    void setLevel(int, int, bool);
     
     void start(bool);
     void onSokConnected();

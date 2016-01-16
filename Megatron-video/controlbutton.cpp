@@ -46,5 +46,5 @@ void ControlButton::sendLevel(bool checked)
     } else {
         setStyleSheet("background-color : white; color : black;");
     }
-    emit setLevel(mConfig.port, checked);
+    emit setLevel(mConfig.canID, mConfig.port, checked);
 }

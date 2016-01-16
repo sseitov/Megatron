@@ -1,6 +1,6 @@
 #include "videoclient.h"
 #include "ui_videoclient.h"
-#include "../Megatron-client/buttonsetup.h"
+#include "buttonsetup.h"
 #include "../common.h"
 #include <QMessageBox>
 #include <QJsonDocument>
@@ -8,8 +8,6 @@
 #include <QVariantMap>
 #include <QJsonArray>
 #include <QSettings>
-
-#define NODE_2057   5
 
 VideoClient::VideoClient(QWidget *parent) :
     QWidget(parent),
@@ -23,8 +21,6 @@ VideoClient::VideoClient(QWidget *parent) :
     connect(ui->clearVideoHistory, SIGNAL(clicked()), this, SLOT(clearVideoHistory()));
     connect(ui->addControl, SIGNAL(clicked()), this, SLOT(addControl()));
     connect(ui->clearControls, SIGNAL(clicked()), this, SLOT(clearControls()));
-    
-//    ui->connectButton->setStyleSheet("background-color:green; color: white;");
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(start(bool)));
 
     connect(ui->videoConnectButton, SIGNAL(clicked()), this, SLOT(videoStart()));
@@ -49,7 +45,7 @@ VideoClient::~VideoClient()
 
 void VideoClient::loadSettings()
 {
-    QSettings settings("V-Channel", "Megatron-video");
+    QSettings settings("V-Channel", "Megatron-video2");
     
     int size = settings.beginReadArray("history");
     for (int i = 0; i < size; ++i) {
@@ -76,10 +72,11 @@ void VideoClient::loadSettings()
             config.name = settings.value("name").toString();
             config.checkable = settings.value("checkable").toBool();
             config.inverse = settings.value("inverse").toBool();
+            config.canID = settings.value("canID").toInt();
             config.port = settings.value("port").toInt();
             
             ControlButton* control = new ControlButton(this);
-            connect(control, SIGNAL(setLevel(int,bool)), this, SLOT(setLevel(int,bool)));
+            connect(control, SIGNAL(setLevel(int, int, bool)), this, SLOT(setLevel(int, int, bool)));
             control->setConfig(config);
             control->setMinimumHeight(40);
             mControlButtons.append(control);
@@ -98,7 +95,7 @@ void VideoClient::loadSettings()
 
 void VideoClient::saveSettings()
 {
-    QSettings settings("V-Channel", "Megatron-video");
+    QSettings settings("V-Channel", "Megatron-video2");
     
     settings.beginWriteArray("history");
     for (int i = 0; i < ui->ipAddress->count(); ++i) {
@@ -124,6 +121,7 @@ void VideoClient::saveSettings()
             settings.setValue("name", config.name);
             settings.setValue("checkable", config.checkable);
             settings.setValue("inverse", config.inverse);
+            settings.setValue("canID", config.canID);
             settings.setValue("port", config.port);
         }
         settings.endArray();
@@ -175,7 +173,7 @@ void VideoClient::addControl()
     ButtonSetup *setup = new ButtonSetup();
     if (setup->exec() == QDialog::Accepted) {
         ControlButton* control = new ControlButton(this);
-        connect(control, SIGNAL(setLevel(int,bool)), this, SLOT(setLevel(int,bool)));
+        connect(control, SIGNAL(setLevel(int, int,bool)), this, SLOT(setLevel(int, int,bool)));
         setup->setupButton(control);
         control->setMinimumHeight(40);
         mControlButtons.append(control);
@@ -187,13 +185,13 @@ void VideoClient::addControl()
     saveSettings();
 }
 
-void VideoClient::setLevel(int port, bool value)
+void VideoClient::setLevel(int canID, int port, bool value)
 {
     if (mServer.isOpen()) {
         QVariantMap map;
         map.insert("CANType", CAN_2057);
         map.insert("CommandType", CAN_SetValue);
-        map.insert("Node", NODE_2057);
+        map.insert("Node", canID);
         map.insert("Port", port);
         map.insert("Value", value);
         QJsonObject command = QJsonObject::fromVariantMap(map);
