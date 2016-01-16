@@ -17,13 +17,13 @@ RCC_DIR = tmp
 
 SOURCES += main.cpp\
         videoclient.cpp \
-        ../Megatron-client/buttonsetup.cpp \
-        ../Megatron-client/controlbutton.cpp
+        buttonsetup.cpp \
+        controlbutton.cpp
 
 HEADERS  += videoclient.h \
-        ../Megatron-client/buttonsetup.h \
         ../common.h \
-        ../Megatron-client/controlbutton.h
+        buttonsetup.h \
+        controlbutton.h
 
 FORMS    += videoclient.ui \
-    ../Megatron-client/buttonsetup.ui
+	buttonsetup.ui
