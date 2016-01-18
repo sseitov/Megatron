@@ -18,6 +18,10 @@ Client::Client(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->resetButton->setStyleSheet("background-color:grey; color: white;");
+    ui->resetButton->setEnabled(false);
+    connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(shutdown()));
+    
     mLeftNode[0] = 3; mRightNode[0] = 0;
     mLeftNode[1] = 1; mRightNode[1] = 2;
     mLeftNode[2] = 0; mRightNode[2] = 0;
@@ -386,6 +390,16 @@ void Client::writeValuesToNode(const QVector<int>& values, int node)
     mServer.write(data);
 }
 
+void Client::shutdown()
+{
+    QByteArray data;
+    data.append(1);
+    data.append(9);
+    data.append(6);
+    data.append(4);
+    mServer.write(data);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Client::start(bool start)
@@ -410,6 +424,8 @@ void Client::onSokConnected()
     }
     ui->connectButton->setText(tr("Отсоединить"));
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
+    ui->resetButton->setStyleSheet("background-color:black; color: white;");
+    ui->resetButton->setEnabled(true);
 }
 
 void Client::onSokDisconnected()
@@ -417,6 +433,8 @@ void Client::onSokDisconnected()
     ui->connectButton->setChecked(false);
     ui->connectButton->setText(tr("Соединить"));
     ui->connectButton->setStyleSheet("background-color:green; color: white;");
+    ui->resetButton->setStyleSheet("background-color:grey; color: white;");
+    ui->resetButton->setEnabled(false);
 }
 
 void Client::onSokDisplayError(QAbstractSocket::SocketError)

@@ -29,6 +29,7 @@ private slots:
     void addControl();
     void clearControls();
     void switchMode(bool);
+    void shutdown();
     
     void setButton(bool checked);
     void setLevel(int, bool);

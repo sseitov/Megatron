@@ -289,7 +289,7 @@ void Server::connection()
     connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
 }
 
-void Server::slotDisconnectClient()
+void Server::shutdown()
 {
     reset2057();
     for (int i=0; i<3; i++) {
@@ -297,34 +297,42 @@ void Server::slotDisconnectClient()
     }
 }
 
+void Server::slotDisconnectClient()
+{
+}
+
 void Server::slotReadClient()
 {
     QTcpSocket *clientSocket = reinterpret_cast<QTcpSocket*>(sender());
     if (clientSocket) {
         QByteArray data = clientSocket->readAll();
-        QJsonDocument request = QJsonDocument::fromBinaryData(data);
-        QJsonObject command = request.object();
-        QJsonValue canType = command.take("CANType");
-        if (canType == QJsonValue::Undefined || canType.toInt() == CAN_None)
-            return;
-        QJsonValue commandType = command.take("CommandType");
-        if (commandType == QJsonValue::Undefined)
-            return;
-        if (commandType.toInt() == CAN_SetValue) {
-            if (canType.toInt() == CAN_2057) {
-                QJsonValue node = command.take("Node");
-                QJsonValue port = command.take("Port");
-                QJsonValue value = command.take("Value");
-                set2057Value(node.toInt(), port.toInt(), value.toBool());
-            } else if (canType.toInt() == CAN_2088) {
-                QJsonArray values = command.take("PortArray").toArray();
-                for (int i=0; i<values.count(); i++) {
-                    QJsonObject item = values[i].toObject();
-                    QJsonValue node = item.take("Node");
-                    QJsonValue port = item.take("Port");
-                    QJsonValue value = item.take("Value");
-//                    qDebug() << "node " << node.toInt() << " port " << port.toInt() << " value " << value.toInt();
-                    mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
+        if ((char)(data[0]) == 1 && (char)(data[1]) == 9 && (char)(data[2]) == 6 && (char)(data[3]) == 4) {
+            shutdown();
+        } else {
+            QJsonDocument request = QJsonDocument::fromBinaryData(data);
+            QJsonObject command = request.object();
+            QJsonValue canType = command.take("CANType");
+            if (canType == QJsonValue::Undefined || canType.toInt() == CAN_None)
+                return;
+            QJsonValue commandType = command.take("CommandType");
+            if (commandType == QJsonValue::Undefined)
+                return;
+            if (commandType.toInt() == CAN_SetValue) {
+                if (canType.toInt() == CAN_2057) {
+                    QJsonValue node = command.take("Node");
+                    QJsonValue port = command.take("Port");
+                    QJsonValue value = command.take("Value");
+                    set2057Value(node.toInt(), port.toInt(), value.toBool());
+                } else if (canType.toInt() == CAN_2088) {
+                    QJsonArray values = command.take("PortArray").toArray();
+                    for (int i=0; i<values.count(); i++) {
+                        QJsonObject item = values[i].toObject();
+                        QJsonValue node = item.take("Node");
+                        QJsonValue port = item.take("Port");
+                        QJsonValue value = item.take("Value");
+    //                    qDebug() << "node " << node.toInt() << " port " << port.toInt() << " value " << value.toInt();
+                        mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
+                    }
                 }
             }
         }
