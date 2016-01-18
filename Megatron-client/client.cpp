@@ -302,14 +302,16 @@ void Client::setButton(bool checked)
             QVariantMap p1;
             p1.insert("Node", 3);
             p1.insert("Port", 4);
-            int value = checked ? 999 : 1;
+//            int value = checked ? 999 : 1;
+            int value = checked ? 1 : 999;
             p1.insert("Value", value);
             list.append(p1);
         } else if (mCurrentMode == 0) {
             QVariantMap p1;
             p1.insert("Node", 1);
             p1.insert("Port", port);
-            int value = checked ? 999 : 1;
+//            int value = checked ? 999 : 1;
+            int value = checked ? 1 : 999;
             p1.insert("Value", value);
             list.append(p1);
         }
