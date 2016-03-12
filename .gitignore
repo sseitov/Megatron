@@ -1,7 +1,5 @@
 .DS_Store
-Megatron.pro.user
 CanFestival/
-Megatron-server/Megatron-server.pro.user
 
 Megatron-client/Info.plist
 Megatron-client/.qmake.stash
@@ -18,3 +16,5 @@ Megatron-video/Megatron-video.xcodeproj/
 Megatron-video/Megatron-video.pro.user
 Megatron-video/Debug/
 Megatron-video/tmp/
+
+Megatron-server/Megatron-server.pro.user
