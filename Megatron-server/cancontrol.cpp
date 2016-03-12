@@ -23,10 +23,12 @@ void CANControl::start(int node)
 
 void CANControl::setFrequency(int value)
 {
-    mFrequiencyIndicator->display(value/10000);
+    double floatValue = double(value)/10.0;
+//    qDebug() << value*1000;
+    mFrequiencyIndicator->display(floatValue);
     if (mNode < 0) return;
     for (int i=0; i<PWM_COUNT; i++) {
-        mCan->setPulseFrequency(mNode, i, value/10);
+        mCan->setPulseFrequency(mNode, i, value*1000);
     }
 }
 

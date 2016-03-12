@@ -473,8 +473,11 @@
             <height>30</height>
            </size>
           </property>
+          <property name="smallDecimalPoint">
+           <bool>true</bool>
+          </property>
           <property name="digitCount">
-           <number>3</number>
+           <number>4</number>
           </property>
          </widget>
         </item>
@@ -483,7 +486,13 @@
       <item>
        <widget class="QSlider" name="frequencySlider_1">
         <property name="maximum">
-         <number>500000</number>
+         <number>500</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1313,8 +1322,11 @@
             <height>30</height>
            </size>
           </property>
+          <property name="smallDecimalPoint">
+           <bool>true</bool>
+          </property>
           <property name="digitCount">
-           <number>3</number>
+           <number>4</number>
           </property>
          </widget>
         </item>
@@ -1323,7 +1335,10 @@
       <item>
        <widget class="QSlider" name="frequencySlider_2">
         <property name="maximum">
-         <number>500000</number>
+         <number>500</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -2153,8 +2168,11 @@
             <height>30</height>
            </size>
           </property>
+          <property name="smallDecimalPoint">
+           <bool>true</bool>
+          </property>
           <property name="digitCount">
-           <number>3</number>
+           <number>4</number>
           </property>
          </widget>
         </item>
@@ -2163,7 +2181,10 @@
       <item>
        <widget class="QSlider" name="frequencySlider_3">
         <property name="maximum">
-         <number>500000</number>
+         <number>500</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

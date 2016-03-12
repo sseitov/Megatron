@@ -87,6 +87,8 @@ Server::Server(QWidget *parent) :
     mNode2088[0].hiLimit.append(ui->hi3_1);
     mNode2088[0].hiLimit.append(ui->hi4_1);
     mNode2088[0].hiLimit.append(ui->hi5_1);
+    mNode2088[0].hiLimit.append(ui->hi6_1);
+    mNode2088[0].hiLimit.append(ui->hi7_1);
 
     mNode2088[0].loLimit.append(ui->lo0_1);
     mNode2088[0].loLimit.append(ui->lo1_1);
@@ -94,6 +96,8 @@ Server::Server(QWidget *parent) :
     mNode2088[0].loLimit.append(ui->lo3_1);
     mNode2088[0].loLimit.append(ui->lo4_1);
     mNode2088[0].loLimit.append(ui->lo5_1);
+    mNode2088[0].loLimit.append(ui->lo6_1);
+    mNode2088[0].loLimit.append(ui->lo7_1);
 
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[0].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
@@ -129,6 +133,8 @@ Server::Server(QWidget *parent) :
     mNode2088[1].hiLimit.append(ui->hi3_2);
     mNode2088[1].hiLimit.append(ui->hi4_2);
     mNode2088[1].hiLimit.append(ui->hi5_2);
+    mNode2088[1].hiLimit.append(ui->hi6_2);
+    mNode2088[1].hiLimit.append(ui->hi7_2);
 
     mNode2088[1].loLimit.append(ui->lo0_2);
     mNode2088[1].loLimit.append(ui->lo1_2);
@@ -136,6 +142,8 @@ Server::Server(QWidget *parent) :
     mNode2088[1].loLimit.append(ui->lo3_2);
     mNode2088[1].loLimit.append(ui->lo4_2);
     mNode2088[1].loLimit.append(ui->lo5_2);
+    mNode2088[1].loLimit.append(ui->lo6_2);
+    mNode2088[1].loLimit.append(ui->lo7_2);
 
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[1].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
@@ -171,6 +179,8 @@ Server::Server(QWidget *parent) :
     mNode2088[2].hiLimit.append(ui->hi3_3);
     mNode2088[2].hiLimit.append(ui->hi4_3);
     mNode2088[2].hiLimit.append(ui->hi5_3);
+    mNode2088[2].hiLimit.append(ui->hi6_3);
+    mNode2088[2].hiLimit.append(ui->hi7_3);
 
     mNode2088[2].loLimit.append(ui->lo0_3);
     mNode2088[2].loLimit.append(ui->lo1_3);
@@ -178,6 +188,8 @@ Server::Server(QWidget *parent) :
     mNode2088[2].loLimit.append(ui->lo3_3);
     mNode2088[2].loLimit.append(ui->lo4_3);
     mNode2088[2].loLimit.append(ui->lo5_3);
+    mNode2088[2].loLimit.append(ui->lo6_3);
+    mNode2088[2].loLimit.append(ui->lo7_3);
 
     for (int i=0; i<PWM_COUNT; i++) {
        mNode2088[2].mOutputPulseIndicator[i]->setObjectName(QString::number(i));
@@ -240,7 +252,7 @@ void Server::loadSettings()
         qDebug() << "Set frequency (" << i << ") to " << val;
         mNode2088[i].mFrequency->setValue(val);
         settings.beginReadArray("Ports");
-        for (int port=0; port<PWM_COUNT; port++) {
+        for (int port=0; port<8; port++) {
             settings.setArrayIndex(port);
             mNode2088[i].hiLimit[port]->setValue(settings.value("hiLimit").toInt());
             mNode2088[i].loLimit[port]->setValue(settings.value("loLimit").toInt());
@@ -253,7 +265,7 @@ void Server::loadSettings()
     for (int i=0; i<3; i++) {
         connect(mNode2088[i].mInversion, SIGNAL(toggled(bool)), this, SLOT(saveSettings()));
         connect(mNode2088[i].mFrequency, SIGNAL(sliderReleased()), this, SLOT(saveSettings()));
-        for (int j=0; j<PWM_COUNT; j++) {
+        for (int j=0; j<8; j++) {
            connect(mNode2088[i].hiLimit[j], SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
            connect(mNode2088[i].loLimit[j], SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
         }
@@ -272,7 +284,7 @@ void Server::saveSettings()
 //        qDebug() << "Save frequency for (" << i << ") to " << val;
         settings.setValue("frequency", val);
         settings.beginWriteArray("Ports");
-        for (int port=0; port<PWM_COUNT; port++) {
+        for (int port=0; port<8; port++) {
             settings.setArrayIndex(port);
             settings.setValue("hiLimit", mNode2088[i].hiLimit[port]->value());
             settings.setValue("loLimit", mNode2088[i].loLimit[port]->value());
