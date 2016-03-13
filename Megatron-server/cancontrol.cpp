@@ -14,10 +14,11 @@ void CANControl::start(int node)
 {
     mNode = node;
     if (mNode < 0) return;
-    int value = mInversion->isChecked() ? 999 : 1;
+    int value = mInversion->isChecked() ? 1 : 999;
     for (int i=0; i<PWM_COUNT; i++) {
+        mCan->setPulseFrequency(mNode, i, mFrequency->value()*1000);
         mCan->setPulseDuty(mNode, i, value );
-        mCan->setPulseFrequency(mNode, i, mFrequency->value()/10);
+        mCan->setPulseOutput(mNode, i, true);
     }
 }
 
@@ -81,9 +82,11 @@ void CANControl::setValue(int port, int value)
         }
         if (port == 6) {
             mButtons[0]->setChecked(value > 1);
+            value = (value > 1) ? hiLimit[6]->value() : loLimit[6]->value();
             mCan->setPulseDuty(mNode, 6, value);
         } else if (port == 7) {
             mButtons[1]->setChecked(value > 1);
+            value = (value > 1) ? hiLimit[7]->value() : loLimit[7]->value();
             mCan->setPulseDuty(mNode, 7, value);
         }
     }
@@ -107,12 +110,12 @@ void CANControl::set()
 void CANControl::reset()
 {
     if (mNode < 0) return;
-    int value = mInversion->isChecked() ? 1 : 999;
+    int value = mInversion->isChecked() ? 999 : 1;
     for (int i=0; i<PWM_COUNT; i++) {
         mDuty[i] = 0;
         mOriginDuty[i] = 0;
         mCan->setPulseDuty(mNode, i, value);
-//        mCan->setPulseOutput(mNode, i, false);
+        mCan->setPulseOutput(mNode, i, false);
         mOutputPulseIndicator[i]->setValue(0);
     }
 }

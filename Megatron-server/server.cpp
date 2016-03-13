@@ -229,6 +229,7 @@ Server::~Server()
 {
     saveSettings();
     mServer.close();
+
     reset2057();
 
     for (int i=0; i<3; i++) {
@@ -311,6 +312,9 @@ void Server::shutdown()
 
 void Server::slotDisconnectClient()
 {
+    for (int i=0; i<3; i++) {
+        mNode2088[i].reset();
+    }
 }
 
 void Server::slotReadClient()
@@ -358,7 +362,6 @@ void Server::canInitialized(int node)
         mNode2088[node-1].mBox->setEnabled(true);
         mNode2088[node-1].mBox->setTitle("2088 ["+QString::number(node)+"]");
         mNode2088[node-1].start(node);
-        mNode2088[node-1].set();
     } else if (canType == 0x2057) {
         int index = node == 5 ? 1 : 0;
         mNode2057[index] = node;
