@@ -6,6 +6,7 @@
 #include <QTcpSocket>
 #include <QCheckBox>
 #include <QProgressBar>
+#include <QTimer>
 #include "qcan.h"
 #include <bitset>
 #include "cancontrol.h"
@@ -30,9 +31,18 @@ private slots:
     void canInitialized(int);
     void set2057port(int state);
 
+    void onPingerConnected();
+    void onPingerDisconnected();
+    void onPingerDisplayError(QAbstractSocket::SocketError);
+    void ping();
+    void slotReadPingAnser();
+
 private:
     Ui::Server *ui;
     QTcpServer mServer;
+    QTcpSocket mPinger;
+    QTimer mPingTimer;
+    bool mPingerConnected;
     QCan mCan;
 
     CANControl mNode2088[3];

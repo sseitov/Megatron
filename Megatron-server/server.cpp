@@ -12,7 +12,7 @@
 #include "../common.h"
 
 Server::Server(QWidget *parent) :
-    QWidget(parent), ui(new Ui::Server)
+    QWidget(parent), ui(new Ui::Server), mPingerConnected(false)
 {
     ui->setupUi(this);
 
@@ -199,6 +199,9 @@ Server::Server(QWidget *parent) :
 
     loadSettings();
 
+    connect(&mPinger, SIGNAL(readyRead()), this, SLOT(slotReadPingAnser()));
+    connect(&mPingTimer, SIGNAL(timeout()), this, SLOT(ping()));
+
     ///////////////////////////////////////////////////////////
 
     connect(&mServer, SIGNAL(newConnection()), this, SLOT(connection()));
@@ -300,6 +303,51 @@ void Server::connection()
     QTcpSocket *client = mServer.nextPendingConnection();
     connect(client, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
+
+    connect(&mPinger, SIGNAL(connected()), this, SLOT(onPingerConnected()));
+    connect(&mPinger, SIGNAL(disconnected()), this, SLOT(onPingerDisconnected()));
+    connect(&mPinger, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onPingerDisplayError(QAbstractSocket::SocketError)));
+    mPinger.connectToHost(client->peerAddress(), PING_SOCKET);
+}
+
+void Server::onPingerConnected()
+{
+    mPingerConnected = true;
+    mPingTimer.start(1000);
+}
+
+void Server::onPingerDisconnected()
+{
+    mPingerConnected = false;
+}
+
+void Server::onPingerDisplayError(QAbstractSocket::SocketError)
+{
+    QTcpSocket *server = reinterpret_cast<QTcpSocket*>(sender());
+    if (server) {
+        QMessageBox::critical(0, "Connection Error!", server->errorString(), QMessageBox::Ok);
+        server->close();
+        onPingerDisconnected();
+    }
+}
+
+void Server::ping()
+{
+    if (mPingerConnected) {
+        QVariantMap map;
+        map.insert("CANType", CAN_2088);
+        map.insert("CommandType", CAN_Acknowledge);
+        QJsonObject answerCommand = QJsonObject::fromVariantMap(map);
+        QByteArray answerData = QJsonDocument(answerCommand).toBinaryData();
+        mPinger.write(answerData);
+        qDebug() << "sent ping";
+    }
+    mPingTimer.start(1000);
+}
+
+void Server::slotReadPingAnser()
+{
+    qDebug() << "read ping answer";
 }
 
 void Server::shutdown()
@@ -312,6 +360,8 @@ void Server::shutdown()
 
 void Server::slotDisconnectClient()
 {
+    mPinger.close();
+    mPingerConnected = false;
     for (int i=0; i<3; i++) {
         mNode2088[i].reset();
     }
