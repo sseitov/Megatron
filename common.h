@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #define SERVER_SOCKET   1964
+#define PING_SOCKET   1402
 
 enum CANType {
     CAN_None,
@@ -10,9 +11,8 @@ enum CANType {
 };
 
 enum CommandType {
-//    CAN_Acknowledge,
-//    CAN_Initialized,
-//    CAN_SetPreference,
+    CAN_Acknowledge,
+    CAN_Alive,
     CAN_SetValue
 };
 
