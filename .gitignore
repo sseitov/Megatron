@@ -8,6 +8,11 @@ Megatron-client/Megatron-client.xcodeproj/
 Megatron-client/Megatron-client.pro.user
 Megatron-client/Debug/
 Megatron-client/tmp/
+Megatron-client/xcshareddata/
+Megatron-client/qt_preprocess.mak
+Megatron-client/qt_makeqmake.mak
+Megatron-client/project.xcworkspace/
+Megatron-client/project.pbxproj
 
 Megatron-video/Info.plist
 Megatron-video/.qmake.stash
