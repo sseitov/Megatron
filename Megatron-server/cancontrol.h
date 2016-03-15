@@ -18,7 +18,9 @@ class CANControl : public QObject
 public:
     explicit CANControl(QObject *parent = 0);
 
-    void start(int node);
+    void init(int node);
+    void start();
+    void stop();
 
     QCan *mCan;
     int mNode;
@@ -32,8 +34,6 @@ public:
     QVector<QSpinBox*> loLimit;
 
     void setValue(int port, int value);
-    void set();
-    void reset();
 
 public slots:
     void setDuty(int value);

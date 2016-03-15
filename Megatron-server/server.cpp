@@ -234,10 +234,8 @@ Server::~Server()
     mServer.close();
 
     reset2057();
+    stop2088();
 
-    for (int i=0; i<3; i++) {
-        mNode2088[i].reset();
-    }
     delete ui;
 }
 
@@ -300,6 +298,8 @@ void Server::saveSettings()
 
 void Server::connection()
 {
+    start2088();
+
     QTcpSocket *client = mServer.nextPendingConnection();
     connect(client, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
@@ -353,18 +353,15 @@ void Server::slotReadPingAnser()
 void Server::shutdown()
 {
     reset2057();
-    for (int i=0; i<3; i++) {
-        mNode2088[i].reset();
-    }
+    stop2088();
 }
 
 void Server::slotDisconnectClient()
 {
     mPinger.close();
     mPingerConnected = false;
-    for (int i=0; i<3; i++) {
-        mNode2088[i].reset();
-    }
+    reset2057();
+    stop2088();
 }
 
 void Server::slotReadClient()
@@ -411,7 +408,7 @@ void Server::canInitialized(int node)
     if (canType == 0x2088) {
         mNode2088[node-1].mBox->setEnabled(true);
         mNode2088[node-1].mBox->setTitle("2088 ["+QString::number(node)+"]");
-        mNode2088[node-1].start(node);
+        mNode2088[node-1].init(node);
     } else if (canType == 0x2057) {
         int index = node == 5 ? 1 : 0;
         mNode2057[index] = node;
@@ -460,5 +457,17 @@ void Server::reset2057()
         for (int i=0; i<16; i++) {
             mOutputIndicator[index][i]->setChecked(false);
         }
+    }
+}
+
+void Server::start2088() {
+    for (int i=0; i<3; i++) {
+        mNode2088[i].start();
+    }
+}
+
+void Server::stop2088() {
+    for (int i=0; i<3; i++) {
+        mNode2088[i].stop();
     }
 }

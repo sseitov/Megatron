@@ -57,6 +57,8 @@ private:
 
     void set2057Value(int node, int port, bool isOn);
     void reset2057();
+    void start2088();
+    void stop2088();
 
     void loadSettings();
     void shutdown();
