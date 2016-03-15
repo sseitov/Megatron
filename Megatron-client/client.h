@@ -6,6 +6,7 @@
 #include <QRadioButton>
 #include "controlbutton.h"
 #include <QTcpSocket>
+#include <QTcpServer>
 #include "qjoystick.h"
 
 namespace Ui {
@@ -35,6 +36,11 @@ private slots:
     void setLevel(int, bool);
     void setLevel(const QVector<int>&);
     void start(bool);
+    
+    void pingConnection();
+    void slotReadPing();
+    void slotDisconnectPing();
+    
     void onSokConnected();
     void onSokDisconnected();
     void onSokDisplayError(QAbstractSocket::SocketError);
@@ -50,6 +56,7 @@ private:
     int mRightNode[NUM_MODE];
 
     QTcpSocket mServer;
+    QTcpServer mPingServer;
     
     void loadSettings();
     void saveSettings();

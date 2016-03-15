@@ -53,6 +53,7 @@ Client::Client(QWidget *parent) :
     connect(ui->joystickMonitor_2, SIGNAL(setLevel(const QVector<int>&)), this, SLOT(setLevel(const QVector<int>&)));
 
     // server
+    connect(&mPingServer, SIGNAL(newConnection()), this, SLOT(pingConnection()));
 
     connect(&mServer, SIGNAL(connected()), this, SLOT(onSokConnected()));
     connect(&mServer, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
@@ -411,8 +412,13 @@ void Client::start(bool start)
         if (mServer.isOpen()) {
             mServer.close();
         }
+        
+        if (!mPingServer.listen(QHostAddress::Any, PING_SOCKET)) {
+            QMessageBox::critical(0, "Unable to start the ping server", mPingServer.errorString(), QMessageBox::Ok);
+        }
         mServer.connectToHost(ui->ipAddress->currentText(), SERVER_SOCKET);
     } else {
+        mPingServer.close();
         if (mServer.isOpen()) {
             mServer.close();
         }
@@ -429,6 +435,38 @@ void Client::onSokConnected()
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
     ui->resetButton->setStyleSheet("background-color:black; color: white;");
     ui->resetButton->setEnabled(true);
+}
+
+void Client::pingConnection()
+{
+    QTcpSocket *client = mPingServer.nextPendingConnection();
+    connect(client, SIGNAL(readyRead()), this, SLOT(slotReadPing()));
+    connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectPing()));
+}
+
+void Client::slotReadPing()
+{
+    QTcpSocket *socket = reinterpret_cast<QTcpSocket*>(sender());
+    if (socket) {
+        QByteArray data = socket->readAll();
+        QJsonDocument request = QJsonDocument::fromBinaryData(data);
+        QJsonObject command = request.object();
+        QJsonValue commandType = command.take("CommandType");
+        if (commandType == QJsonValue::Undefined)
+            return;
+        if (commandType.toInt() == CAN_Acknowledge) {
+            QVariantMap map;
+            map.insert("CANType", CAN_2088);
+            map.insert("CommandType", CAN_Alive);
+            QJsonObject answerCommand = QJsonObject::fromVariantMap(map);
+            QByteArray answerData = QJsonDocument(answerCommand).toBinaryData();
+            socket->write(answerData);
+        }
+    }
+}
+
+void Client::slotDisconnectPing()
+{
 }
 
 void Client::onSokDisconnected()
