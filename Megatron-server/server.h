@@ -43,6 +43,7 @@ private:
     QTcpSocket mPinger;
     QTimer mPingTimer;
     bool mPingerConnected;
+    int mPingError;
     QCan mCan;
 
     CANControl mNode2088[3];
@@ -56,9 +57,8 @@ private:
     std::bitset<8> m2057highPolarity[2];
 
     void set2057Value(int node, int port, bool isOn);
-    void reset2057();
-    void start2088();
-    void stop2088();
+    void start();
+    void stop();
 
     void loadSettings();
     void shutdown();

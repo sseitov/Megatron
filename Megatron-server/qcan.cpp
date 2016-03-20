@@ -205,6 +205,7 @@ void QCan::setPulseFrequency(int node, int port, UNS32 value)
 
 void QCan::setPulseDuty(int node, int port, UNS16 value)
 {
+    qDebug() << "setPulseDuty" << "node = " << node << ", port =" << port << ", value = " << value;
     lock();
     writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();

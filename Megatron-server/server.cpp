@@ -11,8 +11,10 @@
 #include <QSettings>
 #include "../common.h"
 
+static bool Alive;
+
 Server::Server(QWidget *parent) :
-    QWidget(parent), ui(new Ui::Server), mPingerConnected(false)
+    QWidget(parent), ui(new Ui::Server), mPingerConnected(false), mPingError(0)
 {
     ui->setupUi(this);
 
@@ -233,8 +235,7 @@ Server::~Server()
     saveSettings();
     mServer.close();
 
-    reset2057();
-    stop2088();
+    stop();
 
     delete ui;
 }
@@ -298,7 +299,7 @@ void Server::saveSettings()
 
 void Server::connection()
 {
-    start2088();
+    start();
 
     QTcpSocket *client = mServer.nextPendingConnection();
     connect(client, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
@@ -334,34 +335,46 @@ void Server::onPingerDisplayError(QAbstractSocket::SocketError)
 void Server::ping()
 {
     if (mPingerConnected) {
+        mPingerConnected = false;
         QVariantMap map;
         map.insert("CANType", CAN_2088);
         map.insert("CommandType", CAN_Acknowledge);
         QJsonObject answerCommand = QJsonObject::fromVariantMap(map);
         QByteArray answerData = QJsonDocument(answerCommand).toBinaryData();
         mPinger.write(answerData);
-        qDebug() << "sent ping";
+
+//        qDebug() << "sent ping";
+    } else {
+        qDebug() << "ping error";
+        mPingError++;
     }
-    mPingTimer.start(1000);
+    if (mPinger.isOpen()) {
+        if (mPingError > 3) {
+            stop();
+        } else {
+            mPingTimer.start(1000);
+        }
+    }
 }
 
 void Server::slotReadPingAnser()
 {
-    qDebug() << "read ping answer";
+    mPingError = 0;
+    mPingerConnected = true;
+//    qDebug() << "read ping answer";
 }
 
 void Server::shutdown()
 {
-    reset2057();
-    stop2088();
+    stop();
 }
 
 void Server::slotDisconnectClient()
 {
     mPinger.close();
+
     mPingerConnected = false;
-    reset2057();
-    stop2088();
+    stop();
 }
 
 void Server::slotReadClient()
@@ -451,23 +464,23 @@ void Server::set2057Value(int node, int port, bool isOn)
     mOutputIndicator[index][port]->setChecked(isOn);
 }
 
-void Server::reset2057()
-{
+void Server::start() {
+    for (int i=0; i<3; i++) {
+        mNode2088[i].start();
+    }
+    mPingError = 0;
+    Alive = true;
+}
+
+void Server::stop() {
     for (int index=0; index<2; index++) {
         for (int i=0; i<16; i++) {
             mOutputIndicator[index][i]->setChecked(false);
         }
     }
-}
-
-void Server::start2088() {
-    for (int i=0; i<3; i++) {
-        mNode2088[i].start();
-    }
-}
-
-void Server::stop2088() {
     for (int i=0; i<3; i++) {
         mNode2088[i].stop();
     }
+    Alive = false;
+    mPingError = 0;
 }
