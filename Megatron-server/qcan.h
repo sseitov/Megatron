@@ -38,6 +38,7 @@ private:
     CAN_PORT    mPort;
     CO_Data*    mData;
     int mID;
+    bool writeError;
 
     pthread_mutex_t mMutex;
     pthread_cond_t mOperationFinish;

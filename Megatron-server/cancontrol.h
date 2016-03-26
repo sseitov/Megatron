@@ -41,8 +41,8 @@ public slots:
     void setInversion(bool);
 
 private:
-    int mDuty[PWM_COUNT];
-    int mOriginDuty[PWM_COUNT];
+    int mDuty[8];
+    int mOriginDuty[8];
 
 };
 

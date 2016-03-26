@@ -55,6 +55,7 @@ void CANControl::setDuty(int value)
     if (mNode < 0) {
         return;
     }
+
     mOriginDuty[port] = value;
 
     int hi = hiLimit[port]->value();
@@ -64,8 +65,9 @@ void CANControl::setDuty(int value)
 
     if (mInversion->isChecked())
         value = 1000 - value;
-    if (mDuty[port] != value)
+    if (mDuty[port] != value) {
         mCan->setPulseDuty(mNode, port, value);
+    }
     mDuty[port] = value;
 }
 

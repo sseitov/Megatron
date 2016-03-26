@@ -156,8 +156,12 @@ void QCan::CheckWriteSDO(CO_Data* d, UNS8 nodeid)
 {
     UNS32 abortCode;
     QCan* can = (QCan*)d->classObject;
-    if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED)
+    if(getWriteResultNetworkDict(d, nodeid, &abortCode) != SDO_FINISHED) {
         printf("\nResult : Failed in writing information for slave %2.2x, AbortCode :%4.4x \n", nodeid, abortCode);
+        can->writeError = true;
+    } else {
+        can->writeError = false;
+    }
     closeSDOtransfer(d, nodeid, SDO_CLIENT);
     can->signal();
 }
@@ -198,15 +202,22 @@ void QCan::setPulseOutput(int node, int port, bool isOn, bool inversion)
 void QCan::setPulseFrequency(int node, int port, UNS32 value)
 {
     lock();
-    qDebug() << "setPulseFrequency" << "node = " << node << ", port =" << port << ", value = " << value;
     writeNetworkDictCallBack(mData, node, 0x3102, port+1, 4, 0, &value, &QCan::CheckWriteSDO, 0);
     wait();
 }
 
 void QCan::setPulseDuty(int node, int port, UNS16 value)
 {
-    qDebug() << "setPulseDuty" << "node = " << node << ", port =" << port << ", value = " << value;
-    lock();
-    writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
-    wait();
+    if (value < 1 || value > 999) {
+        qDebug() << "Invalid value " << value;
+        return;
+    }
+    if (port == 2) {
+        qDebug() << "setPulseDuty" << "node = " << node << ", port =" << port << ", value = " << value;
+    }
+    do {
+        lock();
+        writeNetworkDictCallBack(mData, node, 0x3103, port+1, 2, 0, &value, &QCan::CheckWriteSDO, 0);
+        wait();
+    } while (writeError);
 }
