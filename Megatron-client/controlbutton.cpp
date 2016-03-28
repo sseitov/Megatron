@@ -28,6 +28,7 @@ void ControlButton::levelOn()
     if (!isCheckable()) {
         sendLevel(true);
     } else {
+        setChecked(false);
         setStyleSheet("background : black; color : white");
     }
 }
@@ -45,6 +46,9 @@ void ControlButton::sendLevel(bool checked)
         setStyleSheet("background-color : black; color : white;");
     } else {
         setStyleSheet("background-color : white; color : black;");
+    }
+    if (isCheckable()) {
+        setChecked(checked);
     }
     emit setLevel(mConfig.port, checked);
 }
