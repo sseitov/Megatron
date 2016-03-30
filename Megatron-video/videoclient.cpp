@@ -187,6 +187,20 @@ void VideoClient::addControl()
 
 void VideoClient::setLevel(int canID, int port, bool value)
 {
+    ControlButton *btn = (ControlButton*)sender();
+    if (value) {
+        btn->setChecked(true);
+        for (int i=0; i < mControlButtons.size(); i++) {
+            ControlButton *b = mControlButtons[i];
+            if (b != btn && b->isChecked()) {
+                if (b->isChecked()) {
+                    b->sendLevel(false);
+                    setLevel(canID, port, false);
+                }
+            }
+        }
+    }
+
     if (mServer.isOpen()) {
         QVariantMap map;
         map.insert("CANType", CAN_2057);
@@ -197,6 +211,7 @@ void VideoClient::setLevel(int canID, int port, bool value)
         QJsonObject command = QJsonObject::fromVariantMap(map);
         QByteArray data = QJsonDocument(command).toBinaryData();
         mServer.write(data);
+        qDebug() << canID <<" " <<  port << " " << value;
     }
 }
 
