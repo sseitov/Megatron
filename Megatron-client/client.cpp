@@ -333,21 +333,6 @@ void Client::setButton(bool checked)
 
 void Client::setLevel(int port, bool value)
 {
-    qDebug() << port << " " << value;
-
-    ControlButton *btn = (ControlButton*)sender();
-    if (value) {
-        btn->setChecked(true);
-        for (int i=0; i < mControlButtons[mCurrentMode].size(); i++) {
-            ControlButton *b = mControlButtons[mCurrentMode][i];
-            if (b != btn && b->isChecked()) {
-                if (b->isChecked()) {
-                    b->sendLevel(false);
-                }
-            }
-        }
-    }
- 
     if (mServer.isOpen()) {
         QVariantMap map;
         map.insert("CANType", CAN_2057);
@@ -450,6 +435,14 @@ void Client::onSokConnected()
     ui->connectButton->setStyleSheet("background-color:red; color: white;");
     ui->resetButton->setStyleSheet("background-color:black; color: white;");
     ui->resetButton->setEnabled(true);
+    
+    QTcpSocket *socket = reinterpret_cast<QTcpSocket*>(sender());
+    QVariantMap map;
+    map.insert("CANType", CAN_2088);
+    map.insert("CommandType", CAN_Alive);
+    QJsonObject answerCommand = QJsonObject::fromVariantMap(map);
+    QByteArray answerData = QJsonDocument(answerCommand).toBinaryData();
+    socket->write(answerData);
 }
 
 void Client::pingConnection()
