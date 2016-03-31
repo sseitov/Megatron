@@ -304,11 +304,6 @@ void Server::connection()
     QTcpSocket *client = mServer.nextPendingConnection();
     connect(client, SIGNAL(readyRead()), this, SLOT(slotReadClient()));
     connect(client, SIGNAL(disconnected()), this, SLOT(slotDisconnectClient()));
-
-    connect(&mPinger, SIGNAL(connected()), this, SLOT(onPingerConnected()));
-    connect(&mPinger, SIGNAL(disconnected()), this, SLOT(onPingerDisconnected()));
-    connect(&mPinger, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onPingerDisplayError(QAbstractSocket::SocketError)));
-    mPinger.connectToHost(client->peerAddress(), PING_SOCKET);
 }
 
 void Server::onPingerConnected()
@@ -343,13 +338,14 @@ void Server::ping()
         QByteArray answerData = QJsonDocument(answerCommand).toBinaryData();
         mPinger.write(answerData);
 
-//        qDebug() << "sent ping";
+        qDebug() << "sent ping";
     } else {
         qDebug() << "ping error";
         mPingError++;
     }
     if (mPinger.isOpen()) {
         if (mPingError > 3) {
+            mPingTimer.stop();
             stop();
         } else {
             mPingTimer.start(1000);
@@ -372,7 +368,7 @@ void Server::shutdown()
 void Server::slotDisconnectClient()
 {
     mPinger.close();
-
+    mPingTimer.stop();
     mPingerConnected = false;
     stop();
 }
@@ -410,6 +406,11 @@ void Server::slotReadClient()
                         mNode2088[node.toInt()-1].setValue(port.toInt(), value.toInt());
                     }
                 }
+            } else if (commandType.toInt() == CAN_Alive) {
+                connect(&mPinger, SIGNAL(connected()), this, SLOT(onPingerConnected()));
+                connect(&mPinger, SIGNAL(disconnected()), this, SLOT(onPingerDisconnected()));
+                connect(&mPinger, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onPingerDisplayError(QAbstractSocket::SocketError)));
+                mPinger.connectToHost(clientSocket->peerAddress(), PING_SOCKET);
             }
         }
     }
