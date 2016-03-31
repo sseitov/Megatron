@@ -18,7 +18,6 @@ public:
     explicit ControlButton(QWidget *parent = 0);
     void setConfig(const ButtonConfig& config);
     const ButtonConfig& config() { return mConfig; }
-    void sendLevel(bool);
 
 signals:
     void setLevel(int, bool);
@@ -30,6 +29,7 @@ private slots:
 
 private:
     ButtonConfig mConfig;
+    void sendLevel(bool);
 };
 
 #endif // CONTROLBUTTON_H
